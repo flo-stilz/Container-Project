@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 public class GUIMain {
+	static Database database = new Database(); 
 	public static void main(String[] args) {
 	final JFrame init = new JFrame("ContainerTracker2020");
 	
@@ -40,7 +41,7 @@ public class GUIMain {
 	bCompany.addActionListener(new ActionListener() {
 
 		public void actionPerformed(ActionEvent e) {
-			CompanyLoginFrame m = new CompanyLoginFrame();
+			CompanyLoginFrame m = new CompanyLoginFrame(database);
 			init.dispose();
 			
 		}

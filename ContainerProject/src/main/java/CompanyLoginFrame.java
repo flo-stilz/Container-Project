@@ -10,13 +10,13 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 public class CompanyLoginFrame {
-	String name = "admin";
-	String pass = "qwerty32123";
+	String name = "Mads Møller";
+	String pass = "1";
 	
 	
 	
-	public CompanyLoginFrame() {
-		JFrame company = new JFrame("Company Login");
+	public CompanyLoginFrame(final Database database) {
+		final JFrame company = new JFrame("Company Login");
 
 		
 		JLabel login = new JLabel("  Login:");
@@ -29,7 +29,7 @@ public class CompanyLoginFrame {
 		
 		JPanel passwordPanel = new JPanel();
 		JLabel passLbl = new JLabel("Password: ");
-		final JPasswordField password = new JPasswordField("password");
+		final JPasswordField password = new JPasswordField("1");
 		passwordPanel.add(passLbl, BorderLayout.LINE_START);
 		passwordPanel.add(password, BorderLayout.LINE_END);		
 		
@@ -40,7 +40,8 @@ public class CompanyLoginFrame {
 			public void actionPerformed(ActionEvent e) {
 				String passtext = new String(password.getPassword());
 				if (username.getText().equals(name) && passtext.equals(pass)) {
-					System.out.println("companysite");
+					CompanyMain c = new CompanyMain(database);
+					company.dispose();
 				}
 				else {
 					final JFrame failedLogin = new JFrame("Failed to login");
