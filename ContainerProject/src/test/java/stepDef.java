@@ -764,7 +764,7 @@ public class stepDef {
 
     @When("the container id is searched for in the journey history to find all journeys the container has been used for")
     public void the_container_id_is_searched_for_in_the_journey_history() {
-    	containerJourneyHistoryList = database.containerJourneyHistory(search, database.getHistory());
+    	containerJourneyHistoryList = database.containerJourneyHistory(search);
     }
 
     @Then("the container C0s journey history should be returned")

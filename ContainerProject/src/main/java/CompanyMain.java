@@ -26,20 +26,36 @@ public class CompanyMain {
 		return cl;
 	}
 
-	public CompanyMain(final Database database) {
+	public CompanyMain(final Database database, final JFrame main) {
 		
 		final JFrame company = new JFrame("Company Overview");
 		
 		JPanel options = new JPanel();
-		final JPanel rest = new JPanel();
-		rest.setPreferredSize(new Dimension(800, 600));
-		rest.setBackground(Color.RED);
+		final JPanel menupanel = new JPanel();
+		menupanel.setPreferredSize(new Dimension(800, 600));
+		menupanel.setBackground(Color.RED);
+		
+		// Logout as company user
+		
+		JButton logout = new JButton("Logout");
+		logout.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				main.setVisible(true);
+				company.dispose();
+			}
+		});
+		menupanel.add(logout);
+		
 		final JPanel rest2 = new JPanel(new CardLayout());
 		rest2.setPreferredSize(new Dimension(800, 600));
 		rest2.setBackground(Color.BLUE);
 		cards = new JPanel(new CardLayout());
-		cards.add(rest, "rest");
+		cards.add(menupanel, "menu");
 		cards.add(rest2, "rest2");
+		
+		JButton menu = new JButton("Menu");
+		menu.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		
 		JButton clients = new JButton("View Clients");
 		clients.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
@@ -57,6 +73,7 @@ public class CompanyMain {
 		
 		// menu options panel
 		
+		
 		ClientSectionPanels c = new ClientSectionPanels(database, this);
 		cards.add(c.getClientSearch(), "clientSearch");
 		cards.add(c.getViewClients(), "viewClients");
@@ -65,12 +82,28 @@ public class CompanyMain {
 		cards.add(j.getJourneySearch(), "journeySearch");
 		cards.add(j.getViewJourneys(), "viewJourneys");
 		
+		ContainerSelectionPanels cont = new ContainerSelectionPanels(database);
+		cards.add(cont.getContainerSearch(), "containerSearch");
+		cards.add(cont.getViewContainers(), "viewContainers");
+		
 		JPanel sim = new JPanel();
 		sim.setPreferredSize(new Dimension(800, 600));
 		cards.add(sim, "sim");
 		
 		// CardLayout
 		cl = (CardLayout)(cards.getLayout());
+		
+		
+		// menu section
+		
+		
+		
+		menu.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				cl.show(cards, "menu");
+			}
+		});
 		
 		// client section
 		
@@ -95,6 +128,7 @@ public class CompanyMain {
 		});
 		
 		// container section
+		
 		
 		
 		
@@ -130,8 +164,8 @@ public class CompanyMain {
 		
 		JButton con = new JButton("Continue");
 		JLabel lbl = new JLabel("Description");
-		rest.add(lbl, BorderLayout.NORTH);
-		rest.add(con, BorderLayout.PAGE_END);
+		menupanel.add(lbl, BorderLayout.NORTH);
+		menupanel.add(con, BorderLayout.PAGE_END);
 		con.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -145,7 +179,8 @@ public class CompanyMain {
 		options.setLayout(new BoxLayout(options, BoxLayout.Y_AXIS));
 		company.add(options, BorderLayout.WEST);
 		company.add(cards, BorderLayout.EAST);
-		cl.show(cards, "rest");
+		cl.show(cards, "menu");
+		options.add(menu);
 		options.add(clients);
 		options.add(journeys);
 		options.add(containers);

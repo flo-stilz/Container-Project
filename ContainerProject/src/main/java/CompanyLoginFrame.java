@@ -15,7 +15,7 @@ public class CompanyLoginFrame {
 	
 	
 	
-	public CompanyLoginFrame(final Database database) {
+	public CompanyLoginFrame(final Database database, final JFrame main) {
 		final JFrame company = new JFrame("Company Login");
 
 		
@@ -40,7 +40,7 @@ public class CompanyLoginFrame {
 			public void actionPerformed(ActionEvent e) {
 				String passtext = new String(password.getPassword());
 				if (username.getText().equals(name) && passtext.equals(pass)) {
-					new CompanyMain(database);
+					new CompanyMain(database, main);
 					company.dispose();
 				}
 				else {

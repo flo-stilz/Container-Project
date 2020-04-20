@@ -168,7 +168,7 @@ public class Database {
 	}
 	
 	
-	public ArrayList<Journey> containerJourneyHistory(String search, ArrayList<Journey> history){
+	public ArrayList<Journey> containerJourneyHistory(String search){
 		for(Journey j : history) {
 			for(Container c : j.getContainerList()) {
 				if (c.getContainerId().equals(search)) {

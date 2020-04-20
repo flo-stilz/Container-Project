@@ -28,7 +28,6 @@ public class JourneySectionPanels {
 
 	public JourneySectionPanels(final Database database, final CompanyMain companymain) {
 		
-		// Search Journeys
 		
 		journeySearch = new JPanel();
 		journeySearch.setPreferredSize(new Dimension(800, 600));
@@ -36,6 +35,7 @@ public class JourneySectionPanels {
 		viewJourneys = new JPanel(new BorderLayout());
 		viewJourneys.setPreferredSize(new Dimension(800, 600));
 		
+		// Search Journeys
 		
 		final JTextField search = new JTextField();
 		search.setPreferredSize(new Dimension(100, 25));
@@ -68,6 +68,8 @@ public class JourneySectionPanels {
 		
 	}
 	
+	// Change current location of a journey
+	
 	private void changeloc(final Database database) {
 		
 		JPanel updateLocation = new JPanel(new BorderLayout());
@@ -99,6 +101,8 @@ public class JourneySectionPanels {
 		viewJourneys.add(update, BorderLayout.SOUTH);
 	}
 	
+	// view Journeys
+	
 	private void displayJourneys(CompanyMain companymain, Database database) {
 		viewJourneys.removeAll();
 		
@@ -116,9 +120,13 @@ public class JourneySectionPanels {
 		for (String s : columnNames) {
 			tableModel.addColumn(s);
 		}
-		
 		for (Journey j : wJourneys) {
-			tableModel.insertRow(0, new Object[] {j.getId(),j.getOrigin(),j.getDestination(),j.getCurrentLocation(), j.getContainerList().toString()});
+			ArrayList<String> containerids = new ArrayList<String>();
+			for (Container c : j.getContainerList()) {
+				containerids.add(c.getContainerId());
+			}
+			
+			tableModel.insertRow(0, new Object[] {j.getId(),j.getOrigin(),j.getDestination(),j.getCurrentLocation(), containerids});
 		}
 		viewJourneys.add(new JScrollPane(table), BorderLayout.NORTH);
 		companymain.getCl().show(companymain.getCards(), "viewJourneys");
