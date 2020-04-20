@@ -8,8 +8,6 @@ public class Database {
 	private ArrayList<Container> containerWarehouse = new ArrayList<Container>();
 	private ArrayList<Journey> history = new ArrayList<Journey>();
 	private ArrayList<client> clients = new ArrayList<client>();
-	private ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
-	private ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
 	
 
 	void add (client c) {
@@ -122,6 +120,7 @@ public class Database {
 			 journey.add(j);
 			 Container container = assignContainer(content, company, j.getId());
 			 j.getContainerList().add(container);
+			 j.updateCurrentLocation(origin);
 			 return j;
 		}
 		else {
@@ -130,6 +129,23 @@ public class Database {
 			findJourney( origin, destination, journey).get(0).updateCurrentLocation(origin);
 			return findJourney( origin, destination, journey).get(0);
 		}
+	}
+	
+	// Find containers that match a certain keyword in the active journey list
+	
+	public ArrayList<Container> findContainer(String keyword) {
+		ArrayList<Container> containers = new ArrayList<Container>();
+		for (Journey j : journey) {
+			for (Container c : j.getContainerList()) {
+				if ((c.getContainerId().contentEquals(keyword)) 
+						|| (c.getCompany().contentEquals(keyword)) 
+						|| (c.getContent().contentEquals(keyword))
+						|| (c.getCurrentLocation().contentEquals(keyword))) {
+					containers.add(c);
+				}
+			}
+		}
+		return containers;
 	}
 	
 	public void endOfJourney(Journey j) {
@@ -169,6 +185,7 @@ public class Database {
 	
 	
 	public ArrayList<Journey> containerJourneyHistory(String search){
+		ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
 		for(Journey j : history) {
 			for(Container c : j.getContainerList()) {
 				if (c.getContainerId().equals(search)) {
@@ -181,6 +198,7 @@ public class Database {
 
 
 	public ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
+		ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
 		for(Journey j : history) {
 			for(Container c : j.getContainerList()) {
 				ArrayList<ArrayList<Integer>> measurements = new ArrayList<ArrayList<Integer>>();

@@ -345,13 +345,13 @@ public class stepDef {
 
 	@Then("the containers are emtied")
 	public void the_containers_are_emtied() {
-	    assertEquals(j1.getContainerList().get(0).getContent(), "covid19");
-	    assertEquals(j1.getContainerList().get(0).getCompany(), "covid19");
+	    assertEquals(database.getContainerWarehouse().get(0).getContent(), "empty");
+	    assertEquals(database.getContainerWarehouse().get(0).getCompany(), "empty");
 	}
 
 	@Then("the containers are stored in the warehouse")
 	public void the_containers_are_stored_in_the_warehouse() {
-	    assertEquals(j1.getContainerList().get(0).getCurrentLocation(), "container warehouse");
+	    assertEquals(database.getContainerWarehouse().get(0).getCurrentLocation(), "container warehouse");
 	    assertEquals(database.getContainerWarehouse().size(), 1);
 	}
 	
@@ -364,8 +364,8 @@ public class stepDef {
 
 	@Then("the container should be taken from containerwarehouse")
 	public void the_container_should_be_taken_from_containerwarehouse() {
-		assertEquals(j1.getContainerList().get(0).getContainerId(), "C30");
-		assertEquals(j2.getContainerList().get(0).getContainerId(), "C30");
+		assertEquals(j1.getContainerList().get(0).getContainerId(), "C0");
+		assertEquals(j2.getContainerList().get(0).getContainerId(), "C0");
 		assertEquals(database.getContainerWarehouse().size(), 0);
 	}
 	

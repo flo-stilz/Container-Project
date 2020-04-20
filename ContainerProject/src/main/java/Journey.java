@@ -68,5 +68,20 @@ public class Journey {
 		this.distance = distance;
 	}
 
+	// finds containers within a journey depending on a keyword
+	
+	public ArrayList<Container> findContainers(String keyword) {
+		
+		ArrayList<Container> containers = new ArrayList<Container>();
+		for (Container c : containerList) {
+			
+			if ((c.getContainerId().contentEquals(keyword)) 
+					|| (c.getContent().contentEquals(keyword))
+					|| (c.getCompany().contentEquals(keyword))) {
+				containers.add(c);
+			}
+		}
+		return containers;
+	}
 
 }

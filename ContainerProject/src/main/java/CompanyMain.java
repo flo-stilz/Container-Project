@@ -82,7 +82,7 @@ public class CompanyMain {
 		cards.add(j.getJourneySearch(), "journeySearch");
 		cards.add(j.getViewJourneys(), "viewJourneys");
 		
-		ContainerSelectionPanels cont = new ContainerSelectionPanels(database);
+		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);
 		cards.add(cont.getContainerSearch(), "containerSearch");
 		cards.add(cont.getViewContainers(), "viewContainers");
 		
@@ -129,7 +129,13 @@ public class CompanyMain {
 		
 		// container section
 		
-		
+		containers.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				
+				cl.show(cards,  "containerSearch");
+			}
+		});
 		
 		
 		// simulation section
