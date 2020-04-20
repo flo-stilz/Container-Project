@@ -36,7 +36,7 @@ public class GUIMain {
 	bCompany.addActionListener(new ActionListener() {
 
 		public void actionPerformed(ActionEvent e) {
-			CompanyLoginFrame m = new CompanyLoginFrame(database);
+			new CompanyLoginFrame(database);
 			init.dispose();
 			
 		}

@@ -40,7 +40,7 @@ public class CompanyLoginFrame {
 			public void actionPerformed(ActionEvent e) {
 				String passtext = new String(password.getPassword());
 				if (username.getText().equals(name) && passtext.equals(pass)) {
-					CompanyMain c = new CompanyMain(database);
+					new CompanyMain(database);
 					company.dispose();
 				}
 				else {
