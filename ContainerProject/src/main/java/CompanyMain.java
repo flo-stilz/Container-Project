@@ -12,15 +12,23 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JTextField;
 
 
-public class CompanyMain implements PropertyChangeListener{
+public class CompanyMain {
 	
-	ClientSectionPanels c;
-	JPanel cards;
-	CardLayout cl;
+	private JPanel cards;
+	private CardLayout cl;
 
-	public CompanyMain(Database database) {
+	public JPanel getCards() {
+		return cards;
+	}
+
+	public CardLayout getCl() {
+		return cl;
+	}
+
+	public CompanyMain(final Database database) {
 		
 		final JFrame company = new JFrame("Company Overview");
 		
@@ -51,21 +59,28 @@ public class CompanyMain implements PropertyChangeListener{
 		
 		// menu options panel
 		
-		// client section
+		ClientSectionPanels c = new ClientSectionPanels(database, this);
+		cards.add(c.getClientSearch(), "clientSearch");
+		cards.add(c.getViewClients(), "viewClients");
 		
-		ClientSectionPanels c = new ClientSectionPanels(database);
-		cards.add(c.getClientSearch(), "clientsearch");
-//		cards.add(c.getViewClients(), "viewclients");
-//		cards.add(c.getData(), "data");
+		JourneySectionPanels j = new JourneySectionPanels(database, this);
+		cards.add(j.getJourneySearch(), "journeySearch");
+		cards.add(j.getViewJourneys(), "viewJourneys");
+		
+		JPanel sim = new JPanel();
+		sim.setPreferredSize(new Dimension(800, 600));
+		cards.add(sim, "sim");
 		
 		// CardLayout
 		cl = (CardLayout)(cards.getLayout());
+		
+		// client section
 		
 		clients.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				
-				cl.show(cards, "clientsearch");
+				cl.show(cards, "clientSearch");
 			}
 		});
 		
@@ -73,10 +88,11 @@ public class CompanyMain implements PropertyChangeListener{
 		
 		// journey section
 		
-		clients.addActionListener(new ActionListener() {
+		journeys.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				
+				cl.show(cards,  "journeySearch");
 			}
 		});
 		
@@ -85,6 +101,30 @@ public class CompanyMain implements PropertyChangeListener{
 		
 		
 		// simulation section
+		
+		JLabel lbldays = new JLabel("amount of days");
+		final JTextField days = new JTextField();
+		days.setPreferredSize(new Dimension(100, 25));
+		
+		JButton start = new JButton("Press Start");
+		
+		start.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				Simulator simulation = new Simulator();
+				simulation.Simulation(database, Integer.parseInt(days.getText()));
+			}
+		});
+		sim.add(lbldays);
+		sim.add(days);
+		sim.add(start);
+		
+		simulation.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				cl.show(cards, "sim");
+			}
+		});
 		
 		
 		
@@ -115,14 +155,6 @@ public class CompanyMain implements PropertyChangeListener{
 		company.pack();		
 		company.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		company.setVisible(true);
-	}
-
-	public void propertyChange(PropertyChangeEvent evt) {
-		cards.add(c.getViewClients(), "viewclients");
-		cl = (CardLayout)(cards.getLayout());
-		cl.show(cards, "viewclients");
-		System.out.println("hello");
-		
 	}
 	
 }

@@ -276,7 +276,7 @@ public class stepDef {
 
 	@When("it matches for the keyword")
 	public void it_matches_for_the_keyword() {
-	    matches = database.findUsingLoop(search, database.getJourney());
+	    matches = database.findUsingLoop(search);
 	}
 
 	@Then("the empty list matches is returned")

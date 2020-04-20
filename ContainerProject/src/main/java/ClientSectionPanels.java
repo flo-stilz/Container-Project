@@ -3,94 +3,96 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 public class ClientSectionPanels {
 
-	private JPanel clientsearch;
+	private JPanel clientSearch;
 	private JPanel viewClients;
-	private JPanel data;
 	private ArrayList<client> wClients;
 	
-	final PropertyChangeSupport support = new PropertyChangeSupport(this); 
 	
-	void addObserver(PropertyChangeListener l) {
-		support.addPropertyChangeListener(l);
-	}
-	
-	public ClientSectionPanels(final Database database) {
+	public ClientSectionPanels(final Database database, final CompanyMain companymain) {
 		
 		
 		// Search the clients
 		
-		clientsearch = new JPanel();
-		clientsearch.setPreferredSize(new Dimension(800, 600));
+		clientSearch = new JPanel();
+		clientSearch.setPreferredSize(new Dimension(800, 600));
+		
+		viewClients = new JPanel();
+		viewClients.setPreferredSize(new Dimension(800, 600));
+		
+		final JTextField search = new JTextField();
+		search.setPreferredSize(new Dimension(100, 25));
+		clientSearch.add(search);
+		
+		JButton searchButton = new JButton("Search");
+		clientSearch.add(searchButton);
+		
+		searchButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				String keyword = search.getText();
+				ArrayList<client> result = new ArrayList<client>();
+				result.addAll(database.search(keyword));
+				wClients = result;
+				displayclients(companymain);
+			}
+		});
 		
 		JButton showAll = new JButton("Show All");
-		clientsearch.add(showAll, BorderLayout.NORTH);
+		clientSearch.add(showAll);
 		showAll.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				wClients = database.getClients();
-				displayclients();
-				// switch panel
-				support.firePropertyChange("some", null, null);
+				displayclients(companymain);
 			}
 		});
-		
-		
-		// display the clients
-		
-		viewClients = new JPanel();
-		viewClients.setPreferredSize(new Dimension(800, 600));
-		viewClients.setBackground(Color.DARK_GRAY);
-		
-		// display data
-		
-		data = new JPanel();
-		
-		
+
 	}
 	
-	public void displayclients() {
+	// display the clients
+	
+	public void displayclients(CompanyMain companymain) {
 		
-		viewClients = new JPanel();
-		viewClients.setPreferredSize(new Dimension(800, 600));
-		viewClients.setLayout(new BoxLayout(viewClients, BoxLayout.Y_AXIS));
+		viewClients.removeAll();
+		DefaultTableModel tableModel = new DefaultTableModel();
+		JTable table = new JTable(tableModel);
+		String[] columnNames = {
+				"Company",
+                "Ref. Person",
+                "e-mail",
+                "address"
+                };
+		
+		for (String s : columnNames) {
+			tableModel.addColumn(s);
+		}
 		
 		for (client c : wClients) {
-			JLabel clients = new JLabel(c.getCompany());
-			viewClients.add(clients);
-			
-			clients.addMouseListener(new MouseAdapter()  
-			{  
-			    public void mouseClicked(MouseEvent e)  
-			    {  
-			       // switch to data panel
-
-			    }  
-			}); 
+			tableModel.insertRow(0, new Object[] {c.getCompany(),c.getName(),c.getEmail(),c.getAddress()});
 		}
+		viewClients.add(new JScrollPane(table), BorderLayout.CENTER);
+		companymain.getCl().show(companymain.getCards(), "viewClients");
 	}
+	
 	
 	public JPanel getViewClients() {
 		return viewClients;
 	}
 
-	public JPanel getData() {
-		return data;
-	}
-
 	public JPanel getClientSearch() {
-		return clientsearch;
+		return clientSearch;
 	}
 }

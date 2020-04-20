@@ -5,6 +5,7 @@ import java.util.Random;
 
 
 public class Simulator {
+	
 	private ArrayList<String> companies = new ArrayList<String>(Arrays.asList("Novo", "Maersk", "Netto", "Lidl", "Vestas", "Topsø", "TDC", "Carlsberg", "DanskBank", "Novozymes", "Nestle", "Ford", "Mercedes", "Volkswagen", "Amazon","Alibaba")); 
 	private ArrayList<String> firstnames = new ArrayList<String>(Arrays.asList("Mads", "Florian", "Martin", "Lucien", "Anna", "John", "Peter", "Sven", "Jørgen", "Brunhilde", "Heath", "Bill", "Phil", "Andrea", "Hubert", "Rebecca", "Emilie"));
 	private ArrayList<String> surnames = new ArrayList<String>(Arrays.asList("Nielsen", "Jensen", "Hansen", "Petersen", "Andersen", "Christensen", "Sørensen", "Møller", "Poulsen", "Ivanova", "Wang", "Kim", "Saito", "Gruber", "Müller", "Peeters", "Smith", "Schmit", "Martin", "Garcia", "Silva", "Rossi"));
@@ -46,8 +47,7 @@ public class Simulator {
 	private String name;
 	private String mail;
 	private String address;
-	client client;
-	
+	private client client;
 	
 	
 	public String companySelection(int seed) {

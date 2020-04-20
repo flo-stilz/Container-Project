@@ -72,7 +72,7 @@ public class Database {
 		return c;
 	}
 
-	public Set<Journey> findUsingLoop (String search, ArrayList<Journey> journey){
+	public Set<Journey> findUsingLoop (String search){
 	
 			Set<Journey> matches = new HashSet<Journey>();
 			for (Journey j : journey) {
