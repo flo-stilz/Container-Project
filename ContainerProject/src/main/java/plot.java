@@ -10,7 +10,11 @@ import java.util.Collections;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
 import org.jfree.data.category.DefaultCategoryDataset;
@@ -36,20 +40,19 @@ public class plot extends ApplicationFrame {
 			e.printStackTrace();
 		}
 	}
-//this sets the background to a really stupid picture
-	void setbackground(JFreeChart c) {
-		c.getPlot().setBackgroundAlpha(0);
+	public void linePlot(String charttype, ArrayList<Integer> a) {
+		JFreeChart lineChart = ChartFactory.createLineChart("this is the " + charttype + " plot", "Time elapsed (min)",
+				charttype, createDataset(a, charttype), PlotOrientation.VERTICAL, true, true, false);
 
-		c.setBackgroundPaint(Color.WHITE);
-
-		Image icon;
-		try {
-			icon = ImageIO.read(new File("img/background.png"));
-			c.setBackgroundImage(icon);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		ChartPanel chartPanel = new ChartPanel(lineChart);
+		chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
+		setContentPane(chartPanel);
+		
+		display();
 	}
+
+
+
 
 	protected DefaultCategoryDataset createDataset(ArrayList<Integer> a, String type) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
