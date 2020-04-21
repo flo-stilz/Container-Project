@@ -2,6 +2,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class Simulator {
@@ -273,6 +274,8 @@ public class Simulator {
 	
 	public void Simulation(Database database, int day) {
 		for (int i = 0; i<day; i++) {
+			
+			
 			if (i == 0) {
 				for (int k = 0; k<2; k++) {
 					clientCreation(database);
@@ -284,6 +287,14 @@ public class Simulator {
 			}
 			
 			for (int j = 0; j<5; j++) {
+				
+				// sleep
+//				try {
+//					TimeUnit.SECONDS.sleep(2);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+				
 				simulateData(database);
 			}
 			

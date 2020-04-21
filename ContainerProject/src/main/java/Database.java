@@ -191,6 +191,7 @@ public class Database {
 		c.getTempList().add(temp);
 		c.getPressureList().add(pressure);
 		c.getHumList().add(humidity);
+		notifyObservers(c);
 	}
 	
 	public void updateData(Journey j, Container c, int temp, int pressure, int humidity) {
@@ -202,7 +203,6 @@ public class Database {
 		else {
 			addData(c, temp, pressure, humidity);
 		}
-		notifyObservers(c);
 	}
 	
 	

@@ -1,6 +1,8 @@
-
 import java.awt.Color;
 import java.util.ArrayList;
+
+import javax.swing.JPanel;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
@@ -13,6 +15,13 @@ import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.TextAnchor;
 
 public class barPlots extends plot implements observer {
+	
+	private ChartPanel chartPanel;
+	
+	public ChartPanel getChartPanel() {
+		return chartPanel;
+	}
+
 	public barPlots(String plottitle) {
 		super(plottitle);
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -51,13 +60,14 @@ public class barPlots extends plot implements observer {
 		ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER);
 		renderer.setBasePositiveItemLabelPosition(position);
 
-		 ChartPanel chartPanel = new ChartPanel( chart );        
-	      chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
-	      setContentPane( chartPanel ); 
+		 chartPanel = new ChartPanel( chart );        
+	     chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
+	     setContentPane( chartPanel ); 
 
 		chart.setBackgroundPaint(Color.WHITE);
+		
 //		setbackground(chart);
-		display();
+//		display();
 	}
 
 	public void update(ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h) {
@@ -75,13 +85,14 @@ public class barPlots extends plot implements observer {
 		ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER);
 		renderer.setBasePositiveItemLabelPosition(position);
 
-		 ChartPanel chartPanel = new ChartPanel( chart );        
-	      chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
-	      setContentPane( chartPanel ); 
+		 chartPanel = new ChartPanel( chart );        
+	     chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
+	     setContentPane( chartPanel ); 
 
 		chart.setBackgroundPaint(Color.WHITE);
 //		setbackground(chart);
 		display();
+		
 	}
 
 }

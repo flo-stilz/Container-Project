@@ -12,6 +12,12 @@ import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 
 public class comparisonlinePlots extends plot implements observer {
+	
+	private ChartPanel chartPanel;
+	
+	public ChartPanel getChartPanel() {
+		return chartPanel;
+	}
 	public comparisonlinePlots(String plottitle) {
 		super(plottitle);
 		ArrayList<Integer> e = new ArrayList<Integer>();
@@ -34,7 +40,7 @@ public class comparisonlinePlots extends plot implements observer {
 			"Time elapsed from Journey", "changes", create2Dataset(t, p, h), PlotOrientation.VERTICAL, true, true,
 			false);
 
-	ChartPanel chartPanel = new ChartPanel(xylineChart);
+	chartPanel = new ChartPanel(xylineChart);
 	chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
 	final XYPlot plot = xylineChart.getXYPlot();
 
@@ -48,7 +54,7 @@ public class comparisonlinePlots extends plot implements observer {
 	plot.setRenderer(renderer);
 	setContentPane(chartPanel);
 
-	display();
+//	display();
 	
 	}
 

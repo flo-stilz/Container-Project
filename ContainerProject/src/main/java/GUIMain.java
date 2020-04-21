@@ -8,8 +8,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 public class GUIMain {
+	
 	static Database database = new Database(); 
+	
 	public static void main(String[] args) {
+		
 	final JFrame init = new JFrame("ContainerTracker2020");
 	
 	
@@ -29,7 +32,7 @@ public class GUIMain {
 		private int c = 0;
 		public void actionPerformed(ActionEvent e) {
 			new ClientLoginFrame(database, init);
-			init.dispose();
+//			init.dispose();
 		}	
 	});
 	JButton bCompany = new JButton("Company");
@@ -37,7 +40,7 @@ public class GUIMain {
 
 		public void actionPerformed(ActionEvent e) {
 			new CompanyLoginFrame(database, init);
-			init.dispose();
+//			init.dispose();
 			
 		}
 		

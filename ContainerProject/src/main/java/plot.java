@@ -23,6 +23,13 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
 public class plot extends ApplicationFrame {
+	
+	private ChartPanel chartPanel;
+	
+	public ChartPanel getChartPanel() {
+		return chartPanel;
+	}
+
 	public plot(String plottitle) {
 		super(plottitle);
 	}
@@ -40,15 +47,16 @@ public class plot extends ApplicationFrame {
 			e.printStackTrace();
 		}
 	}
+	
 	public void linePlot(String charttype, ArrayList<Integer> a) {
 		JFreeChart lineChart = ChartFactory.createLineChart("this is the " + charttype + " plot", "Time elapsed (min)",
 				charttype, createDataset(a, charttype), PlotOrientation.VERTICAL, true, true, false);
 
-		ChartPanel chartPanel = new ChartPanel(lineChart);
+		chartPanel = new ChartPanel(lineChart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
 		setContentPane(chartPanel);
 		
-		display();
+//		display();
 	}
 
 

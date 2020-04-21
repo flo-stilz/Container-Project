@@ -161,7 +161,7 @@ public class ContainerSelectionPanels {
 		dataUpdate.add(update, BorderLayout.SOUTH);
 	}
 	
-	public void showPlots(final Database database, final JComboBox<String> id, CompanyMain companymain) {
+	public void showPlots(final Database database, final JComboBox<String> id, final CompanyMain companymain) {
 		
 		JPanel choosePlots = new JPanel(new BorderLayout());
 		extraOptions.add(choosePlots, BorderLayout.EAST);
@@ -170,12 +170,14 @@ public class ContainerSelectionPanels {
 		final JCheckBox checkBoxPres = new JCheckBox("Pressure Plot");
 		final JCheckBox checkBoxHum = new JCheckBox("Humidity Plot");
 		final JCheckBox checkBoxAllinOne = new JCheckBox("All in One");
+		final JCheckBox checkBoxBarPlot = new JCheckBox("Bar Plot");
 		
 		JPanel checkOptions = new JPanel(new GridLayout(0,2));
 		checkOptions.add(checkBoxTemp);
 		checkOptions.add(checkBoxPres);
 		checkOptions.add(checkBoxHum);
 		checkOptions.add(checkBoxAllinOne);
+		checkOptions.add(checkBoxBarPlot);
 		
 		choosePlots.add(checkOptions, BorderLayout.CENTER);
 		
@@ -185,6 +187,7 @@ public class ContainerSelectionPanels {
 
 			public void actionPerformed(ActionEvent e) {
 				
+				plotPanel.removeAll();
 				// get Container
 				ArrayList<Container> result = new ArrayList<Container>();
 				result.addAll(database.findContainer(id.getSelectedItem().toString()));
@@ -192,6 +195,12 @@ public class ContainerSelectionPanels {
 				
 				 if (checkBoxTemp.isSelected()) {
 					 ArrayList<Integer> data = c.getTempList();
+					 
+					 plot plot = new plot("plot");
+					 plot.linePlot("Temperature", data);;
+					 JPanel tempPanel = plot.getChartPanel();
+					 plotPanel.add(tempPanel);
+					 
 					 // plot.plot(data);
 					 // where plot.plot is the function that will displays the data
 					 // data is the corresponding arraylist for the plot
@@ -199,9 +208,19 @@ public class ContainerSelectionPanels {
 				 if (checkBoxPres.isSelected()) {
 					 ArrayList<Integer> data = c.getPressureList();
 					 
+					 plot plot = new plot("plot");
+					 plot.linePlot("Pressure", data);;
+					 JPanel presPanel = plot.getChartPanel();
+					 plotPanel.add(presPanel);
+					 
 				 }
 				 if (checkBoxHum.isSelected()) {
 					 ArrayList<Integer> data = c.getHumList();
+					 
+					 plot plot = new plot("plot");
+					 plot.linePlot("Humidity", data);;
+					 JPanel humPanel = plot.getChartPanel();
+					 plotPanel.add(humPanel);
 					 
 				 }
 				 if (checkBoxAllinOne.isSelected()) {
@@ -209,13 +228,28 @@ public class ContainerSelectionPanels {
 					 ArrayList<Integer> pres = c.getPressureList();
 					 ArrayList<Integer> hum = c.getHumList();
 					 
+					 comparisonlinePlots cplot = new comparisonlinePlots("Comparison line plot", temp, pres, hum);
+					 JPanel comparisonplot = cplot.getChartPanel();
+					 plotPanel.add(comparisonplot);
+					 
+				 }
+				 if (checkBoxBarPlot.isSelected()) {
+					 ArrayList<Integer> temp = c.getTempList();
+					 ArrayList<Integer> pres = c.getPressureList();
+					 ArrayList<Integer> hum = c.getHumList();
+					 
+					 barPlots bPlot = new barPlots("Bar plot", temp, pres, hum);
+					 database.addObserver(bPlot);
+					 JPanel barplot = bPlot.getChartPanel();
+					 plotPanel.add(barplot);
 				 }
 				
-				
+				companymain.getCl().show(companymain.getCards(), "plotPanel");
 			}
 		});
 		
 	}
+
 	
 	public void displayJourneys(Database database, CompanyMain companymain) {
 		
@@ -280,4 +314,6 @@ public class ContainerSelectionPanels {
 		viewContainers.add(new JScrollPane(table), BorderLayout.NORTH);
 		companymain.getCl().show(companymain.getCards(), "viewContainers");
 	}
+
+
 }
