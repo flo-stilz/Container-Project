@@ -8,6 +8,8 @@ public class Database {
 	private ArrayList<Container> containerWarehouse = new ArrayList<Container>();
 	private ArrayList<Journey> history = new ArrayList<Journey>();
 	private ArrayList<client> clients = new ArrayList<client>();
+	private ArrayList<observer> obs = new ArrayList<observer>();
+	private ArrayList<chartobserver> cobs = new ArrayList<chartobserver>();
 	
 
 	void add (client c) {
@@ -182,6 +184,7 @@ public class Database {
 			}
 			journey.remove(j);
 		} 
+		notifychartOberver();
 	}
 	
 	public void addData(Container c, int temp, int pressure, int humidity) {
@@ -199,6 +202,7 @@ public class Database {
 		else {
 			addData(c, temp, pressure, humidity);
 		}
+		notifyObservers(c);
 	}
 	
 	
@@ -230,6 +234,25 @@ public class Database {
 		
 		}
 		return containerInternalStatusHistoryList;
+	}
+	public void addObserver(observer o) {
+		obs.add(o);
+	}
+
+	private void notifyObservers( Container c) {
+		for (observer o: obs) {
+			o.update(c.getTempList(),c.getPressureList(),c.getHumList());
+		}
+	}
+	
+	public void addchartObserver(chartobserver o) {
+		cobs.add(o);
+	}
+	//where to containders get added to warehouse
+	private void notifychartOberver() {
+		for (chartobserver o :cobs) {
+			o.updateC(containerWarehouse);
+		}
 	}
 	
 }
