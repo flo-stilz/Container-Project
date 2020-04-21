@@ -47,7 +47,7 @@ public class CompanyMain {
 		});
 		menupanel.add(logout);
 		
-		final JPanel rest2 = new JPanel(new CardLayout());
+		final JPanel rest2 = new JPanel();
 		rest2.setPreferredSize(new Dimension(800, 600));
 		rest2.setBackground(Color.BLUE);
 		cards = new JPanel(new CardLayout());
@@ -85,6 +85,7 @@ public class CompanyMain {
 		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);
 		cards.add(cont.getContainerSearch(), "containerSearch");
 		cards.add(cont.getViewContainers(), "viewContainers");
+		cards.add(cont.getPlotPanel(), "plotPanel");
 		
 		JPanel sim = new JPanel();
 		sim.setPreferredSize(new Dimension(800, 600));

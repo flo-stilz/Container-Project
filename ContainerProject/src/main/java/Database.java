@@ -23,8 +23,8 @@ public class Database {
 		return false;
 	}
 	
-	Set<client> search (String c){
-		Set<client> results = new HashSet<client>();
+	ArrayList<client> search (String c){
+		ArrayList<client> results = new ArrayList<client>();
 		for (client cl: clients) {
 
 			if ((cl.getAddress().contentEquals(c)||cl.getCompany().contentEquals(c)||cl.getEmail().contentEquals(c)||cl.getName().contentEquals(c))) {
@@ -64,8 +64,8 @@ public class Database {
 		this.clients = clients;
 	}
 	
-	public client createClient( String company, String address, String email, String name) {
-		client c = new client(company, address, email, name);
+	public client createClient( String company, String address, String email, String name, String password) {
+		client c = new client(company, address, email, name, password);
 		clients.add(c);
 		return c;
 	}
@@ -75,7 +75,9 @@ public class Database {
 			Set<Journey> matches = new HashSet<Journey>();
 			for (Journey j : journey) {
 				if ((j.getOrigin().equalsIgnoreCase(search))||
-						(j.getDestination().equalsIgnoreCase(search))) {
+						(j.getDestination().equalsIgnoreCase(search))
+						|| (j.getId().equalsIgnoreCase(search))
+						|| (j.getCurrentLocation().equalsIgnoreCase(search))) {
 					matches.add(j);
 					}
 				}
@@ -137,15 +139,31 @@ public class Database {
 		ArrayList<Container> containers = new ArrayList<Container>();
 		for (Journey j : journey) {
 			for (Container c : j.getContainerList()) {
-				if ((c.getContainerId().contentEquals(keyword)) 
-						|| (c.getCompany().contentEquals(keyword)) 
-						|| (c.getContent().contentEquals(keyword))
-						|| (c.getCurrentLocation().contentEquals(keyword))) {
+				if ((c.getContainerId().equalsIgnoreCase(keyword)) 
+						|| (c.getCompany().equalsIgnoreCase(keyword)) 
+						|| (c.getContent().equalsIgnoreCase(keyword))
+						|| (c.getCurrentLocation().equalsIgnoreCase(keyword))) {
 					containers.add(c);
 				}
 			}
 		}
 		return containers;
+	}
+	
+	public ArrayList<Container> getActiveContainers() {
+		ArrayList<Container> Containers = new ArrayList<Container>();
+		for (Journey j : journey) {
+			for (Container c : j.getContainerList()) {
+				Containers.add(c);
+			}
+		}
+		return Containers;
+	}
+	
+	public ArrayList<Container> getAllContainers() {
+		ArrayList<Container> Containers = getActiveContainers();
+		Containers.addAll(containerWarehouse);
+		return Containers;
 	}
 	
 	public void endOfJourney(Journey j) {

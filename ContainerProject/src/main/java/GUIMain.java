@@ -28,8 +28,8 @@ public class GUIMain {
 	bClient.addActionListener(new ActionListener() {
 		private int c = 0;
 		public void actionPerformed(ActionEvent e) {
-			c++;
-			System.out.println(c);	
+			new ClientLoginFrame(database, init);
+			init.dispose();
 		}	
 	});
 	JButton bCompany = new JButton("Company");

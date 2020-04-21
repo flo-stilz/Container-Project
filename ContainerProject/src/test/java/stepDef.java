@@ -59,6 +59,7 @@ public class stepDef {
 	String name;
 	String mail;
 	String address;
+	String password;
 	int days;
 	
 	
@@ -95,7 +96,7 @@ public class stepDef {
 
 	@When("client is registered")
 	public void client_is_registered() {
-		client= database.createClient(companyName, address, mail, name);
+		client= database.createClient(companyName, address, mail, name, password);
 
 	  
 	}
@@ -132,10 +133,10 @@ public class stepDef {
 	
 	
 
-	Set<client> results;
+	ArrayList<client> results;
 	@When("string {string} apears as client infornmation")
 	public void string_apears_as_client_infornmation(String string) {
-		 results =database.search(string);
+		 results = database.search(string);
 	}
 
 	@Then("a list of possible clients is returned")
@@ -498,7 +499,7 @@ public class stepDef {
 		address = sim.addressSelection(seed);
 		name = sim.nameSelection(seed);
 		mail = sim.emailCreation(name, company);
-		client = database.createClient(company, address, mail, name);
+		client = database.createClient(company, address, mail, name, password);
 	}
 
 	@Then("that client should be in the database")
@@ -515,7 +516,7 @@ public class stepDef {
 		address = sim.addressSelection(seed);
 		name = sim.nameSelection(seed);
 		mail = sim.emailCreation(name, company);
-		client = database.createClient(company, address, mail, name);
+		client = database.createClient(company, address, mail, name, password);
 	}
 
 	@When("a client is choosen with seed {int}")

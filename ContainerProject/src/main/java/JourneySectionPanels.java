@@ -70,7 +70,7 @@ public class JourneySectionPanels {
 	
 	// Change current location of a journey
 	
-	private void changeloc(final Database database) {
+	public void changeloc(final Database database) {
 		
 		JPanel updateLocation = new JPanel(new BorderLayout());
 		viewJourneys.add(updateLocation, BorderLayout.CENTER);
@@ -103,7 +103,7 @@ public class JourneySectionPanels {
 	
 	// view Journeys
 	
-	private void displayJourneys(CompanyMain companymain, Database database) {
+	public void displayJourneys(CompanyMain companymain, Database database) {
 		viewJourneys.removeAll();
 		
 		changeloc(database);

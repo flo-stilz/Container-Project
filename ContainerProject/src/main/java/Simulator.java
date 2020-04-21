@@ -47,6 +47,7 @@ public class Simulator {
 	private String name;
 	private String mail;
 	private String address;
+	private String password;
 	private client client;
 	
 	
@@ -299,7 +300,7 @@ public class Simulator {
 		address = addressSelection(seed);
 		name = nameSelection(seed);
 		mail = emailCreation(name, company);
-		client = database.createClient(company, address, mail, name);
+		client = database.createClient(company, address, mail, name, password);
 	}
 	
 	public void clientCreation(Database database) {
@@ -307,7 +308,7 @@ public class Simulator {
 		address = addressSelection();
 		name = nameSelection();
 		mail = emailCreation(name, company);
-		client = database.createClient(company, address, mail, name);
+		client = database.createClient(company, address, mail, name, password);
 	}
 	
 	public void journeyCreation(Database database, int seed) {
