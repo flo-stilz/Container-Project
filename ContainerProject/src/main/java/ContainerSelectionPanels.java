@@ -96,8 +96,14 @@ public class ContainerSelectionPanels {
 		showAll.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				wContainers = database.getAllContainers();
-				displayContainers(database, companymain);
+				try {
+					wContainers = database.getAllContainers();
+					doesItemExist(wContainers);
+					displayContainers(database, companymain);
+				} catch(MyException me) {
+					wContainers.removeAll(wContainers);
+				}
+//				displayContainers(database, companymain);
 			}
 		});
 		
@@ -309,11 +315,22 @@ public class ContainerSelectionPanels {
 			}
 			else {
 				tableModel.insertRow(0, new Object[] {c.getContainerId(), c.getCompany(), c.getContent(), c.getCurrentLocation(), c.getTempList().get(c.getTempList().size()-1), c.getPressureList().get(c.getPressureList().size()-1), c.getHumList().get(c.getHumList().size()-1), c.getTempList(), c.getPressureList(), c.getHumList()});
-			}
+			} 
+			
 		}
 		viewContainers.add(new JScrollPane(table), BorderLayout.NORTH);
 		companymain.getCl().show(companymain.getCards(), "viewContainers");
 	}
+	
+	public static void doesItemExist(ArrayList<Container> c) throws MyException {
+			
+			if (c.size() == 0) {
+				throw new MyException("Nothing matches your search!");
+			}
+			else {
+				System.out.println("All good");
+			}
+		}
 
 
 }

@@ -91,7 +91,7 @@ public class barPlots extends plot implements observer {
 
 		chart.setBackgroundPaint(Color.WHITE);
 //		setbackground(chart);
-		display();
+//		display();
 		
 	}
 
