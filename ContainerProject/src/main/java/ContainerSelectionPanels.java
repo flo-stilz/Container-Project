@@ -35,6 +35,9 @@ public class ContainerSelectionPanels {
 	private JCheckBox checkBoxHum;
 	private JCheckBox checkBoxAllinOne;
 	private JCheckBox checkBoxBarPlot;
+	private plot tempPlot;
+	private plot presPlot;
+	private plot humPlot;
 	
 	public JPanel getPlotPanel() {
 		return plotPanel;
@@ -249,13 +252,12 @@ public class ContainerSelectionPanels {
 
 			public void actionPerformed(ActionEvent e) {
 				
-				plotPanel.removeAll();
 				// get Container
 				ArrayList<Container> result = new ArrayList<Container>();
 				result.addAll(database.findContainer(id.getSelectedItem().toString(), database.getJourney()));
 				Container c = result.get(0);
 				
-				 checkPlots(database, topmain, c);
+				 createPlots(database, topmain, c);
 				
 				 topmain.getCl().show(topmain.getCards(), "plotPanel");
 			}
@@ -264,14 +266,14 @@ public class ContainerSelectionPanels {
 		
 	}
 	
-	public void checkPlots(final Database database, final TopMain topmain, Container c) {
+	public void createPlots(final Database database, final TopMain topmain, Container c) {
 		if (checkBoxTemp.isSelected()) {
 			 ArrayList<Integer> data = c.getTempList();
 			 
-			 plot plot = new plot("plot");
-			 plot.linePlot("Temperature", data);;
-			 JPanel tempPanel = plot.getChartPanel();
-			 plotPanel.add(tempPanel);
+			 tempPlot = new plot("plot");
+			 tempPlot.linePlot("Temperature", data);;
+//			 JPanel tempPanel = tempPlot.getChartPanel();
+//			 plotPanel.add(tempPanel);
 			 
 			 // plot.plot(data);
 			 // where plot.plot is the function that will displays the data
@@ -280,19 +282,17 @@ public class ContainerSelectionPanels {
 		 if (checkBoxPres.isSelected()) {
 			 ArrayList<Integer> data = c.getPressureList();
 			 
-			 plot plot = new plot("plot");
-			 plot.linePlot("Pressure", data);;
-			 JPanel presPanel = plot.getChartPanel();
-			 plotPanel.add(presPanel);
+			 presPlot = new plot("plot");
+			 presPlot.linePlot("Pressure", data);;
 			 
 		 }
 		 if (checkBoxHum.isSelected()) {
 			 ArrayList<Integer> data = c.getHumList();
 			 
-			 plot plot = new plot("plot");
-			 plot.linePlot("Humidity", data);;
-			 JPanel humPanel = plot.getChartPanel();
-			 plotPanel.add(humPanel);
+			 humPlot = new plot("plot");
+			 humPlot.linePlot("Humidity", data);;
+//			 JPanel humPanel = humPlot.getChartPanel();
+//			 plotPanel.add(humPanel);
 			 
 		 }
 		 if (checkBoxAllinOne.isSelected()) {
@@ -301,7 +301,7 @@ public class ContainerSelectionPanels {
 			 ArrayList<Integer> hum = c.getHumList();
 			 
 			 cPlot = new comparisonlinePlots("Comparison line plot", temp, pres, hum, csp, topmain);
-			 updateComparisonPlot(cPlot);
+//			 updateComparisonPlot(cPlot);
 			 database.addObserver(cPlot);
 			 
 		 }
@@ -312,8 +312,14 @@ public class ContainerSelectionPanels {
 			 
 			 bPlot = new barPlots("Bar plot", temp, pres, hum, csp, topmain);
 			 database.addObserver(bPlot);
-			 updateBarPlot(bPlot);
+//			 updateBarPlot(bPlot);
 		 }
+		 updateAllPlots(topmain);
+	}
+
+	public void updateLinePlots(plot linePlot) {
+		JPanel linePanel = linePlot.getChartPanel();
+		 plotPanel.add(linePanel);
 	}
 
 	
@@ -321,12 +327,15 @@ public class ContainerSelectionPanels {
 		plotPanel.removeAll();
 		if (checkBoxTemp.isSelected()) {
 			// updateTempPlot
+			updateLinePlots(tempPlot);
 		}
 		if (checkBoxPres.isSelected()) {
 			// updatePresPlot
+			updateLinePlots(presPlot);
 		}
 		if (checkBoxHum.isSelected()) {
 			// updateHumPlot
+			updateLinePlots(humPlot);
 		}
 		if (checkBoxAllinOne.isSelected()) {
 			updateComparisonPlot(cPlot);
