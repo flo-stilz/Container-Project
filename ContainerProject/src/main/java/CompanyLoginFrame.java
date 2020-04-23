@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 
 public class CompanyLoginFrame {
 	
-	private String name = "Mads Møller";
+	private String name = "Mads Mï¿½ller";
 	private String pass = "1";
 	
 	
@@ -25,7 +25,7 @@ public class CompanyLoginFrame {
 
 		JPanel usernamePanel = new JPanel();
 		JLabel userLbl = new JLabel("Username: ");
-		final JTextField username = new JTextField("Mads Møller");
+		final JTextField username = new JTextField("Mads Mï¿½ller");
 		username.setPreferredSize(new Dimension(100, 25));
 		usernamePanel.add(userLbl, BorderLayout.LINE_START);
 		usernamePanel.add(username, BorderLayout.LINE_END);
@@ -44,7 +44,7 @@ public class CompanyLoginFrame {
 			public void actionPerformed(ActionEvent e) {
 				String passtext = new String(password.getPassword());
 				if (username.getText().equals(name) && passtext.equals(pass)) {
-					new CompanyMain(database, main);
+					new CompanyMain(username.getText(), database, main);
 					company.dispose();
 				}
 				else {

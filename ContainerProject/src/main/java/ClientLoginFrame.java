@@ -26,7 +26,7 @@ public class ClientLoginFrame {
 
 		JPanel usernamePanel = new JPanel();
 		JLabel userLbl = new JLabel("Username: ");
-		final JTextField username = new JTextField("Mads Møller");
+		final JTextField username = new JTextField("Mads Mï¿½ller");
 		username.setPreferredSize(new Dimension(100, 25));
 		usernamePanel.add(userLbl, BorderLayout.LINE_START);
 		usernamePanel.add(username, BorderLayout.LINE_END);
@@ -50,7 +50,7 @@ public class ClientLoginFrame {
 					client client = database.search(userText).get(0);
 					
 					if (client.getPassword().contentEquals(passtext)) {
-						new CompanyMain(database, main);
+						new ClientMain(userText, database, main);
 						clientfield.dispose();
 					}
 					else {

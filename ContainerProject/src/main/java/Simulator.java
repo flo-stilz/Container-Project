@@ -310,7 +310,7 @@ public class Simulator {
 		company = companySelection(seed);
 		address = addressSelection(seed);
 		name = nameSelection(seed);
-		mail = emailCreation(name, company);
+		mail = emailCreation(company, name);
 		client = database.createClient(company, address, mail, name, password);
 	}
 	
@@ -318,7 +318,7 @@ public class Simulator {
 		company = companySelection();
 		address = addressSelection();
 		name = nameSelection();
-		mail = emailCreation(name, company);
+		mail = emailCreation(company, name);
 		client = database.createClient(company, address, mail, name, password);
 	}
 	

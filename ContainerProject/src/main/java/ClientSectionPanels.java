@@ -26,7 +26,7 @@ public class ClientSectionPanels {
 		clientSearch = new JPanel();
 		clientSearch.setPreferredSize(new Dimension(800, 600));
 		
-		viewClients = new JPanel();
+		viewClients = new JPanel(new BorderLayout());
 		viewClients.setPreferredSize(new Dimension(800, 600));
 		
 		final JTextField search = new JTextField();
@@ -43,7 +43,7 @@ public class ClientSectionPanels {
 				ArrayList<client> result = new ArrayList<client>();
 				result.addAll(database.search(keyword));
 				wClients = result;
-				displayclients(companymain);
+				displayclients(companymain, database);
 			}
 		});
 		
@@ -53,7 +53,7 @@ public class ClientSectionPanels {
 
 			public void actionPerformed(ActionEvent e) {
 				wClients = database.getClients();
-				displayclients(companymain);
+				displayclients(companymain, database);
 			}
 		});
 
@@ -61,7 +61,7 @@ public class ClientSectionPanels {
 	
 	// display the clients
 	
-	public void displayclients(CompanyMain companymain) {
+	public void displayclients(CompanyMain companymain, Database database) {
 		
 		viewClients.removeAll();
 		DefaultTableModel tableModel = new DefaultTableModel();
@@ -70,17 +70,26 @@ public class ClientSectionPanels {
 				"Company",
                 "Ref. Person",
                 "e-mail",
-                "address"
+                "address", 
+                "Client id",
+                "Active containers"
                 };
 		
 		for (String s : columnNames) {
 			tableModel.addColumn(s);
 		}
 		
+		
 		for (client c : wClients) {
-			tableModel.insertRow(0, new Object[] {c.getCompany(),c.getName(),c.getEmail(),c.getAddress()});
+			ArrayList<String> containerids = new ArrayList<String>();
+			ArrayList<Container> containers = database.findContainer(c.getCompany(), database.getJourney());
+			for (Container x : containers) {
+				containerids.add(x.getContainerId());
+			}
+		
+			tableModel.insertRow(0, new Object[] {c.getCompany(),c.getName(),c.getEmail(),c.getAddress(), c.getId(), containerids});
 		}
-		viewClients.add(new JScrollPane(table), BorderLayout.CENTER);
+		viewClients.add(new JScrollPane(table), BorderLayout.NORTH);
 		companymain.getCl().show(companymain.getCards(), "viewClients");
 	}
 	

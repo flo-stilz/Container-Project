@@ -3,9 +3,12 @@ import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Set;
 
+import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -26,46 +29,118 @@ public class JourneySectionPanels {
 		return viewJourneys;
 	}
 
-	public JourneySectionPanels(final Database database, final CompanyMain companymain) {
-		
+	public JourneySectionPanels(final Database database, final TopMain topmain) {
 		
 		journeySearch = new JPanel();
 		journeySearch.setPreferredSize(new Dimension(800, 600));
 		
 		viewJourneys = new JPanel(new BorderLayout());
 		viewJourneys.setPreferredSize(new Dimension(800, 600));
+			
+		searchActiveJourneys(database, topmain);
+			
+		showAllActiveJourneys(database, topmain);
+			
+		journeyPastSearch(database, topmain);
+			
+		showAllPast(database, topmain);	
+	}
+	
+	public ArrayList<Journey> filterActiveJourneysForClient(final Database database, final TopMain topmain) {
+		if (topmain instanceof ClientMain) {
+			Set<Journey> clientJourneys = database.findClientJourneys(topmain.getUserText(),database.getJourney());
+			ArrayList<Journey> result = new ArrayList<Journey>();
+			result.addAll(clientJourneys);
+			return result;
+		}
+		else {
+			return database.getJourney();
+		}
 		
-		// Search Journeys
-		
-		final JTextField search = new JTextField();
-		search.setPreferredSize(new Dimension(100, 25));
-		journeySearch.add(search);
-		
-		JButton searchButton = new JButton("Search");
-		journeySearch.add(searchButton);
-		
-		searchButton.addActionListener(new ActionListener() {
+	}
+
+	public void showAllPast(final Database database, final TopMain topmain) {
+		JButton showAllPast = new JButton("Show All");
+		journeySearch.add(showAllPast);
+		showAllPast.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				String keyword = search.getText();
-				ArrayList<Journey> result = new ArrayList<Journey>();
-				result.addAll(database.findUsingLoop(keyword));
+				ArrayList<Journey> result = filterPastJourneysForClient(database, topmain);
 				wJourneys = result;
-				displayJourneys(companymain, database);
+				displayJourneys(topmain, database);
 			}
+
 		});
+	}
+
+	public void journeyPastSearch(final Database database, final TopMain topmain) {
+		JLabel journeyPast = new JLabel("Journey's History");
+		journeySearch.add(journeyPast);
+		final JTextField searchjourneyPastTxt = new JTextField();
+		searchjourneyPastTxt.setPreferredSize(new Dimension(100, 25));
+		journeySearch.add(searchjourneyPastTxt);
 		
-		JButton showAll = new JButton("Show All");
-		journeySearch.add(showAll);
-		showAll.addActionListener(new ActionListener() {
+		JButton journeyPastSearch = new JButton("Search");
+		journeySearch.add(journeyPastSearch);
+		journeyPastSearch.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				wJourneys = database.getJourney();
-				displayJourneys(companymain, database);
+				ArrayList<Journey> result = filterPastJourneysForClient(database, topmain);
+				String keyword = searchjourneyPastTxt.getText();
+				wJourneys = database.findUsingLoop(keyword, result);
+				displayJourneys(topmain, database);
+			}
+		});
+	}
+
+	public ArrayList<Journey> filterPastJourneysForClient(Database database, TopMain topmain) {
+		if (topmain instanceof ClientMain) {
+			Set<Journey> clientJourneys = database.findClientJourneys(topmain.getUserText(),database.getHistory());
+			ArrayList<Journey> result = new ArrayList<Journey>();
+			result.addAll(clientJourneys);
+			return result;
+		}
+		else {
+			return database.getHistory();
+		}
+	}
+
+	public void showAllActiveJourneys(final Database database, final TopMain topmain) {
+		
+		JButton showAllActive = new JButton("Show All");
+		journeySearch.add(showAllActive);
+		showAllActive.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Journey> result = filterActiveJourneysForClient(database, topmain);
+				wJourneys = result;
+				displayJourneys(topmain, database);
 			}
 
 		});
+	}
+
+	public void searchActiveJourneys(final Database database, final TopMain topmain) {
 		
+		JLabel journeyActive = new JLabel("Active Journeys");
+		final JTextField searchActive = new JTextField();
+		searchActive.setPreferredSize(new Dimension(100, 25));
+		journeySearch.add(journeyActive);
+		journeySearch.add(searchActive);
+		
+		JButton searchActiveButton = new JButton("Search");
+		journeySearch.add(searchActiveButton);
+		
+		searchActiveButton.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Journey> result = filterActiveJourneysForClient(database, topmain);
+				String keyword = searchActive.getText();
+				database.findUsingLoop(keyword, result);
+				wJourneys = result;
+				displayJourneys(topmain, database);
+			}
+		});
 	}
 	
 	// Change current location of a journey
@@ -93,7 +168,7 @@ public class JourneySectionPanels {
 			public void actionPerformed(ActionEvent e) {
 				String newcurrentLocation = loc.getText();
 				ArrayList<Journey> result = new ArrayList<Journey>();
-				result.addAll(database.findUsingLoop(id.getSelectedItem().toString()));
+				result.addAll(database.findUsingLoop(id.getSelectedItem().toString(), database.getJourney()));
 				Journey j = result.get(0);
 				j.updateCurrentLocation(newcurrentLocation);
 			}
@@ -101,12 +176,59 @@ public class JourneySectionPanels {
 		viewJourneys.add(update, BorderLayout.SOUTH);
 	}
 	
+	public void signUpGoods(final Database database, final TopMain topmain) {
+		
+		JPanel signUp = new JPanel(new BorderLayout());
+		viewJourneys.add(signUp, BorderLayout.CENTER);
+		String[] options = new String[database.getJourney().size()];
+		int i = 0;
+		for (Journey j : database.getJourney()) {
+			options[i] = j.getId();
+			i++;
+		}
+		JPanel inputs = new JPanel();
+		inputs.setLayout(new BoxLayout(inputs, BoxLayout.Y_AXIS));
+		signUp.add(inputs, BorderLayout.CENTER);
+		
+		final JTextField content = new JTextField();
+		content.setPreferredSize(new Dimension(100, 25));
+		inputs.add(new JLabel("Input content: "));
+		inputs.add(content);
+		
+		final JTextField origin = new JTextField();
+		origin.setPreferredSize(new Dimension(100, 25));
+		inputs.add(new JLabel("Input origin: "));
+		inputs.add(origin);
+		
+		final JTextField destination = new JTextField();
+		destination.setPreferredSize(new Dimension(100, 25));
+		inputs.add(new JLabel("Input destination: "));
+		inputs.add(destination);
+		
+		
+		JButton confirm = new JButton("Confirm new journey");
+		confirm.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				String newContent = content.getText();
+				String newOrigin = origin.getText();
+				String newDestination = destination.getText();
+				database.createJourney(newOrigin, newDestination, newContent, topmain.getUserText());
+			}
+		});
+		viewJourneys.add(confirm, BorderLayout.SOUTH);
+	}
+	
 	// view Journeys
 	
-	public void displayJourneys(CompanyMain companymain, Database database) {
+	public void displayJourneys(TopMain topmain, Database database) {
 		viewJourneys.removeAll();
-		
-		changeloc(database);
+		if (topmain instanceof CompanyMain) {
+			changeloc(database);
+		}
+		else if (topmain instanceof ClientMain) {
+			signUpGoods(database, topmain);
+		}
 		DefaultTableModel tableModel = new DefaultTableModel();
 		JTable table = new JTable(tableModel);
 		String[] columnNames = {
@@ -121,14 +243,29 @@ public class JourneySectionPanels {
 			tableModel.addColumn(s);
 		}
 		for (Journey j : wJourneys) {
-			ArrayList<String> containerids = new ArrayList<String>();
-			for (Container c : j.getContainerList()) {
-				containerids.add(c.getContainerId());
-			}
-			
+			ArrayList<String> containerids = filterClientContainers(database, topmain, j);
 			tableModel.insertRow(0, new Object[] {j.getId(),j.getOrigin(),j.getDestination(),j.getCurrentLocation(), containerids});
 		}
 		viewJourneys.add(new JScrollPane(table), BorderLayout.NORTH);
-		companymain.getCl().show(companymain.getCards(), "viewJourneys");
+		topmain.getCl().show(topmain.getCards(), "viewJourneys");
 	}
+	
+	public ArrayList<String> filterClientContainers(Database database, TopMain topmain, Journey j){
+		ArrayList<String> containerids = new ArrayList<String>();
+		if ( topmain instanceof CompanyMain) {
+			for (Container c : j.getContainerList()) {
+				containerids.add(c.getContainerId());
+			}
+		}
+		
+		else if ( topmain instanceof ClientMain) {
+			for (Container c : j.getContainerList()) {
+				if (c.getCompany().contentEquals(topmain.getUserText())) {
+				containerids.add(c.getContainerId());
+				}
+			}
+		}
+		return containerids;
+	}
+	
 }

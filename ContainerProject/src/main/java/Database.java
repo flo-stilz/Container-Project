@@ -72,10 +72,10 @@ public class Database {
 		return c;
 	}
 
-	public Set<Journey> findUsingLoop (String search){
+	public ArrayList<Journey> findUsingLoop (String search, ArrayList<Journey> journeyList){
 	
-			Set<Journey> matches = new HashSet<Journey>();
-			for (Journey j : journey) {
+			ArrayList<Journey> matches = new ArrayList<Journey>();
+			for (Journey j : journeyList) {
 				if ((j.getOrigin().equalsIgnoreCase(search))||
 						(j.getDestination().equalsIgnoreCase(search))
 						|| (j.getId().equalsIgnoreCase(search))
@@ -137,9 +137,9 @@ public class Database {
 	
 	// Find containers that match a certain keyword in the active journey list
 	
-	public ArrayList<Container> findContainer(String keyword) {
+	public ArrayList<Container> findContainer(String keyword, ArrayList<Journey> journeyList) {
 		ArrayList<Container> containers = new ArrayList<Container>();
-		for (Journey j : journey) {
+		for (Journey j : journeyList) {
 			for (Container c : j.getContainerList()) {
 				if ((c.getContainerId().equalsIgnoreCase(keyword)) 
 						|| (c.getCompany().equalsIgnoreCase(keyword)) 
@@ -206,16 +206,18 @@ public class Database {
 	}
 	
 	
-	public ArrayList<Journey> containerJourneyHistory(String search){
-		ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
+	public Set<Journey> findJourneysFromContainers(String search){
+		Set<Journey> result = new HashSet<Journey>();
 		for(Journey j : history) {
 			for(Container c : j.getContainerList()) {
-				if (c.getContainerId().equals(search)) {
-					containerJourneyHistoryList.add(j);	
+				if ((c.getContainerId().equals(search)) 
+					|| (c.getContent().equals(search))
+					|| (c.getCompany().equals(search))) {
+					result.add(j);	
 				}
 			}
 		}
-		return containerJourneyHistoryList;			
+		return result;			
 	}
 
 
@@ -248,12 +250,38 @@ public class Database {
 	public void addchartObserver(chartobserver o) {
 		cobs.add(o);
 	}
-	//where to containders get added to warehouse
+	//where containers get added to warehouse
 	private void notifychartOberver() {
 		for (chartobserver o :cobs) {
 			o.updateC(containerWarehouse);
 		}
 	}
+	
+	public Set<Journey> findClientJourneys(String client, ArrayList<Journey> journeyList){
+		Set<Journey> result = new HashSet<Journey>();
+		for ( Journey j : journeyList) {
+			for (Container c : j.getContainerList()) {
+				if (client.contentEquals(c.getCompany())) {
+					result.add(j);
+				}
+			}
+		}
+		return result;
+	}
+	
+	public ArrayList<Container> findClientContainer(String client, ArrayList<Journey> journeyList){
+		ArrayList<Container> result = new ArrayList<Container>();
+		for ( Journey j : journeyList) {
+			for (Container c : j.getContainerList()) {
+				if (client.contentEquals(c.getCompany())) {
+					result.add(c);
+				}
+			}
+		}
+		return result;
+	}
+	
+	
 	
 }
 		

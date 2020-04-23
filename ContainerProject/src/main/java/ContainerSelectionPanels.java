@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -38,7 +39,7 @@ public class ContainerSelectionPanels {
 		return viewContainers;
 	}
 
-	public ContainerSelectionPanels(final Database database, final CompanyMain companymain) {
+	public ContainerSelectionPanels(final Database database, final TopMain topmain) {
 		
 		containerSearch = new JPanel();
 		containerSearch.setPreferredSize(new Dimension(800, 600));
@@ -53,25 +54,37 @@ public class ContainerSelectionPanels {
 		
 		// Container History
 		
-		JLabel containerpast = new JLabel("Container's History");
-		containerSearch.add(containerpast);
-		final JTextField searchContainerevol = new JTextField();
-		searchContainerevol.setPreferredSize(new Dimension(100, 25));
-		containerSearch.add(searchContainerevol);
-		
-		JButton search = new JButton("Search");
-		containerSearch.add(search);
-		search.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				keyword = searchContainerevol.getText();
-				wJourneys = database.containerJourneyHistory(keyword);
-				displayJourneys(database, companymain);
-			}
-		});
+		searchContainerPast(database, topmain);
 		
 		// Filter among active Containers
 		
+		searchActiveContainers(database, topmain);
+		
+		// Show all Containers at the current status
+		
+		showAllActiveContainers(database, topmain);
+		
+	}
+
+	public void showAllActiveContainers(final Database database, final TopMain topmain) {
+		JButton showAll = new JButton("Show All");
+		containerSearch.add(showAll);
+		showAll.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Journey> result = filterActiveContainersforClients(database, topmain);
+				if (result.size() == 0) {
+					//something
+				}
+				else {
+					wContainers = database.getAllContainers();
+					displayContainers(database, topmain);
+				}	
+			}
+		});
+	}
+
+	public void searchActiveContainers(final Database database, final TopMain topmain) {
 		JLabel activecontainer = new JLabel("Active Container");
 		containerSearch.add(activecontainer);
 		final JTextField searchActiveContainer = new JTextField();
@@ -84,32 +97,60 @@ public class ContainerSelectionPanels {
 
 			public void actionPerformed(ActionEvent e) {
 				keyword = searchActiveContainer.getText();
-				wContainers = database.findContainer(keyword);
-				displayContainers(database, companymain);
+				ArrayList<Journey> result = filterActiveContainersforClients(database, topmain);
+				
+				wContainers = database.findContainer(keyword, result);
+				displayContainers(database, topmain);
 			}
-		});
-		
-		// Show all Containers at the current status
-		
-		JButton showAll = new JButton("Show All");
-		containerSearch.add(showAll);
-		showAll.addActionListener(new ActionListener() {
 
-			public void actionPerformed(ActionEvent e) {
-				try {
-					wContainers = database.getAllContainers();
-					doesItemExist(wContainers);
-					displayContainers(database, companymain);
-				} catch(MyException me) {
-					wContainers.removeAll(wContainers);
-				}
-//				displayContainers(database, companymain);
-			}
 		});
-		
 	}
 	
-	public void additionalInformation(Database database, CompanyMain companymain) {
+	public ArrayList<Journey> filterActiveContainersforClients(final Database database, final TopMain topmain) {
+		if (topmain instanceof ClientMain) {
+			ArrayList<Journey> result = new ArrayList<Journey>();
+			result.addAll(database.findClientJourneys(topmain.getUserText(), database.getJourney()));
+			return result;
+		}
+		else {
+			return database.getJourney();
+		}
+	}
+
+	public void searchContainerPast(final Database database, final TopMain topmain) {
+		JLabel containerpast = new JLabel("Container's History");
+		containerSearch.add(containerpast);
+		final JTextField searchContainerevol = new JTextField();
+		searchContainerevol.setPreferredSize(new Dimension(100, 25));
+		containerSearch.add(searchContainerevol);
+		
+		JButton search = new JButton("Search");
+		containerSearch.add(search);
+		search.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				keyword = searchContainerevol.getText();
+				ArrayList<Journey> results = new ArrayList<Journey>();
+				results.addAll(database.findJourneysFromContainers(keyword));
+				ArrayList<Journey> result = filterJourneysForClients(database, topmain, results);
+				wJourneys = result;
+				displayJourneys(database, topmain);
+			}
+		});
+	}
+	
+	public ArrayList<Journey> filterJourneysForClients(final Database database, final TopMain topmain, ArrayList<Journey> unfiltered) {
+		if (topmain instanceof ClientMain) {
+			ArrayList<Journey> result = new ArrayList<Journey>();
+			result.addAll(database.findClientJourneys(topmain.getUserText(), unfiltered));
+			return result;
+		}
+		else {
+			return unfiltered;
+		}
+	}
+	
+	public void additionalInformation(Database database, TopMain topmain) {
 		
 		extraOptions = new JPanel(new BorderLayout());
 		viewContainers.add(extraOptions, BorderLayout.CENTER);
@@ -123,8 +164,10 @@ public class ContainerSelectionPanels {
 		final JComboBox<String> id = new JComboBox<String>(options);
 		extraOptions.add(id, BorderLayout.NORTH);
 		
-		updateData(database, id);
-		showPlots(database, id, companymain);
+		if (topmain instanceof CompanyMain) {
+			updateData(database, id);
+		}
+		showPlots(database, id, topmain);
 	}
 	
 	public void updateData(final Database database, final JComboBox<String> id) {
@@ -159,7 +202,7 @@ public class ContainerSelectionPanels {
 				Integer newPressure = Integer.parseInt(pressure.getText());
 				Integer newHum = Integer.parseInt(hum.getText());
 				ArrayList<Container> result = new ArrayList<Container>();
-				result.addAll(database.findContainer(id.getSelectedItem().toString()));
+				result.addAll(database.findContainer(id.getSelectedItem().toString(), database.getJourney()));
 				Container c = result.get(0);
 				database.addData(c, newTemp, newPressure, newHum);
 			}
@@ -167,7 +210,7 @@ public class ContainerSelectionPanels {
 		dataUpdate.add(update, BorderLayout.SOUTH);
 	}
 	
-	public void showPlots(final Database database, final JComboBox<String> id, final CompanyMain companymain) {
+	public void showPlots(final Database database, final JComboBox<String> id, final TopMain topmain) {
 		
 		JPanel choosePlots = new JPanel(new BorderLayout());
 		extraOptions.add(choosePlots, BorderLayout.EAST);
@@ -196,7 +239,7 @@ public class ContainerSelectionPanels {
 				plotPanel.removeAll();
 				// get Container
 				ArrayList<Container> result = new ArrayList<Container>();
-				result.addAll(database.findContainer(id.getSelectedItem().toString()));
+				result.addAll(database.findContainer(id.getSelectedItem().toString(), database.getJourney()));
 				Container c = result.get(0);
 				
 				 if (checkBoxTemp.isSelected()) {
@@ -250,14 +293,14 @@ public class ContainerSelectionPanels {
 					 plotPanel.add(barplot);
 				 }
 				
-				companymain.getCl().show(companymain.getCards(), "plotPanel");
+				 topmain.getCl().show(topmain.getCards(), "plotPanel");
 			}
 		});
 		
 	}
 
 	
-	public void displayJourneys(Database database, CompanyMain companymain) {
+	public void displayJourneys(Database database, TopMain topmain) {
 		
 		viewContainers.removeAll();
 		DefaultTableModel tableModel = new DefaultTableModel();
@@ -283,13 +326,13 @@ public class ContainerSelectionPanels {
 			tableModel.insertRow(0, new Object[] {j.getId(),j.getOrigin(),j.getDestination(),j.getCurrentLocation(), j.findContainers(keyword).get(0).getCompany(), j.findContainers(keyword).get(0).getContent(), j.findContainers(keyword).get(0).getTempList(), j.findContainers(keyword).get(0).getPressureList(), j.findContainers(keyword).get(0).getHumList()});
 		}
 		viewContainers.add(new JScrollPane(table), BorderLayout.NORTH);
-		companymain.getCl().show(companymain.getCards(), "viewContainers");
+		topmain.getCl().show(topmain.getCards(), "viewContainers");
 	}
 	
-	public void displayContainers(Database database, CompanyMain companymain) {
+	public void displayContainers(Database database, TopMain topmain) {
 		
 		viewContainers.removeAll();
-		additionalInformation(database, companymain);
+		additionalInformation(database, topmain);
 		DefaultTableModel tableModel = new DefaultTableModel();
 		JTable table = new JTable(tableModel);
 		String[] columnNames = {
@@ -319,7 +362,7 @@ public class ContainerSelectionPanels {
 			
 		}
 		viewContainers.add(new JScrollPane(table), BorderLayout.NORTH);
-		companymain.getCl().show(companymain.getCards(), "viewContainers");
+		topmain.getCl().show(topmain.getCards(), "viewContainers");
 	}
 	
 	public static void doesItemExist(ArrayList<Container> c) throws MyException {

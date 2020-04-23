@@ -18,7 +18,7 @@ public class stepDef {
 	Journey j2;
 	Journey j3;
 	Database database = new Database();
-	Set<Journey> matches = new HashSet<Journey>();
+	ArrayList<Journey> matches = new ArrayList<Journey>();
 	String search;
 	String newloc;
 	String loc;
@@ -65,7 +65,7 @@ public class stepDef {
 	
 	
 	//Imports for Container Status Tracking
-	ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
+	Set<Journey> containerJourneyHistoryList = new HashSet<Journey>();
 	ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
 	Journey j5;
 	Journey j6;
@@ -275,7 +275,7 @@ public class stepDef {
 
 	@When("it matches for the keyword")
 	public void it_matches_for_the_keyword() {
-	    matches = database.findUsingLoop(search);
+	    matches = database.findUsingLoop(search, database.getJourney());
 	}
 
 	@Then("the empty list matches is returned")
@@ -765,12 +765,12 @@ public class stepDef {
 
     @When("the container id is searched for in the journey history to find all journeys the container has been used for")
     public void the_container_id_is_searched_for_in_the_journey_history() {
-    	containerJourneyHistoryList = database.containerJourneyHistory(search);
+    	containerJourneyHistoryList = database.findJourneysFromContainers(search);
     }
 
     @Then("the container C0s journey history should be returned")
     public void the_container_C0s_journey_history_should_be_returned() {
-    	assertEquals(containerJourneyHistoryList.get(0).getId(), "BUAMIA0");
+    	assertEquals(containerJourneyHistoryList.contains(j5), true);
     	assertEquals(containerJourneyHistoryList.size(), 1); 	
     }
     
@@ -809,8 +809,8 @@ public class stepDef {
    
     @Then("the reused container C0s journey history should be returned")
     public void the_reused_container_C0s_journey_history_should_be_returned() {
-    	assertEquals(containerJourneyHistoryList.get(0).getId(), "BUAMIA0");
-    	assertEquals(containerJourneyHistoryList.get(1).getId(), "BUAMIA1");
+    	assertEquals(containerJourneyHistoryList.contains(j6), true);
+    	assertEquals(containerJourneyHistoryList.contains(j7), true);
     	assertEquals(containerJourneyHistoryList.size(),2); 
     }
 
