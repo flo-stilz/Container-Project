@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 public class TopMain {
 	
 	private String userText;
-	private JFrame company;
+	private JFrame main1;
 	private JPanel options;
 	private JPanel cards;
 	private CardLayout cl;
@@ -27,12 +27,12 @@ public class TopMain {
 	public CardLayout getCl() {
 		return cl;
 	}
-	public JFrame getCompany() {
-		return company;
+	public JFrame getMain1() {
+		return main1;
 	}
 
-	public void setCompany(JFrame company) {
-		this.company = company;
+	public void setMain1(JFrame main1) {
+		this.main1 = main1;
 	}
 
 	public JPanel getOptions() {
@@ -51,52 +51,51 @@ public class TopMain {
 		this.cl = cl;
 	}
 
-	public TopMain(String userText, final Database database, final JFrame main) {
+	public TopMain(String userText, final Database database, final JFrame login) {
 		
 		this.userText = userText;
-		System.out.println(userText);
-		JFrame company = new JFrame("Company Overview");
+		main1 = new JFrame("Company Overview");
 
 		// CardLayout
 		cards = new JPanel(new CardLayout());
 		
-		options(database, main, company);
+		options(database, login);
 		
 		cl = (CardLayout)(cards.getLayout());
 		
 		
-		company.add(options, BorderLayout.WEST);
-		company.add(cards, BorderLayout.EAST);
+		main1.add(options, BorderLayout.WEST);
+		main1.add(cards, BorderLayout.EAST);
 		cl.show(cards, "menu");
-		company.pack();		
-		company.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		company.setVisible(true);
+		main1.pack();		
+		main1.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		main1.setVisible(true);
 	}
 	
 	
-	public void options(Database database, JFrame main, JFrame company) {
+	public void options(Database database, JFrame login) {
 		options = new JPanel();
 		options.setLayout(new BoxLayout(options, BoxLayout.Y_AXIS));
 		
 		JButton menu = new JButton("Menu");
 		menu.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		options.add(menu);
-		menuButton(database, main, menu, company);
+		menuButton(database, login, menu);
 		
 		JButton journeys = new JButton("View Journeys");
 		journeys.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		options.add(journeys);
-		journeyButton(database, main, journeys);
+		journeyButton(database, login, journeys);
 		
 		
 		JButton containers = new JButton("View Containers");
 		containers.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		options.add(containers);
-		containerButton(database, main, containers);
+		containerButton(database, login, containers);
 			
 	} 
 	
-	public void menuButton(Database database, JFrame main, JButton menu, JFrame company) {
+	public void menuButton(Database database, JFrame login, JButton menu) {
 		final JPanel menupanel = new JPanel();
 		menupanel.setPreferredSize(new Dimension(800, 600));
 		menupanel.setBackground(Color.RED);
@@ -105,7 +104,7 @@ public class TopMain {
 		
 		JLabel lbl = new JLabel("Description");
 		menupanel.add(lbl, BorderLayout.NORTH);
-		logOutButton(database, main, company, menupanel);
+		logOutButton(database, login, menupanel);
 		
 		menu.addActionListener(new ActionListener() {
 
@@ -117,7 +116,7 @@ public class TopMain {
 	
 
 	
-	public void journeyButton(Database database, JFrame main, JButton journeys) {
+	public void journeyButton(Database database, JFrame login, JButton journeys) {
 		// journey section
 		
 		JourneySectionPanels j = new JourneySectionPanels(database, this);
@@ -144,7 +143,7 @@ public class TopMain {
 		this.userText = userText;
 	}
 
-	public void containerButton(Database database, JFrame main, JButton containers) {
+	public void containerButton(Database database, JFrame login, JButton containers) {
 	// container section
 	
 		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);
@@ -163,7 +162,7 @@ public class TopMain {
 	
 
 
-	public void logOutButton(Database database, final JFrame main, final JFrame company, JPanel menupanel) {
+	public void logOutButton(Database database, final JFrame login, JPanel menupanel) {
 		// Logout as company user
 		
 		JButton logout = new JButton("Logout");
@@ -173,8 +172,8 @@ public class TopMain {
 		logout.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				main.setVisible(true);
-				company.dispose();
+				login.setVisible(true);
+				main1.dispose();
 			}
 		});
 	}

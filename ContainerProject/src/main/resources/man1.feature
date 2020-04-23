@@ -43,7 +43,7 @@ Feature: Client Management
     And client is registered
     And a new client company name "coconuts", address "dtu", email "mail", contact person "log"
     And client is registered
-    When string "mail" apears as client infornmation
+    When string "coconuts" apears as client infornmation
     Then a list of possible clients is returned
     
     

@@ -27,8 +27,8 @@ public class CompanyMain extends TopMain{
 //		return cl;
 //	}
 
-	public CompanyMain(String userText, final Database database, final JFrame main) {
-		super(userText, database, main);
+	public CompanyMain(String userText, final Database database, final JFrame login) {
+		super(userText, database, login);
 //		final JFrame company = new JFrame("Company Overview");
 
 		// CardLayout
@@ -48,37 +48,37 @@ public class CompanyMain extends TopMain{
 	}
 	
 	@Override
-	public void options(Database database, JFrame main, JFrame company) {
+	public void options(Database database, JFrame login) {
 		setOptions(new JPanel());
 		getOptions().setLayout(new BoxLayout(getOptions(), BoxLayout.Y_AXIS));
 		
 		JButton menu = new JButton("Menu");
 		menu.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(menu);
-		menuButton(database, main, menu, company);
+		menuButton(database, login, menu);
 		
 		JButton clients = new JButton("View Clients");
 		clients.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(clients);
-		clientButton(database, main, clients);
+		clientButton(database, login, clients);
 		
 		
 		JButton journeys = new JButton("View Journeys");
 		journeys.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(journeys);
-		journeyButton(database, main, journeys);
+		journeyButton(database, login, journeys);
 		
 		
 		JButton containers = new JButton("View Containers");
 		containers.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(containers);
-		containerButton(database, main, containers);
+		containerButton(database, login, containers);
 		
 		
 		JButton simulation = new JButton("Start Simulation");
 		simulation.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(simulation);
-		simulationButton(database, main, simulation);
+		simulationButton(database, login, simulation);
 		
 	
 	} 
@@ -102,7 +102,7 @@ public class CompanyMain extends TopMain{
 //		});
 //	}
 	
-	public void clientButton(Database database, JFrame main, JButton clients) {
+	public void clientButton(Database database, JFrame login, JButton clients) {
 		ClientSectionPanels c = new ClientSectionPanels(database, this);
 		getCards().add(c.getClientSearch(), "clientSearch");
 		getCards().add(c.getViewClients(), "viewClients");
@@ -152,7 +152,7 @@ public class CompanyMain extends TopMain{
 //			
 //	}
 	
-	public void simulationButton(final Database database, JFrame main, JButton simulation) {	
+	public void simulationButton(final Database database, JFrame login, JButton simulation) {	
 		// simulation section
 		
 		JPanel sim = new JPanel();

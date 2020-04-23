@@ -29,8 +29,8 @@ public class ClientMain extends TopMain{
 //		return cl;
 //	}
 
-	public ClientMain(String userText, final Database database, final JFrame main) {
-		super(userText, database, main);
+	public ClientMain(String userText, final Database database, final JFrame login) {
+		super(userText, database, login);
 		System.out.println("client");
 
 
@@ -53,7 +53,7 @@ public class ClientMain extends TopMain{
 	}
 	
 	@Override
-	public void options(Database database, JFrame main, JFrame client) {
+	public void options(Database database, JFrame login) {
 		currentClient = database.search(getUserText()).get(0);
 		setOptions(new JPanel());
 		getOptions().setLayout(new BoxLayout(getOptions(), BoxLayout.Y_AXIS));
@@ -61,7 +61,7 @@ public class ClientMain extends TopMain{
 		JButton menu = new JButton("Profile");
 		menu.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(menu);
-		menuButton(database, main, menu, client);
+		menuButton(database, login, menu);
 		
 //		JButton clients = new JButton("View Clients");
 //		clients.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
@@ -72,13 +72,13 @@ public class ClientMain extends TopMain{
 		JButton journeys = new JButton("My Journeys");
 		journeys.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(journeys);
-		journeyButton(database, main, journeys);
+		journeyButton(database, login, journeys);
 		
 		
 		JButton containers = new JButton("My Containers");
 		containers.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(containers);
-		containerButton(database, main, containers);
+		containerButton(database, login, containers);
 		
 		
 //		JButton simulation = new JButton("Start Simulation");
@@ -89,7 +89,7 @@ public class ClientMain extends TopMain{
 	
 	} 
 	@Override
-	public void menuButton(Database database, JFrame main, JButton menu, JFrame client) {
+	public void menuButton(Database database, JFrame login, JButton menu) {
 		final JPanel menupanel = new JPanel( new BorderLayout());
 		menupanel.setPreferredSize(new Dimension(800, 600));
 		menupanel.setBackground(Color.RED);
@@ -115,7 +115,7 @@ public class ClientMain extends TopMain{
 		clientDetails.add(id);
 		menupanel.add(clientDetails, BorderLayout.CENTER);
 		
-		logOutButton(database, main, client, menupanel);
+		logOutButton(database, login, menupanel);
 		
 		menu.addActionListener(new ActionListener() {
 
@@ -139,7 +139,7 @@ public class ClientMain extends TopMain{
 //		
 //	}
 	@Override
-	public void journeyButton(Database database, JFrame main, JButton journeys) {
+	public void journeyButton(Database database, JFrame login, JButton journeys) {
 		// journey section
 		
 		JourneySectionPanels j = new JourneySectionPanels(database, this);
@@ -158,7 +158,7 @@ public class ClientMain extends TopMain{
 		
 	}
 	
-	public void containerButton(Database database, JFrame main, JButton containers) {
+	public void containerButton(Database database, JFrame login, JButton containers) {
 	// container section
 	
 		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);

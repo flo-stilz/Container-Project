@@ -17,6 +17,8 @@ import org.jfree.ui.TextAnchor;
 public class barPlots extends plot implements observer {
 	
 	private ChartPanel chartPanel;
+	private ContainerSelectionPanels csp;
+	private TopMain topmain;
 	
 	public ChartPanel getChartPanel() {
 		return chartPanel;
@@ -44,10 +46,12 @@ public class barPlots extends plot implements observer {
 		//display();
 	}
 
-	public barPlots(String plottitle, ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h) {
+	public barPlots(String plottitle, ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h, ContainerSelectionPanels csp, TopMain topmain) {
 		super(plottitle);
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
+		this.csp = csp;
+		this.topmain = topmain;
 		dataset.setValue(range(t), "hum", "Temperature");
 		dataset.setValue(range(p), "hum", "Pressure");
 		dataset.setValue(range(h), "hum", "Volume");
@@ -88,6 +92,8 @@ public class barPlots extends plot implements observer {
 		 chartPanel = new ChartPanel( chart );        
 	     chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
 	     setContentPane( chartPanel ); 
+	     
+	     csp.updateAllPlots(topmain);
 
 		chart.setBackgroundPaint(Color.WHITE);
 //		setbackground(chart);
