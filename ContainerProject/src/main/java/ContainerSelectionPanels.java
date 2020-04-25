@@ -18,6 +18,11 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+// Was added:
+// SearchContainerEntryC
+// SearchContainerEntryJ
+
+
 public class ContainerSelectionPanels {
 
 	private JPanel containerSearch;
@@ -72,6 +77,10 @@ public class ContainerSelectionPanels {
 		
 		searchContainerPast(database, topmain);
 		
+		// Filter among past Containers
+		
+		searchForItemsInContainerPast(database, topmain);
+		
 		// Filter among active Containers
 		
 		searchActiveContainers(database, topmain);
@@ -89,13 +98,8 @@ public class ContainerSelectionPanels {
 
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Journey> result = filterActiveContainersforClients(database, topmain);
-				if (result.size() == 0) {
-					//something
-				}
-				else {
-					wContainers = database.getAllContainers();
-					displayContainers(database, topmain);
-				}	
+				wContainers = database.getAllContainers();
+				checksSearchEntryC(database, topmain);
 			}
 		});
 	}
@@ -116,10 +120,28 @@ public class ContainerSelectionPanels {
 				ArrayList<Journey> result = filterActiveContainersforClients(database, topmain);
 				
 				wContainers = database.findContainer(keyword, result);
-				displayContainers(database, topmain);
+				checksSearchEntryC(database, topmain);
 			}
 
 		});
+	}
+	
+	public void checksSearchEntryC(final Database database, final TopMain topmain) {
+		if (wContainers.size() == 0) {
+			// Window created
+		}
+		else {
+			displayContainers(database, topmain);
+		}
+	}
+	
+	public void checksSearchEntryJ(final Database database, final TopMain topmain) {
+		if (wJourneys.size() == 0) {
+			// Window created
+		}
+		else {
+			displayJourneys(database, topmain);
+		}
 	}
 	
 	public ArrayList<Journey> filterActiveContainersforClients(final Database database, final TopMain topmain) {
@@ -150,7 +172,7 @@ public class ContainerSelectionPanels {
 				results.addAll(database.findJourneysFromContainers(keyword));
 				ArrayList<Journey> result = filterJourneysForClients(database, topmain, results);
 				wJourneys = result;
-				displayJourneys(database, topmain);
+				checksSearchEntryJ(database, topmain);
 			}
 		});
 	}
@@ -163,6 +185,38 @@ public class ContainerSelectionPanels {
 		}
 		else {
 			return unfiltered;
+		}
+	}
+	
+	public void searchForItemsInContainerPast(final Database database, final TopMain topmain) {
+		JLabel containeritempast = new JLabel("Filtered past containers");
+		containerSearch.add(containeritempast);
+		final JTextField searchPastContainers = new JTextField();
+		searchPastContainers.setPreferredSize(new Dimension(100, 25));
+		containerSearch.add(searchPastContainers);
+		
+		JButton searchPast = new JButton("Search");
+		containerSearch.add(searchPast);
+		searchPast.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				keyword = searchPastContainers.getText();
+				ArrayList<Journey> result = filterPastContainersforClients(database, topmain);
+				
+				wContainers = database.findContainer(keyword, result);
+				checksSearchEntryC(database, topmain);
+			}
+		});
+	}
+
+	public ArrayList<Journey> filterPastContainersforClients(final Database database, final TopMain topmain) {
+		if (topmain instanceof ClientMain) {
+			ArrayList<Journey> result = new ArrayList<Journey>();
+			result.addAll(database.findClientJourneys(topmain.getUserText(), database.getHistory()));
+			return result;
+		}
+		else {
+			return database.getHistory();
 		}
 	}
 	
@@ -180,11 +234,21 @@ public class ContainerSelectionPanels {
 		final JComboBox<String> id = new JComboBox<String>(options);
 		extraOptions.add(id, BorderLayout.NORTH);
 		
-		if (topmain instanceof CompanyMain) {
+		if (topmain instanceof CompanyMain && checkContainerListForPastOrActive(database)) {
 			updateData(database, id);
 		}
 		showPlots(database, id, topmain);
 	}
+	
+	// Using the first item in the container list to check whether the containers are active
+	
+	public boolean checkContainerListForPastOrActive(Database database) {
+		Container firstContainer = wContainers.get(0);
+		String journeyid = firstContainer.getId();
+		return (database.findUsingLoop(journeyid, database.getJourney()).size() == 0);
+	}
+	
+	// Give the company the option to update current Containers measurements
 	
 	public void updateData(final Database database, final JComboBox<String> id) {
 		
@@ -397,6 +461,7 @@ public class ContainerSelectionPanels {
 		JTable table = new JTable(tableModel);
 		String[] columnNames = {
 				"Container ID",
+				"Journey ID",
                 "company",
                 "content",
                 "cur. Location",
@@ -413,16 +478,22 @@ public class ContainerSelectionPanels {
 		}
 		for (Container c : wContainers) {
 			
-			if (c.isEmpty()) {
-				tableModel.insertRow(0, new Object[] {c.getContainerId(), c.getCompany(), c.getContent(), c.getCurrentLocation(), "N/A", "N/A", "N/A", c.getTempList(), c.getPressureList(), c.getHumList()});
-			}
-			else {
-				tableModel.insertRow(0, new Object[] {c.getContainerId(), c.getCompany(), c.getContent(), c.getCurrentLocation(), c.getTempList().get(c.getTempList().size()-1), c.getPressureList().get(c.getPressureList().size()-1), c.getHumList().get(c.getHumList().size()-1), c.getTempList(), c.getPressureList(), c.getHumList()});
-			} 
+			formRowForContainer(tableModel, c, database); 
 			
 		}
 		viewContainers.add(new JScrollPane(table), BorderLayout.NORTH);
 		topmain.getCl().show(topmain.getCards(), "viewContainers");
+	}
+
+	public void formRowForContainer(DefaultTableModel tableModel, Container c, Database database) {
+		
+		// checks whether the measurement lists are empty and whether a container belongs to the active Journey list
+		if ((c.isEmpty()) || (database.findUsingLoop(c.getId(),database.getJourney()).size() == 0)) {
+			tableModel.insertRow(0, new Object[] {c.getContainerId(), c.getId(), c.getCompany(), c.getContent(), c.getCurrentLocation(), "N/A", "N/A", "N/A", c.getTempList(), c.getPressureList(), c.getHumList()});
+		}
+		else {
+			tableModel.insertRow(0, new Object[] {c.getContainerId(), c.getId(), c.getCompany(), c.getContent(), c.getCurrentLocation(), c.getTempList().get(c.getTempList().size()-1), c.getPressureList().get(c.getPressureList().size()-1), c.getHumList().get(c.getHumList().size()-1), c.getTempList(), c.getPressureList(), c.getHumList()});
+		}
 	}
 	
 	public static void doesItemExist(ArrayList<Container> c) throws MyException {

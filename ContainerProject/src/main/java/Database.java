@@ -113,6 +113,7 @@ public class Database {
 			containerWarehouse.remove(0);
 			container.setCompany(company);
 			container.setContent(content);
+			container.setId(id);
 			return container;
 		}
 		
@@ -269,17 +270,15 @@ public class Database {
 		return result;
 	}
 	
-//	public ArrayList<Container> findClientContainer(String client, ArrayList<Journey> journeyList){
-//		ArrayList<Container> result = new ArrayList<Container>();
-//		for ( Journey j : journeyList) {
-//			for (Container c : j.getContainerList()) {
-//				if (client.contentEquals(c.getCompany())) {
-//					result.add(c);
-//				}
-//			}
-//		}
-//		return result;
-//	}
+	public ArrayList<Container> findClientContainers(String client, ArrayList<Container> containerList){
+		ArrayList<Container> result = new ArrayList<Container>();
+		for ( Container c : containerList) {
+			if (client.contentEquals(c.getCompany())) {
+				result.add(c);
+			}
+		}
+		return result;
+	}
 	
 	
 	
