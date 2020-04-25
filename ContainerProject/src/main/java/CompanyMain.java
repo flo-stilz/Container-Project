@@ -169,7 +169,7 @@ public class CompanyMain extends TopMain{
 
 			public void actionPerformed(ActionEvent e) {
 				Simulator simulation = new Simulator();
-				simulation.Simulation(database, Integer.parseInt(days.getText()));
+				simulation.simulation(database, Integer.parseInt(days.getText()));
 			}
 		});
 		sim.add(lbldays);

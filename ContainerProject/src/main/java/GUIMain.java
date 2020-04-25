@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 public class GUIMain {
 	
-	static Database database = new Database(); 
+	private static Database database = new Database(); 
 	
 	public static void main(String[] args) {
 		

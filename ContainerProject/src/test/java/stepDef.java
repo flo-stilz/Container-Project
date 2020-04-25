@@ -626,9 +626,9 @@ public class stepDef {
 	
 	@When("data is generated based on previous data")
 	public void data_is_generated_based_on_previous_data() {
-	    temp = sim.temperatureGenerated(c1, seed);
-	    pressure = sim.pressureGenerated(c1, seed);
-	    hum = sim.humidityGenerated(c1, seed);
+	    temp = sim.temperatureGenerator(c1, seed);
+	    pressure = sim.pressureGenerator(c1, seed);
+	    hum = sim.humidityGenerator(c1, seed);
 	    database.updateData(j, c1, temp, pressure, hum);
 	}
 
@@ -715,7 +715,7 @@ public class stepDef {
 	
 	@When("simulation is running")
 	public void simulation_is_running() {
-	    sim.Simulation(database, days);
+	    sim.simulation(database, days);
 	}
 
 	@Then("the amount of clients in the system should be {int}")

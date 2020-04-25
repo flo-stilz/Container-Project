@@ -25,11 +25,11 @@ public class Database {
 		return false;
 	}
 	
-	ArrayList<client> search (String c){
+	public ArrayList<client> search (String keyword){
 		ArrayList<client> results = new ArrayList<client>();
 		for (client cl: clients) {
 
-			if ((cl.getAddress().contentEquals(c)||cl.getCompany().contentEquals(c)||cl.getEmail().contentEquals(c)||cl.getName().contentEquals(c))) {
+			if ((cl.getAddress().contentEquals(keyword)||cl.getCompany().contentEquals(keyword)||cl.getEmail().contentEquals(keyword)||cl.getName().contentEquals(keyword))) {
 				results.add(cl);
 			}
 		}
@@ -87,7 +87,7 @@ public class Database {
 			
 		}
 
-	public ArrayList<Journey> findJourney (String origin, String destination, ArrayList<Journey> journey){
+	public ArrayList<Journey> findJourney (String origin, String destination){
 		
 		ArrayList<Journey> results = new ArrayList<Journey>();
 		for (Journey j : journey) {
@@ -119,7 +119,7 @@ public class Database {
 	}
 	
 	public Journey createJourney( String origin, String destination, String content, String company) {
-		if (findJourney( origin, destination, journey).size() == 0) {
+		if (findJourney( origin, destination).size() == 0) {
 			 Journey j = new Journey(origin, destination, content, company);
 			 journey.add(j);
 			 Container container = assignContainer(content, company, j.getId());
@@ -128,10 +128,10 @@ public class Database {
 			 return j;
 		}
 		else {
-			Container container = assignContainer(content, company, findJourney( origin, destination, journey).get(0).getId());
-			findJourney( origin, destination, journey).get(0).getContainerList().add(container);
-			findJourney( origin, destination, journey).get(0).updateCurrentLocation(origin);
-			return findJourney( origin, destination, journey).get(0);
+			Container container = assignContainer(content, company, findJourney( origin, destination).get(0).getId());
+			findJourney( origin, destination).get(0).getContainerList().add(container);
+			findJourney( origin, destination).get(0).updateCurrentLocation(origin);
+			return findJourney( origin, destination).get(0);
 		}
 	}
 	
@@ -269,17 +269,17 @@ public class Database {
 		return result;
 	}
 	
-	public ArrayList<Container> findClientContainer(String client, ArrayList<Journey> journeyList){
-		ArrayList<Container> result = new ArrayList<Container>();
-		for ( Journey j : journeyList) {
-			for (Container c : j.getContainerList()) {
-				if (client.contentEquals(c.getCompany())) {
-					result.add(c);
-				}
-			}
-		}
-		return result;
-	}
+//	public ArrayList<Container> findClientContainer(String client, ArrayList<Journey> journeyList){
+//		ArrayList<Container> result = new ArrayList<Container>();
+//		for ( Journey j : journeyList) {
+//			for (Container c : j.getContainerList()) {
+//				if (client.contentEquals(c.getCompany())) {
+//					result.add(c);
+//				}
+//			}
+//		}
+//		return result;
+//	}
 	
 	
 	

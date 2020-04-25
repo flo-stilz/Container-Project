@@ -24,14 +24,14 @@ public class Container {
     
     
     public Container(Container org) {
-   	 this.containerId = org.getContainerId();
-   	 this.content = org.getContent();
-   	 this.company = org.getCompany();
-   	 this.id = org.getId(); //journeyId
-   	 this.currentLocation = org.getCurrentLocation();
-   	 this.pressureList = new ArrayList<Integer>(org.getPressureList());
-   	 this.humList = new ArrayList<Integer>(org.getHumList());
-   	 this.tempList = new ArrayList<Integer>(org.getTempList()); 
+    	this.containerId = org.getContainerId();
+   	 	this.content = org.getContent();
+   	 	this.company = org.getCompany();
+   	 	this.id = org.getId(); //journeyId
+   	 	this.currentLocation = org.getCurrentLocation();
+   	 	this.pressureList = new ArrayList<Integer>(org.getPressureList());
+   	 	this.humList = new ArrayList<Integer>(org.getHumList());
+   	 	this.tempList = new ArrayList<Integer>(org.getTempList()); 
    }
     
     

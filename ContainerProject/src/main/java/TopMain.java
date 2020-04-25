@@ -43,12 +43,20 @@ public class TopMain {
 		this.options = options;
 	}
 
-	public void setCards(JPanel cards) {
-		this.cards = cards;
-	}
+//	public void setCards(JPanel cards) {
+//		this.cards = cards;
+//	}
 
-	public void setCl(CardLayout cl) {
-		this.cl = cl;
+//	public void setCl(CardLayout cl) {
+//		this.cl = cl;
+//	}
+	
+	public String getUserText() {
+		return userText;
+	}
+	
+	public void setUserText(String userText) {
+		this.userText = userText;
 	}
 
 	public TopMain(String userText, final Database database, final JFrame login) {
@@ -133,14 +141,6 @@ public class TopMain {
 		
 
 		
-	}
-	
-	public String getUserText() {
-		return userText;
-	}
-
-	public void setUserText(String userText) {
-		this.userText = userText;
 	}
 
 	public void containerButton(Database database, JFrame login, JButton containers) {

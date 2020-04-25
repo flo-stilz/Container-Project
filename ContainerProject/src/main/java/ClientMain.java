@@ -15,7 +15,7 @@ import javax.swing.JTextField;
 
 public class ClientMain extends TopMain{
 	
-	client currentClient;
+	private client currentClient;
 	
 //	private JPanel options;
 //	private JPanel cards;
@@ -158,6 +158,7 @@ public class ClientMain extends TopMain{
 		
 	}
 	
+	@Override
 	public void containerButton(Database database, JFrame login, JButton containers) {
 	// container section
 	

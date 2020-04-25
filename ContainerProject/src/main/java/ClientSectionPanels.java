@@ -43,7 +43,7 @@ public class ClientSectionPanels {
 				ArrayList<client> result = new ArrayList<client>();
 				result.addAll(database.search(keyword));
 				wClients = result;
-				displayclients(companymain, database);
+				displayClients(companymain, database);
 			}
 		});
 		
@@ -53,7 +53,7 @@ public class ClientSectionPanels {
 
 			public void actionPerformed(ActionEvent e) {
 				wClients = database.getClients();
-				displayclients(companymain, database);
+				displayClients(companymain, database);
 			}
 		});
 
@@ -61,7 +61,7 @@ public class ClientSectionPanels {
 	
 	// display the clients
 	
-	public void displayclients(CompanyMain companymain, Database database) {
+	public void displayClients(CompanyMain companymain, Database database) {
 		
 		viewClients.removeAll();
 		DefaultTableModel tableModel = new DefaultTableModel();

@@ -189,7 +189,7 @@ public class Simulator {
 		return hum;
 	}
 	
-	public int temperatureGenerated(Container c,int seed) {
+	public int temperatureGenerator(Container c,int seed) {
 		r.setSeed(seed);
 		int value = r.nextInt(10);
 		int previousdataindex = c.getTempList().size()-1;
@@ -197,14 +197,14 @@ public class Simulator {
 		return temp;
 	}
 	
-	public int temperatureGenerated(Container c) {
+	public int temperatureGenerator(Container c) {
 		int value = r.nextInt(10);
 		int previousdataindex = c.getTempList().size()-1;
 		int temp = c.getTempList().get(previousdataindex) + value - 5 ;
 		return temp;
 	}
 	
-	public int pressureGenerated(Container c,int seed) {
+	public int pressureGenerator(Container c,int seed) {
 		r.setSeed(seed);
 		int value = r.nextInt(100);
 		int previousdataindex = c.getPressureList().size()-1;
@@ -212,14 +212,14 @@ public class Simulator {
 		return pressure;
 	}
 	
-	public int pressureGenerated(Container c) {
+	public int pressureGenerator(Container c) {
 		int value = r.nextInt(100);
 		int previousdataindex = c.getPressureList().size()-1;
 		int pressure = c.getPressureList().get(previousdataindex) + value - 50 ;
 		return pressure;
 	}
 	
-	public int humidityGenerated(Container c,int seed) {
+	public int humidityGenerator(Container c,int seed) {
 		r.setSeed(seed);
 		int value = r.nextInt(10);
 		int previousdataindex = c.getHumList().size()-1;
@@ -227,7 +227,7 @@ public class Simulator {
 		return hum;
 	}
 	
-	public int humidityGenerated(Container c) {
+	public int humidityGenerator(Container c) {
 		int value = r.nextInt(10);
 		int previousdataindex = c.getHumList().size()-1;
 		int hum = c.getHumList().get(previousdataindex) + value - 5 ;
@@ -244,9 +244,9 @@ public class Simulator {
 					database.updateData(j, c, temp, pressure, hum);
 				}
 				else {
-					int temp = temperatureGenerated(c);
-					int pressure = pressureGenerated(c);
-					int hum = humidityGenerated(c);
+					int temp = temperatureGenerator(c);
+					int pressure = pressureGenerator(c);
+					int hum = humidityGenerator(c);
 					database.updateData(j, c, temp, pressure, hum);
 				}
 			}
@@ -263,16 +263,16 @@ public class Simulator {
 					database.updateData(j, c, temp, pressure, hum);
 				}
 				else {
-					int temp = temperatureGenerated(c, seed);
-					int pressure = pressureGenerated(c, seed);
-					int hum = humidityGenerated(c, seed);
+					int temp = temperatureGenerator(c, seed);
+					int pressure = pressureGenerator(c, seed);
+					int hum = humidityGenerator(c, seed);
 					database.updateData(j, c, temp, pressure, hum);
 				}
 			}
 		}
 	}
 	
-	public void Simulation(Database database, int day) {
+	public void simulation(Database database, int day) {
 		for (int i = 0; i<day; i++) {
 			
 			
