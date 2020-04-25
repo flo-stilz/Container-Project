@@ -14,14 +14,12 @@ import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 public class comparisonlinePlots extends plot implements observer {
 	
 	private ChartPanel chartPanel;
-	private ContainerSelectionPanels csp;
-	private TopMain topmain;
 	
 	public ChartPanel getChartPanel() {
 		return chartPanel;
 	}
-	public comparisonlinePlots(String plottitle) {
-		super(plottitle);
+	public comparisonlinePlots(String plottitle, ContainerSelectionPanels csp, TopMain topmain) {
+		super(plottitle, csp, topmain);
 		ArrayList<Integer> e = new ArrayList<Integer>();
 	JFreeChart xylineChart = ChartFactory.createXYLineChart("Changes in Container's Enviornment",
 			"Time elapsed from Journey", "changes", create2Dataset(e,e,e), PlotOrientation.VERTICAL, true, true,
@@ -36,10 +34,8 @@ public class comparisonlinePlots extends plot implements observer {
 	
 	}
 	public comparisonlinePlots(String plottitle, ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h, ContainerSelectionPanels csp, TopMain topmain) {
-		super(plottitle);
+		super(plottitle, csp, topmain);
 
-		this.csp = csp;
-		this.topmain = topmain;
 	JFreeChart xylineChart = ChartFactory.createXYLineChart("Changes in Container's Enviornment",
 			"Time elapsed from Journey", "changes", create2Dataset(t, p, h), PlotOrientation.VERTICAL, true, true,
 			false);
@@ -81,7 +77,7 @@ public class comparisonlinePlots extends plot implements observer {
 		plot.setRenderer(renderer);
 		setContentPane(chartPanel);
 		
-		csp.updateAllPlots(topmain);
+		getCsp().updateAllPlots(getTopmain());
 		
 //	display();
 	}

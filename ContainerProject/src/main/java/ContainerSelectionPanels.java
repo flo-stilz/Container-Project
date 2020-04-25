@@ -270,8 +270,9 @@ public class ContainerSelectionPanels {
 		if (checkBoxTemp.isSelected()) {
 			 ArrayList<Integer> data = c.getTempList();
 			 
-			 tempPlot = new plot("plot");
-			 tempPlot.linePlot("Temperature", data);;
+			 tempPlot = new plot("Temperature", csp, topmain);
+			 tempPlot.linePlot(data);;
+			 database.addObserver(tempPlot);
 //			 JPanel tempPanel = tempPlot.getChartPanel();
 //			 plotPanel.add(tempPanel);
 			 
@@ -282,15 +283,17 @@ public class ContainerSelectionPanels {
 		 if (checkBoxPres.isSelected()) {
 			 ArrayList<Integer> data = c.getPressureList();
 			 
-			 presPlot = new plot("plot");
-			 presPlot.linePlot("Pressure", data);;
+			 presPlot = new plot("Pressure", csp, topmain);
+			 presPlot.linePlot(data);;
+			 database.addObserver(presPlot);
 			 
 		 }
 		 if (checkBoxHum.isSelected()) {
 			 ArrayList<Integer> data = c.getHumList();
 			 
-			 humPlot = new plot("plot");
-			 humPlot.linePlot("Humidity", data);;
+			 humPlot = new plot("Humidity", csp, topmain);
+			 humPlot.linePlot(data);;
+			 database.addObserver(humPlot);
 //			 JPanel humPanel = humPlot.getChartPanel();
 //			 plotPanel.add(humPanel);
 			 
@@ -319,7 +322,7 @@ public class ContainerSelectionPanels {
 
 	public void updateLinePlots(plot linePlot) {
 		JPanel linePanel = linePlot.getChartPanel();
-		 plotPanel.add(linePanel);
+		plotPanel.add(linePanel);
 	}
 
 	
@@ -352,7 +355,6 @@ public class ContainerSelectionPanels {
 	}
 	
 	public void updateBarPlot(barPlots bPlot) {
-		
 		JPanel barplot = bPlot.getChartPanel();
 		plotPanel.add(barplot);
 	}

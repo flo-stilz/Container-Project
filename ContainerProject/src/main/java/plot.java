@@ -22,20 +22,33 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-public class plot extends ApplicationFrame {
+public class plot extends ApplicationFrame implements observer{
 	
 	private ChartPanel chartPanel;
+	private String plottitle;
+	private ContainerSelectionPanels csp;
+	private TopMain topmain;
+	private String chartType;
+	private ArrayList<Integer> a;
 	
+	public TopMain getTopmain() {
+		return topmain;
+	}
+
+	public ContainerSelectionPanels getCsp() {
+		return csp;
+	}
+
 	public ChartPanel getChartPanel() {
 		return chartPanel;
 	}
 
-	public plot(String plottitle) {
+	public plot(String plottitle, ContainerSelectionPanels csp, TopMain topmain) {
 		super(plottitle);
+		this.plottitle = plottitle;
+		this.csp = csp;
+		this.topmain = topmain;
 	}
-
-	String chartType;
-	ArrayList<Integer> a;
 
 	public void display() {
 		pack();
@@ -48,9 +61,9 @@ public class plot extends ApplicationFrame {
 		}
 	}
 	
-	public void linePlot(String charttype, ArrayList<Integer> a) {
-		JFreeChart lineChart = ChartFactory.createLineChart("this is the " + charttype + " plot", "Time elapsed (min)",
-				charttype, createDataset(a, charttype), PlotOrientation.VERTICAL, true, true, false);
+	public void linePlot(ArrayList<Integer> a) {
+		JFreeChart lineChart = ChartFactory.createLineChart("this is the " + plottitle + " plot", "Time elapsed (min)",
+				plottitle, createDataset(a, plottitle), PlotOrientation.VERTICAL, true, true, false);
 
 		chartPanel = new ChartPanel(lineChart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
@@ -105,6 +118,28 @@ public class plot extends ApplicationFrame {
 		int r = Collections.max(a) - Collections.min(a);
 		return r;
 
+	}
+
+	public void update(ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h) {
+		
+		if (this.getTitle().contentEquals("Temperature")) {
+			a = t;
+		}
+		else if (this.getTitle().contentEquals("Pressure")) {
+			a = p;
+		}
+		else {
+			a = h;
+		}
+		
+		this.getTitle().contentEquals("Temperature");
+		JFreeChart lineChart = ChartFactory.createLineChart("this is the " + plottitle + " plot", "Time elapsed (min)",
+				plottitle, createDataset(a, plottitle), PlotOrientation.VERTICAL, true, true, false);
+
+		chartPanel = new ChartPanel(lineChart);
+		chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
+		setContentPane(chartPanel);
+		getCsp().updateAllPlots(getTopmain());
 	}
 
 	}
