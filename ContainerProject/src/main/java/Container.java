@@ -1,28 +1,38 @@
 import java.util.ArrayList;
-import java.util.Scanner;
+import java.util.Arrays;
+import java.util.List;
 
 public class Container {
-	private String containerId;
 	private String content;
 	private String company;
-	private String id; //journeyId
 	private String currentLocation;
-	
-    //Take input and store data
-    private ArrayList<Integer> pressureList = new ArrayList<Integer>();
-    private ArrayList<Integer> humList = new ArrayList<Integer>();
-    private ArrayList<Integer> tempList = new ArrayList<Integer>(); 
-    
+	private String containerId;
+	private String id; //journeyId
     private String containerID;
     private String journeyID;
-    private String uniqueID = containerID + "," + journeyID;   
-    private String holdID1;
-    private String holdID2;
-    private String holdID3;
-    private ArrayList <String> outPressure = new ArrayList<String>(); 
-    private ArrayList <String> outHum = new ArrayList<String>(); 
-    private ArrayList <String> outTemp = new ArrayList<String>();
+	private int temp;
+	private int pressure;
+	private int humidity;
+	private static int cCounter = 0;
+    private List<Integer> pressureList = new ArrayList<Integer>();
+    private List<Integer> humList = new ArrayList<Integer>();
+    private List<Integer> tempList = new ArrayList<Integer>(); 
     
+    
+	public void setPressureList(List<Integer> pressureList) {
+		this.pressureList = pressureList;
+	}
+
+	public void setHumList(List<Integer> humList) {
+		this.humList = humList;
+	}
+
+	public void setTempList(List<Integer> tempList) {
+		this.tempList = tempList;
+	}
+
+	public Container() {
+	}
     
     public Container(Container org) {
    	 this.containerId = org.getContainerId();
@@ -34,19 +44,15 @@ public class Container {
    	 this.humList = new ArrayList<Integer>(org.getHumList());
    	 this.tempList = new ArrayList<Integer>(org.getTempList()); 
    }
-    
-    
 	
-	private static int cCounter = 0;
-	
-	public Container( String content, String company, String id) {
+	public Container(String content, String company, String id) {
 		this.id = id;
 		this.content = content;
 		this.company = company;
 		this.containerId = "C"+ cCounter;
-		
 		cCounter++;
 	}
+	
     public boolean isEmpty() {
     	if (tempList.size() == 0 && humList.size() == 0 && pressureList.size() == 0) {
     		return true;
@@ -56,24 +62,19 @@ public class Container {
     	}
     }
 
-	public static int getcCounter() {
-		return cCounter;
-	}
 	public static void setcCounter(int cCounter) {
 		Container.cCounter = cCounter;
 	}
     
-    
-    public ArrayList<Integer> getPressureList() {
+    public List<Integer> getPressureList() {
 		return pressureList;
 	}
 
-
-	public ArrayList<Integer> getHumList() {
+	public List<Integer> getHumList() {
 		return humList;
 	}
 	
-	public ArrayList<Integer> getTempList() {
+	public List<Integer> getTempList() {
 		return tempList;
 	}
 
@@ -81,22 +82,6 @@ public class Container {
         this.containerID = containerID;
     }
 
-	public void setJourneyID(String journeyID) {
-		this.journeyID = journeyID;
-	}
-
-	public void getExpandedUniqueIDAll(String uniqueID) {
-        holdID1 = uniqueID + "," + "pressure";
-        holdID2 = uniqueID + "," + "hum";
-        holdID3 = uniqueID + "," + "temp";
-        outPressure.add(holdID1);
-        outHum.add(holdID2);
-        outTemp.add(holdID3);
-    }
-    
-    public String getUniqueID() {
-		return uniqueID;
-	}
 	public String getContainerId() {
 		return containerId;
 	}
@@ -110,12 +95,15 @@ public class Container {
 	public String getCompany() {
 		return company;
 	}
+	
 	public void setCompany(String company) {
 		this.company = company;
 	}
+	
 	public String getId() {
 		return id;
 	}
+	
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -123,10 +111,36 @@ public class Container {
 	public String getCurrentLocation() {
 		return currentLocation;
 	}
+	
 	public void setCurrentLocation(String currentLocation) {
 		this.currentLocation = currentLocation;
 	}
+	
+	public void setContainerId(String containerId) {
+		this.containerId = containerId;
+	}
+	
+	public int getTemp() {
+		return temp;
+	}
 
+	public void setTemp(int temp) {
+		this.temp = temp;
+	}
 
+	public int getPressure() {
+		return pressure;
+	}
 
+	public void setPressure(int pressure) {
+		this.pressure = pressure;
+	}
+
+	public int getHumidity() {
+		return humidity;
+	}
+
+	public void setHumidity(int humidity) {
+		this.humidity = humidity;
+	}
 }

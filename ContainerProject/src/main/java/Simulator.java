@@ -175,6 +175,14 @@ public class Simulator {
 		return pressure;
 	}
 	
+//	Hubert's suggestion: The code should look like the commented section below, because of code reuse. 
+//hubert wants it done everywhere where the code is similair in this class
+	
+//	public int humidityInitialization(int seed) {
+//		r.setSeed(seed);
+//		return humidityInitialization();
+//	}
+	
 	public int humidityInitialization(int seed) {
 		r.setSeed(seed);
 		int value = r.nextInt(90);
@@ -315,10 +323,18 @@ public class Simulator {
 		client = clientSelection(database, seed);
 		content = contentSelection(seed);
 		origin = originSelection(seed);
+		System.out.println(locations.size());
+		System.out.println(origin);
 		destination = destinationSelection(seed, origin);
+		System.out.println(origin);
+		System.out.println(destination);
+		System.out.println(locations.size());
 		Journey j = database.createJourney(origin, destination, content, client.getCompany());
 		int originindex = locations.indexOf(origin) + 1;
 		int destinationindex = locations.indexOf(destination) + 1;
+		System.out.println(originindex);
+		System.out.println(locations.indexOf(origin));
+		System.out.println(destinationindex);
 		j.setDistance(5 + Integer.parseInt(travelTime[originindex][destinationindex]));
 	}
 	
@@ -359,7 +375,9 @@ public class Simulator {
 	public ArrayList<String> getAddress() {
 		return addresses;
 	}
-
+	public ArrayList<String> getContents() {
+		return contents;
+	}
 	
 	
 }
