@@ -2,6 +2,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
@@ -11,16 +13,24 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class ClientSectionPanels {
+public class ClientSectionPanels implements PropertyChangeListener {
 
 	private JPanel clientSearch;
 	private JPanel viewClients;
-	private ArrayList<client> wClients;
+	private ArrayList<client> wClients = new ArrayList<client>();
+	private boolean showAllCommand;
+	private String keyword;
+	private CompanyMain companymain;
+	private Database database;
 	
-	
+	public ArrayList<client> getwClients() {;
+		return wClients;
+	}
+
 	public ClientSectionPanels(final Database database, final CompanyMain companymain) {
 		
-		
+		this.database = database;
+		this.companymain = companymain;
 		// Search the clients
 		
 		clientSearch = new JPanel();
@@ -39,11 +49,10 @@ public class ClientSectionPanels {
 		searchButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				String keyword = search.getText();
-				ArrayList<client> result = new ArrayList<client>();
-				result.addAll(database.search(keyword));
-				wClients = result;
-				displayClients(companymain, database);
+				keyword = search.getText();
+				showAllCommand = false;
+				wClients = database.search(keyword);
+				displayClients();
 			}
 		});
 		
@@ -52,8 +61,9 @@ public class ClientSectionPanels {
 		showAll.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				showAllCommand = true;
 				wClients = database.getClients();
-				displayClients(companymain, database);
+				displayClients();
 			}
 		});
 
@@ -61,7 +71,7 @@ public class ClientSectionPanels {
 	
 	// display the clients
 	
-	public void displayClients(CompanyMain companymain, Database database) {
+	public void displayClients() {
 		
 		viewClients.removeAll();
 		DefaultTableModel tableModel = new DefaultTableModel();
@@ -100,5 +110,25 @@ public class ClientSectionPanels {
 
 	public JPanel getClientSearch() {
 		return clientSearch;
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		Database dat = ((Database)evt.getSource());
+		if (wClients.size()!= 0) {
+			if (evt.getPropertyName().contentEquals("clients")) {
+				showAllOrSearch(dat);
+			}
+			displayClients();
+			companymain.getMain1().revalidate();
+		}
+	}
+	
+	public void showAllOrSearch(Database dat) {
+		if (showAllCommand) {
+			wClients = dat.getClients();
+		}
+		else {
+			wClients = dat.search(keyword);
+		}
 	}
 }

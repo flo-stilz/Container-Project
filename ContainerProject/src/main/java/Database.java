@@ -75,6 +75,7 @@ public class Database {
 	public client createClient( String company, String address, String email, String name, String password) {
 		client c = new client(company, address, email, name, password);
 		clients.add(c);
+		support.firePropertyChange("clients",null,null);
 		return c;
 	}
 

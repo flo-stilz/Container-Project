@@ -15,6 +15,11 @@ import javax.swing.JTextField;
 
 public class CompanyMain extends TopMain{
 	
+	private ClientSectionPanels c;
+
+	public ClientSectionPanels getC() {
+		return c;
+	}
 //	private JPanel options;
 //	private JPanel cards;
 //	private CardLayout cl;
@@ -103,12 +108,15 @@ public class CompanyMain extends TopMain{
 //	}
 	
 	public void clientButton(Database database, JFrame login, JButton clients) {
-		ClientSectionPanels c = new ClientSectionPanels(database, this);
+		c = new ClientSectionPanels(database, this);
+		database.addObserver(c);
 		getCards().add(c.getClientSearch(), "clientSearch");
 		getCards().add(c.getViewClients(), "viewClients");
 		clients.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				getC().getwClients().clear();
+//				System.out.println(getC().getwClients());
 				getJ().getwJourneys().clear();
 				getCont().getwContainers().clear();
 				getCl().show(getCards(), "clientSearch");
@@ -180,6 +188,7 @@ public class CompanyMain extends TopMain{
 		simulation.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				getC().getwClients().clear();
 				getJ().getwJourneys().clear();
 				getCont().getwContainers().clear();
 				getCl().show(getCards(), "sim");
