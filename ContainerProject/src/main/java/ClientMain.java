@@ -16,6 +16,16 @@ import javax.swing.JTextField;
 public class ClientMain extends TopMain{
 	
 	private client currentClient;
+	private JourneySectionPanels j;
+	private ContainerSelectionPanels cont;
+
+	public JourneySectionPanels getJ() {
+		return j;
+	}
+
+	public ContainerSelectionPanels getCont() {
+		return cont;
+	}
 	
 //	private JPanel options;
 //	private JPanel cards;
@@ -120,6 +130,8 @@ public class ClientMain extends TopMain{
 		menu.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				getJ().getwJourneys().clear();
+				getCont().getwContainers().clear();
 				getCl().show(getCards(), "menu");
 			}
 		});
@@ -142,7 +154,7 @@ public class ClientMain extends TopMain{
 	public void journeyButton(Database database, JFrame login, JButton journeys) {
 		// journey section
 		
-		JourneySectionPanels j = new JourneySectionPanels(database, this);
+		j = new JourneySectionPanels(database, this);
 		database.addObserver(j);
 		getCards().add(j.getJourneySearch(), "journeySearch");
 		getCards().add(j.getViewJourneys(), "viewJourneys");
@@ -150,7 +162,8 @@ public class ClientMain extends TopMain{
 		journeys.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				
+				getJ().getwJourneys().clear();
+				getCont().getwContainers().clear();
 				getCl().show(getCards(),  "journeySearch");
 			}
 		});
@@ -163,7 +176,7 @@ public class ClientMain extends TopMain{
 	public void containerButton(Database database, JFrame login, JButton containers) {
 	// container section
 	
-		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);
+		cont = new ContainerSelectionPanels(database, this);
 		database.addObserver(cont);
 		getCards().add(cont.getContainerSearch(), "containerSearch");
 		getCards().add(cont.getViewContainers(), "viewContainers");
@@ -171,7 +184,8 @@ public class ClientMain extends TopMain{
 		
 		containers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-						
+				getJ().getwJourneys().clear();
+				getCont().getwContainers().clear();
 				getCl().show(getCards(),  "containerSearch");
 				}
 		});

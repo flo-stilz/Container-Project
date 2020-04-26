@@ -27,6 +27,10 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	private TopMain topmain;
 	private String keyword;
 	
+	public ArrayList<Journey> getwJourneys() {
+		return wJourneys;
+	}
+
 	public JPanel getJourneySearch() {
 		return journeySearch;
 	}
@@ -150,7 +154,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				ArrayList<Journey> result = filterActiveJourneysForClient(database, topmain);
 				keyword = searchActive.getText();
 				database.findUsingLoop(keyword, result);
-				wJourneys = result;
+				wJourneys = database.findUsingLoop(keyword, result);;
 				displayJourneys();
 			}
 		});
@@ -290,11 +294,12 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		Database dat = ((Database)evt.getSource());
 		if (wJourneys.size()!= 0) {
 			if ((checkJourneyListForPast(dat) && (evt.getPropertyName().contentEquals("history")))) {
-				ArrayList<Journey> jList = dat.getHistory();
+				
+				ArrayList<Journey> jList = filterPastJourneysForClient(dat, topmain);
 				showAllOrSearch(jList, dat);
 			}
 			else if (checkJourneyListForPast(dat) == false && (evt.getPropertyName().contentEquals("journey"))) {
-				ArrayList<Journey> jList = dat.getJourney();
+				ArrayList<Journey> jList = filterActiveJourneysForClient(dat, topmain);
 				showAllOrSearch(jList, dat);
 			}
 			displayJourneys();

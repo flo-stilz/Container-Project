@@ -173,10 +173,10 @@ public class Database {
 		return Containers;
 	}
 	
-	public ArrayList<Container> getAllContainers(boolean isPast, ArrayList<Journey> jList) {
+	public ArrayList<Container> getAllContainers(boolean isPastOrClient, ArrayList<Journey> jList) {
 		
-		ArrayList<Container> Containers = getfilteredContainers(isPast, jList);
-		if (isPast == false) {
+		ArrayList<Container> Containers = getfilteredContainers(isPastOrClient, jList);
+		if (isPastOrClient == false) {
 			Containers.addAll(containerWarehouse);
 		}
 		return Containers;

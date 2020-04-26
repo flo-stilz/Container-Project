@@ -109,7 +109,8 @@ public class CompanyMain extends TopMain{
 		clients.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				
+				getJ().getwJourneys().clear();
+				getCont().getwContainers().clear();
 				getCl().show(getCards(), "clientSearch");
 			}
 		});
@@ -179,6 +180,8 @@ public class CompanyMain extends TopMain{
 		simulation.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				getJ().getwJourneys().clear();
+				getCont().getwContainers().clear();
 				getCl().show(getCards(), "sim");
 			}
 		});
