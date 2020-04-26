@@ -143,6 +143,7 @@ public class ClientMain extends TopMain{
 		// journey section
 		
 		JourneySectionPanels j = new JourneySectionPanels(database, this);
+		database.addObserver(j);
 		getCards().add(j.getJourneySearch(), "journeySearch");
 		getCards().add(j.getViewJourneys(), "viewJourneys");
 		
@@ -163,6 +164,7 @@ public class ClientMain extends TopMain{
 	// container section
 	
 		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);
+		database.addObserver(cont);
 		getCards().add(cont.getContainerSearch(), "containerSearch");
 		getCards().add(cont.getViewContainers(), "viewContainers");
 		getCards().add(cont.getPlotPanel(), "plotPanel");

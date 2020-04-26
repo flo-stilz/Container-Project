@@ -21,6 +21,8 @@ public class Container {
     private ArrayList <String> outPressure = new ArrayList<String>(); 
     private ArrayList <String> outHum = new ArrayList<String>(); 
     private ArrayList <String> outTemp = new ArrayList<String>();
+    private static int cCounter = 0;
+    private ArrayList<observer> obs = new ArrayList<observer>();
     
     public void setPressureList(ArrayList<Integer> pressureList) {
 		this.pressureList = pressureList;
@@ -47,8 +49,22 @@ public class Container {
    }
     
     
-	
-	private static int cCounter = 0;
+    public void addData(int temp, int pressure, int humidity) {
+		getTempList().add(temp);
+		getPressureList().add(pressure);
+		getHumList().add(humidity);
+		notifyObservers(this);
+	}
+    
+    public void addObserver(observer o) {
+		obs.add(o);
+	}
+
+	private void notifyObservers( Container c) {
+		for (observer o: obs) {
+			o.update(c.getTempList(),c.getPressureList(),c.getHumList());
+		}
+	}
 	
 	public Container( String content, String company, String id) {
 		this.id = id;

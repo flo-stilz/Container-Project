@@ -2,6 +2,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -15,11 +17,15 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-public class JourneySectionPanels {
+public class JourneySectionPanels implements PropertyChangeListener {
 
 	private JPanel journeySearch;
 	private JPanel viewJourneys;
-	private ArrayList<Journey> wJourneys;
+	private ArrayList<Journey> wJourneys = new ArrayList<Journey>();
+	private boolean showAllCommand;
+	private Database database;
+	private TopMain topmain;
+	private String keyword;
 	
 	public JPanel getJourneySearch() {
 		return journeySearch;
@@ -30,6 +36,9 @@ public class JourneySectionPanels {
 	}
 
 	public JourneySectionPanels(final Database database, final TopMain topmain) {
+		
+		this.database = database;
+		this.topmain = topmain;
 		
 		journeySearch = new JPanel();
 		journeySearch.setPreferredSize(new Dimension(800, 600));
@@ -62,12 +71,13 @@ public class JourneySectionPanels {
 	public void showAllPast(final Database database, final TopMain topmain) {
 		JButton showAllPast = new JButton("Show All");
 		journeySearch.add(showAllPast);
+		showAllCommand = true;
 		showAllPast.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Journey> result = filterPastJourneysForClient(database, topmain);
 				wJourneys = result;
-				displayJourneys(topmain, database);
+				displayJourneys();
 			}
 
 		});
@@ -82,13 +92,14 @@ public class JourneySectionPanels {
 		
 		JButton journeyPastSearch = new JButton("Search");
 		journeySearch.add(journeyPastSearch);
+		showAllCommand = false;
 		journeyPastSearch.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Journey> result = filterPastJourneysForClient(database, topmain);
-				String keyword = searchjourneyPastTxt.getText();
+				keyword = searchjourneyPastTxt.getText();
 				wJourneys = database.findUsingLoop(keyword, result);
-				displayJourneys(topmain, database);
+				displayJourneys();
 			}
 		});
 	}
@@ -109,12 +120,13 @@ public class JourneySectionPanels {
 		
 		JButton showAllActive = new JButton("Show All");
 		journeySearch.add(showAllActive);
+		showAllCommand = true;
 		showAllActive.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Journey> result = filterActiveJourneysForClient(database, topmain);
 				wJourneys = result;
-				displayJourneys(topmain, database);
+				displayJourneys();
 			}
 
 		});
@@ -130,15 +142,16 @@ public class JourneySectionPanels {
 		
 		JButton searchActiveButton = new JButton("Search");
 		journeySearch.add(searchActiveButton);
+		showAllCommand = false;
 		
 		searchActiveButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Journey> result = filterActiveJourneysForClient(database, topmain);
-				String keyword = searchActive.getText();
+				keyword = searchActive.getText();
 				database.findUsingLoop(keyword, result);
 				wJourneys = result;
-				displayJourneys(topmain, database);
+				displayJourneys();
 			}
 		});
 	}
@@ -221,7 +234,7 @@ public class JourneySectionPanels {
 	
 	// view Journeys
 	
-	public void displayJourneys(TopMain topmain, Database database) {
+	public void displayJourneys() {
 		viewJourneys.removeAll();
 		if (topmain instanceof CompanyMain) {
 			changeloc(database);
@@ -266,6 +279,36 @@ public class JourneySectionPanels {
 			}
 		}
 		return containerids;
+	}
+	
+	public boolean checkJourneyListForPast(Database database) {
+		String journeyid = wJourneys.get(0).getId();
+		return (database.findUsingLoop(journeyid, database.getJourney()).size() == 0);
+	}
+
+	public void propertyChange(PropertyChangeEvent evt) {
+		Database dat = ((Database)evt.getSource());
+		if (wJourneys.size()!= 0) {
+			if ((checkJourneyListForPast(dat) && (evt.getPropertyName().contentEquals("history")))) {
+				ArrayList<Journey> jList = dat.getHistory();
+				showAllOrSearch(jList, dat);
+			}
+			else if (checkJourneyListForPast(dat) == false && (evt.getPropertyName().contentEquals("journey"))) {
+				ArrayList<Journey> jList = dat.getJourney();
+				showAllOrSearch(jList, dat);
+			}
+			displayJourneys();
+			topmain.getMain1().revalidate();
+		}
+	}
+
+	public void showAllOrSearch(ArrayList<Journey> jList, Database dat) {
+		if (showAllCommand) {
+			wJourneys = jList;
+		}
+		else {
+			wJourneys = dat.findUsingLoop(keyword,jList);
+		}
 	}
 	
 }

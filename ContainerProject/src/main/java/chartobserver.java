@@ -2,6 +2,6 @@ import java.util.ArrayList;
 
 public interface chartobserver {
 	
- void updateC( ArrayList<Container> containerWarehouse);
+	public void updateC(ArrayList<Container> containerWarehouse);
 }
 

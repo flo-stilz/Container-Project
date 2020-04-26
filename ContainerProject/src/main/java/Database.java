@@ -1,3 +1,5 @@
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -8,10 +10,14 @@ public class Database {
 	private ArrayList<Container> containerWarehouse = new ArrayList<Container>();
 	private ArrayList<Journey> history = new ArrayList<Journey>();
 	private ArrayList<client> clients = new ArrayList<client>();
-	private ArrayList<observer> obs = new ArrayList<observer>();
+	//private ArrayList<observer> obs = new ArrayList<observer>();
 	private ArrayList<chartobserver> cobs = new ArrayList<chartobserver>();
 	
-
+	private PropertyChangeSupport support = new PropertyChangeSupport(this);
+	void addObserver(PropertyChangeListener l) {
+		support.addPropertyChangeListener(l);
+	}
+		
 	void add (client c) {
 		if (!exists(c)) {
 		clients.add(c);
@@ -126,12 +132,14 @@ public class Database {
 			 Container container = assignContainer(content, company, j.getId());
 			 j.getContainerList().add(container);
 			 j.updateCurrentLocation(origin);
+			 support.firePropertyChange("journey",null,null);
 			 return j;
 		}
 		else {
 			Container container = assignContainer(content, company, findJourney( origin, destination).get(0).getId());
 			findJourney( origin, destination).get(0).getContainerList().add(container);
 			findJourney( origin, destination).get(0).updateCurrentLocation(origin);
+			support.firePropertyChange("journey",null,null);
 			return findJourney( origin, destination).get(0);
 		}
 	}
@@ -153,9 +161,11 @@ public class Database {
 		return containers;
 	}
 	
-	public ArrayList<Container> getActiveContainers() {
+	// rename it afterwards
+	public ArrayList<Container> getfilteredContainers(boolean isPast, ArrayList<Journey> jList) {
+
 		ArrayList<Container> Containers = new ArrayList<Container>();
-		for (Journey j : journey) {
+		for (Journey j : jList) {
 			for (Container c : j.getContainerList()) {
 				Containers.add(c);
 			}
@@ -163,9 +173,12 @@ public class Database {
 		return Containers;
 	}
 	
-	public ArrayList<Container> getAllContainers() {
-		ArrayList<Container> Containers = getActiveContainers();
-		Containers.addAll(containerWarehouse);
+	public ArrayList<Container> getAllContainers(boolean isPast, ArrayList<Journey> jList) {
+		
+		ArrayList<Container> Containers = getfilteredContainers(isPast, jList);
+		if (isPast == false) {
+			Containers.addAll(containerWarehouse);
+		}
 		return Containers;
 	}
 	
@@ -186,23 +199,27 @@ public class Database {
 			journey.remove(j);
 		} 
 		notifychartOberver();
+		support.firePropertyChange("history",null,null);
+		support.firePropertyChange("journey",null,null);
 	}
-	
+	// This has been moved to container as well as all the observer part
 	public void addData(Container c, int temp, int pressure, int humidity) {
-		c.getTempList().add(temp);
-		c.getPressureList().add(pressure);
-		c.getHumList().add(humidity);
-		notifyObservers(c);
+		c.addData(temp, pressure, humidity);
+		support.firePropertyChange("journey",null,null);
+//		c.getTempList().add(temp);
+//		c.getPressureList().add(pressure);
+//		c.getHumList().add(humidity);
+//		notifyObservers(c);
 	}
 	
 	public void updateData(Journey j, Container c, int temp, int pressure, int humidity) {
 		if (c.isEmpty()) {
 			for (Container con : j.getContainerList()) {
-				addData(con, temp, pressure, humidity);
+				con.addData(temp, pressure, humidity);
 			}
 		}
 		else {
-			addData(c, temp, pressure, humidity);
+			c.addData(temp, pressure, humidity);
 		}
 	}
 	
@@ -238,15 +255,15 @@ public class Database {
 		}
 		return containerInternalStatusHistoryList;
 	}
-	public void addObserver(observer o) {
-		obs.add(o);
-	}
-
-	private void notifyObservers( Container c) {
-		for (observer o: obs) {
-			o.update(c.getTempList(),c.getPressureList(),c.getHumList());
-		}
-	}
+//	public void addObserver(observer o) {
+//		obs.add(o);
+//	}
+//
+//	private void notifyObservers( Container c) {
+//		for (observer o: obs) {
+//			o.update(c.getTempList(),c.getPressureList(),c.getHumList());
+//		}
+//	}
 	
 	public void addchartObserver(chartobserver o) {
 		cobs.add(o);

@@ -3,6 +3,8 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Set;
@@ -19,6 +21,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+
 // Was added:
 // SearchContainerEntryC
 // SearchContainerEntryJ
@@ -27,14 +30,16 @@ import javax.swing.table.DefaultTableModel;
 // chooseContainerOptions
 // chooseContainerForPlot
 // GetAllContainerMeasurements
+// showAllOrSearch
+// propertyChange
 
 
-public class ContainerSelectionPanels {
+public class ContainerSelectionPanels implements PropertyChangeListener{
 
 	private JPanel containerSearch;
 	private JPanel viewContainers;
-	private ArrayList<Journey> wJourneys;
-	private ArrayList<Container> wContainers;
+	private ArrayList<Journey> wJourneys = new ArrayList<Journey>();
+	private ArrayList<Container> wContainers = new ArrayList<Container>();
 	private String keyword;
 	private JPanel extraOptions;
 	private JPanel plotPanel;
@@ -49,7 +54,9 @@ public class ContainerSelectionPanels {
 	private plot tempPlot;
 	private plot presPlot;
 	private plot humPlot;
-	private boolean isDisplayJourney;
+	private Database database;
+	private TopMain topmain;
+	private boolean showAllCommand;
 	
 	public JPanel getPlotPanel() {
 		return plotPanel;
@@ -66,7 +73,9 @@ public class ContainerSelectionPanels {
 
 	public ContainerSelectionPanels(final Database database, final TopMain topmain) {
 		
-		this.main1 = main1;
+		this.database = database;
+		this.topmain = topmain;
+		
 		containerSearch = new JPanel();
 		containerSearch.setPreferredSize(new Dimension(800, 600));
 		
@@ -101,11 +110,12 @@ public class ContainerSelectionPanels {
 	public void showAllActiveContainers(final Database database, final TopMain topmain) {
 		JButton showAll = new JButton("Show All");
 		containerSearch.add(showAll);
+		showAllCommand = true;
 		showAll.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Journey> result = filterActiveContainersforClients(database, topmain);
-				wContainers = database.getAllContainers();
+				ArrayList<Journey> result = filterJourneysForClients(database, topmain, database.getJourney());
+				wContainers = database.getAllContainers(false, result);
 				checksSearchEntryC(database, topmain);
 			}
 		});
@@ -120,11 +130,12 @@ public class ContainerSelectionPanels {
 		
 		JButton search2 = new JButton("Search");
 		containerSearch.add(search2);
+		showAllCommand = false;
 		search2.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				keyword = searchActiveContainer.getText();
-				ArrayList<Journey> result = filterActiveContainersforClients(database, topmain);
+				ArrayList<Journey> result = filterJourneysForClients(database, topmain, database.getJourney());
 				
 				wContainers = database.findContainer(keyword, result);
 				checksSearchEntryC(database, topmain);
@@ -138,7 +149,7 @@ public class ContainerSelectionPanels {
 			// Window created
 		}
 		else {
-			displayContainers(database, topmain);
+			displayContainers();
 		}
 	}
 	
@@ -151,6 +162,7 @@ public class ContainerSelectionPanels {
 		}
 	}
 	
+	// might not be needed?
 	public ArrayList<Journey> filterActiveContainersforClients(final Database database, final TopMain topmain) {
 		if (topmain instanceof ClientMain) {
 			ArrayList<Journey> result = new ArrayList<Journey>();
@@ -196,7 +208,7 @@ public class ContainerSelectionPanels {
 	}
 	
 	public void searchForItemsInContainerPast(final Database database, final TopMain topmain) {
-		JLabel containeritempast = new JLabel("Filtered past containers");
+		JLabel containeritempast = new JLabel("History of Containers");
 		containerSearch.add(containeritempast);
 		final JTextField searchPastContainers = new JTextField();
 		searchPastContainers.setPreferredSize(new Dimension(100, 25));
@@ -204,11 +216,12 @@ public class ContainerSelectionPanels {
 		
 		JButton searchPast = new JButton("Search");
 		containerSearch.add(searchPast);
+		showAllCommand = false;
 		searchPast.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				keyword = searchPastContainers.getText();
-				ArrayList<Journey> result = filterPastContainersforClients(database, topmain);
+				ArrayList<Journey> result = filterJourneysForClients(database, topmain, database.getHistory());
 				
 				wContainers = database.findContainer(keyword, result);
 				checksSearchEntryC(database, topmain);
@@ -216,6 +229,7 @@ public class ContainerSelectionPanels {
 		});
 	}
 
+	// might not be needed?
 	public ArrayList<Journey> filterPastContainersforClients(final Database database, final TopMain topmain) {
 		if (topmain instanceof ClientMain) {
 			ArrayList<Journey> result = new ArrayList<Journey>();
@@ -246,7 +260,7 @@ public class ContainerSelectionPanels {
 			op = database.findContainer(keyword,database.getHistory());
 		}
 		else {
-			op = database.getActiveContainers();
+			op = database.getfilteredContainers(false, database.getJourney());
 		}
 		String[] options = new String[op.size()];
 		int i = 0;
@@ -302,6 +316,7 @@ public class ContainerSelectionPanels {
 				ArrayList<Container> result = new ArrayList<Container>();
 				result.addAll(database.findContainer(id.getSelectedItem().toString(), database.getJourney()));
 				Container c = result.get(0);
+//				database.addData(c, newTemp, newPressure, newHum);
 				database.addData(c, newTemp, newPressure, newHum);
 			}
 		});
@@ -358,8 +373,7 @@ public class ContainerSelectionPanels {
 		else {
 			ArrayList<Container> result = database.findContainer(id, database.getJourney());;
 			Container c = result.get(0);
-			Container con = new Container(c);
-			return con;
+			return c;
 		}
 	}
 	
@@ -370,7 +384,7 @@ public class ContainerSelectionPanels {
 			 
 			 tempPlot = new plot("Temperature", csp, topmain);
 			 tempPlot.linePlot(data);;
-			 database.addObserver(tempPlot);
+			 c.addObserver(tempPlot);
 //			 JPanel tempPanel = tempPlot.getChartPanel();
 //			 plotPanel.add(tempPanel);
 			 
@@ -384,7 +398,7 @@ public class ContainerSelectionPanels {
 			 
 			 presPlot = new plot("Pressure", csp, topmain);
 			 presPlot.linePlot(data);;
-			 database.addObserver(presPlot);
+			 c.addObserver(presPlot);
 			 
 		 }
 		 if (checkBoxHum.isSelected()) {
@@ -393,7 +407,7 @@ public class ContainerSelectionPanels {
 			 
 			 humPlot = new plot("Humidity", csp, topmain);
 			 humPlot.linePlot(data);;
-			 database.addObserver(humPlot);
+			 c.addObserver(humPlot);
 //			 JPanel humPanel = humPlot.getChartPanel();
 //			 plotPanel.add(humPanel);
 			 
@@ -405,7 +419,7 @@ public class ContainerSelectionPanels {
 			 
 			 cPlot = new comparisonlinePlots("Comparison line plot", temp, pres, hum, csp, topmain);
 //			 updateComparisonPlot(cPlot);
-			 database.addObserver(cPlot);
+			 c.addObserver(cPlot);
 			 
 		 }
 		 if (checkBoxBarPlot.isSelected()) {
@@ -414,7 +428,7 @@ public class ContainerSelectionPanels {
 			 ArrayList<Integer> hum = c.getHumList();
 			 
 			 bPlot = new barPlots("Bar plot", temp, pres, hum, csp, topmain);
-			 database.addObserver(bPlot);
+			 c.addObserver(bPlot);
 //			 updateBarPlot(bPlot);
 		 }
 		 updateAllPlots(topmain);
@@ -477,7 +491,7 @@ public class ContainerSelectionPanels {
 
 	
 	public void displayJourneys(Database database, TopMain topmain) {
-		isDisplayJourney = true;
+
 		viewContainers.removeAll();
 		//additionalInformation(database, topmain);
 		DefaultTableModel tableModel = new DefaultTableModel();
@@ -506,8 +520,8 @@ public class ContainerSelectionPanels {
 		topmain.getCl().show(topmain.getCards(), "viewContainers");
 	}
 	
-	public void displayContainers(Database database, TopMain topmain) {
-		isDisplayJourney = false;
+	public void displayContainers() {
+		
 		viewContainers.removeAll();
 		additionalInformation(database, topmain);
 		DefaultTableModel tableModel = new DefaultTableModel();
@@ -539,7 +553,7 @@ public class ContainerSelectionPanels {
 	}
 
 	public void formRowForContainer(DefaultTableModel tableModel, Container c, Database database) {
-		
+
 		// checks whether the measurement lists are empty and whether a container belongs to the active Journey list
 		if ((c.isEmpty()) || (database.findUsingLoop(c.getId(),database.getJourney()).size() == 0)) {
 			tableModel.insertRow(0, new Object[] {c.getContainerId(), c.getId(), c.getCompany(), c.getContent(), c.getCurrentLocation(), "N/A", "N/A", "N/A", c.getTempList(), c.getPressureList(), c.getHumList()});
@@ -549,15 +563,46 @@ public class ContainerSelectionPanels {
 		}
 	}
 	
-	public static void doesItemExist(ArrayList<Container> c) throws MyException {
-			
-			if (c.size() == 0) {
-				throw new MyException("Nothing matches your search!");
+//	public static void doesItemExist(ArrayList<Container> c) throws MyException {
+//			
+//			if (c.size() == 0) {
+//				throw new MyException("Nothing matches your search!");
+//			}
+//			else {
+//				System.out.println("All good");
+//			}
+//		}
+	 
+
+	public void propertyChange(PropertyChangeEvent evt) {
+
+		Database dat = ((Database)evt.getSource());
+		if (wContainers.size()!= 0) {
+			if ((checkContainerListForPast(dat) && (evt.getPropertyName().contentEquals("history")))) {
+		
+				ArrayList<Journey> jList = dat.getHistory();
+				showAllOrSearch(jList, dat, true);
 			}
-			else {
-				System.out.println("All good");
+			else if (checkContainerListForPast(dat) == false && (evt.getPropertyName().contentEquals("journey"))) {
+				ArrayList<Journey> jList = dat.getJourney();
+				showAllOrSearch(jList, dat, false);
 			}
+			displayContainers();
+			topmain.getMain1().revalidate();
 		}
+	}
+
+	public void showAllOrSearch(ArrayList<Journey> jList, Database dat, boolean isPast) {
+		if (showAllCommand) {
+			ArrayList<Journey> result = filterJourneysForClients(database, topmain, jList);
+			wContainers = dat.getAllContainers(isPast, result);
+		}
+		else {
+			ArrayList<Journey> result = new ArrayList<Journey>();
+			result.addAll(database.findClientJourneys(topmain.getUserText(), jList));
+			wContainers = dat.findContainer(keyword,result);
+		}
+	}
 
 
 }

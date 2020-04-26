@@ -141,6 +141,5 @@ public class plot extends ApplicationFrame implements observer{
 		setContentPane(chartPanel);
 		getCsp().updateAllPlots(getTopmain());
 	}
-
 	}
 

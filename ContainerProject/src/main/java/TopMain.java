@@ -128,6 +128,7 @@ public class TopMain {
 		// journey section
 		
 		JourneySectionPanels j = new JourneySectionPanels(database, this);
+		database.addObserver(j);
 		cards.add(j.getJourneySearch(), "journeySearch");
 		cards.add(j.getViewJourneys(), "viewJourneys");
 		
@@ -147,6 +148,7 @@ public class TopMain {
 	// container section
 	
 		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);
+		database.addObserver(cont);
 		cards.add(cont.getContainerSearch(), "containerSearch");
 		cards.add(cont.getViewContainers(), "viewContainers");
 		cards.add(cont.getPlotPanel(), "plotPanel");

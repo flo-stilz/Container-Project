@@ -16,8 +16,8 @@ public class GUIMain {
 	static Database database = new Database(); 
 	static private JFrame failedLogin;
 	static private JFrame failedReg;
-	static private String name = "admin";
-	static private String pass = "qwerty";
+	static private String name = "Mads M�ller";
+	static private String pass = "1";
 	
 	/*
 	 * This method is used for registering a new client.
