@@ -4,6 +4,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Set;
 
 import javax.swing.BoxLayout;
@@ -21,6 +22,11 @@ import javax.swing.table.DefaultTableModel;
 // Was added:
 // SearchContainerEntryC
 // SearchContainerEntryJ
+// pickPastOrActiveJourneys
+// checkContainerListForPast
+// chooseContainerOptions
+// chooseContainerForPlot
+// GetAllContainerMeasurements
 
 
 public class ContainerSelectionPanels {
@@ -43,6 +49,7 @@ public class ContainerSelectionPanels {
 	private plot tempPlot;
 	private plot presPlot;
 	private plot humPlot;
+	private boolean isDisplayJourney;
 	
 	public JPanel getPlotPanel() {
 		return plotPanel;
@@ -224,25 +231,36 @@ public class ContainerSelectionPanels {
 		
 		extraOptions = new JPanel(new BorderLayout());
 		viewContainers.add(extraOptions, BorderLayout.CENTER);
-		String[] options = new String[database.getActiveContainers().size()];
-		int i = 0;
-		for (Container c : database.getActiveContainers()) {
-			options[i] = c.getContainerId();
-			i++;
-		}
-		
-		final JComboBox<String> id = new JComboBox<String>(options);
+		String idstring;
+		final JComboBox<String> id = chooseContainerOptions(database);
 		extraOptions.add(id, BorderLayout.NORTH);
-		
-		if (topmain instanceof CompanyMain && checkContainerListForPastOrActive(database)) {
+		if (topmain instanceof CompanyMain && (checkContainerListForPast(database) == false)) {
 			updateData(database, id);
 		}
 		showPlots(database, id, topmain);
 	}
+
+	public JComboBox<String> chooseContainerOptions(Database database) {
+		ArrayList<Container> op;
+		if (checkContainerListForPast(database)) {
+			op = database.findContainer(keyword,database.getHistory());
+		}
+		else {
+			op = database.getActiveContainers();
+		}
+		String[] options = new String[op.size()];
+		int i = 0;
+		for (Container c : op) {
+			options[i] = c.getContainerId();
+			i++;
+		}
+		final JComboBox<String> id = new JComboBox<String>(options);
+		return id;
+	}
 	
 	// Using the first item in the container list to check whether the containers are active
 	
-	public boolean checkContainerListForPastOrActive(Database database) {
+	public boolean checkContainerListForPast(Database database) {
 		Container firstContainer = wContainers.get(0);
 		String journeyid = firstContainer.getId();
 		return (database.findUsingLoop(journeyid, database.getJourney()).size() == 0);
@@ -317,9 +335,8 @@ public class ContainerSelectionPanels {
 			public void actionPerformed(ActionEvent e) {
 				
 				// get Container
-				ArrayList<Container> result = new ArrayList<Container>();
-				result.addAll(database.findContainer(id.getSelectedItem().toString(), database.getJourney()));
-				Container c = result.get(0);
+				// does not pick the right container!!!
+				Container c = chooseContainerForPlot(database, id.getSelectedItem().toString());
 				
 				 createPlots(database, topmain, c);
 				
@@ -330,9 +347,26 @@ public class ContainerSelectionPanels {
 		
 	}
 	
+	public Container chooseContainerForPlot(Database database, String id) {
+		if (checkContainerListForPast(database)) {
+			ArrayList<Container> result = database.findContainer(id, database.getHistory());
+			Container c = result.get(0);
+			Container con = new Container(c);
+			GetAllContainerMeasurements(database, con, id);
+			return con;
+		}
+		else {
+			ArrayList<Container> result = database.findContainer(id, database.getJourney());;
+			Container c = result.get(0);
+			Container con = new Container(c);
+			return con;
+		}
+	}
+	
 	public void createPlots(final Database database, final TopMain topmain, Container c) {
 		if (checkBoxTemp.isSelected()) {
-			 ArrayList<Integer> data = c.getTempList();
+			
+			ArrayList<Integer> data = c.getTempList();
 			 
 			 tempPlot = new plot("Temperature", csp, topmain);
 			 tempPlot.linePlot(data);;
@@ -345,7 +379,8 @@ public class ContainerSelectionPanels {
 			 // data is the corresponding arraylist for the plot
 		 }
 		 if (checkBoxPres.isSelected()) {
-			 ArrayList<Integer> data = c.getPressureList();
+			 
+			ArrayList<Integer> data = c.getPressureList();
 			 
 			 presPlot = new plot("Pressure", csp, topmain);
 			 presPlot.linePlot(data);;
@@ -353,6 +388,7 @@ public class ContainerSelectionPanels {
 			 
 		 }
 		 if (checkBoxHum.isSelected()) {
+			 
 			 ArrayList<Integer> data = c.getHumList();
 			 
 			 humPlot = new plot("Humidity", csp, topmain);
@@ -382,6 +418,22 @@ public class ContainerSelectionPanels {
 //			 updateBarPlot(bPlot);
 		 }
 		 updateAllPlots(topmain);
+	}
+
+	// possibly keyword instead of id ?
+	public void GetAllContainerMeasurements(final Database database, Container c, String id) {
+		ArrayList<Integer> result = new ArrayList<Integer>();
+		ArrayList<Integer> result2 = new ArrayList<Integer>();
+		ArrayList<Integer> result3 = new ArrayList<Integer>();
+		ArrayList<ArrayList<Integer>> totalresult = new ArrayList<ArrayList<Integer>>();
+		for (ArrayList<ArrayList<Integer>> measurement: database.containerInternalStatusHistory(id, database.getHistory())) {
+			result.addAll(measurement.get(0));
+			result2.addAll(measurement.get(1));
+			result3.addAll(measurement.get(2));
+		}
+		c.setTempList(result);
+		c.setPressureList(result2);
+		c.setHumList(result3);
 	}
 
 	public void updateLinePlots(plot linePlot) {
@@ -425,8 +477,9 @@ public class ContainerSelectionPanels {
 
 	
 	public void displayJourneys(Database database, TopMain topmain) {
-		
+		isDisplayJourney = true;
 		viewContainers.removeAll();
+		//additionalInformation(database, topmain);
 		DefaultTableModel tableModel = new DefaultTableModel();
 		JTable table = new JTable(tableModel);
 		String[] columnNames = {
@@ -454,7 +507,7 @@ public class ContainerSelectionPanels {
 	}
 	
 	public void displayContainers(Database database, TopMain topmain) {
-		
+		isDisplayJourney = false;
 		viewContainers.removeAll();
 		additionalInformation(database, topmain);
 		DefaultTableModel tableModel = new DefaultTableModel();

@@ -22,6 +22,18 @@ public class Container {
     private ArrayList <String> outHum = new ArrayList<String>(); 
     private ArrayList <String> outTemp = new ArrayList<String>();
     
+    public void setPressureList(ArrayList<Integer> pressureList) {
+		this.pressureList = pressureList;
+	}
+
+	public void setHumList(ArrayList<Integer> humList) {
+		this.humList = humList;
+	}
+
+	public void setTempList(ArrayList<Integer> tempList) {
+		this.tempList = tempList;
+	}
+    
     
     public Container(Container org) {
     	this.containerId = org.getContainerId();
