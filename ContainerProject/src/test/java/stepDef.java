@@ -110,17 +110,17 @@ public class stepDef {
 	//2
 	@When("client wants to update email to {string}")
 	public void client_wants_to_update_email_to(String string) {
-	    client.updateEmail(string);
+	    database.updateClientMail(client, string);
 	}
 
 	@When("client wants to update adress to {string}")
 	public void client_wants_to_update_adress_to(String string) {
-	    client.updateAddress(string);
+	    database.updateClientAddress(client, string);
 	}
 
 	@When("client wants to update contact person to {string}")
 	public void client_wants_to_update_contact_person_to(String string) {
-	    client.updateName(string);
+	    database.updateClientName(client, string);
 	}
 
 	@Then("client has been updated")
@@ -321,7 +321,7 @@ public class stepDef {
 
 	@When("the journeys current location is updated")
 	public void the_journeys_current_location_is_updated() {
-		j1.updateCurrentLocation(newloc);
+		database.updateCurrentLocation(j1, newloc);
 	}
 
 	@Then("the current location should be updated")
@@ -754,7 +754,7 @@ public class stepDef {
     
     @Given("the journey j5 is completed")
     public void the_journey_j5_is_completed() {
-    	j5.updateCurrentLocation(j5.getDestination());
+    	database.updateCurrentLocation(j5, j5.getDestination());
     	database.endOfJourney(j5);
     }
     
@@ -786,7 +786,7 @@ public class stepDef {
     
     @Given("the journey j6 is completed")
     public void the_journey_j6_is_completed() {
-    	j6.updateCurrentLocation(j6.getDestination());
+    	database.updateCurrentLocation(j6, j6.getDestination());
     	database.endOfJourney(j6);
     }
     
@@ -798,7 +798,7 @@ public class stepDef {
     
     @Given("the journey j7 is completed") 
     public void the_journey_j7_is_completed() {
-    	j7.updateCurrentLocation(j7.getDestination());
+    	database.updateCurrentLocation(j7, j7.getDestination());
     	database.endOfJourney(j7);
     }
     
@@ -825,7 +825,7 @@ public class stepDef {
     
     @Given("the journey j8 is completed")
     public void the_journey_j8_is_completed() {
-    	j8.updateCurrentLocation(j8.getDestination());
+    	database.updateCurrentLocation(j8, j8.getDestination());
     	database.endOfJourney(j8);
     }
     
@@ -862,7 +862,7 @@ public class stepDef {
     
     @When("the journey j9 is completed")
     public void the_journey_j9_is_completed() {
-    	j9.updateCurrentLocation(j9.getDestination());
+    	database.updateCurrentLocation(j9, j9.getDestination());
     	database.endOfJourney(j9);
     }
     
@@ -904,7 +904,7 @@ public class stepDef {
 
     @Given("the journey j10 is completed")
     public void the_journey_j10_is_completed() {
-    	j10.updateCurrentLocation(j10.getDestination());
+    	database.updateCurrentLocation(j10, j10.getDestination());
     	database.endOfJourney(j10);
     }
     
@@ -933,7 +933,7 @@ public class stepDef {
     
     @When("the journey j11 is completed")
     public void the_journey_j11_is_completed() {
-    	j11.updateCurrentLocation(j11.getDestination());
+    	database.updateCurrentLocation(j11, j11.getDestination());
     	database.endOfJourney(j11);
     }
     
@@ -971,7 +971,7 @@ public class stepDef {
 
     @When("the journey j12 is completed")
     public void the_journey_j12_is_completed() {
-    	j12.updateCurrentLocation(j12.getDestination());
+    	database.updateCurrentLocation(j12, j12.getDestination());
     	database.endOfJourney(j12);
     }
 

@@ -53,13 +53,17 @@ public class Journey {
 		return currentLocation;
 	}
 
-	public void updateCurrentLocation(String newcurrentLocation) {
-		for (int i=0; i < containerList.size(); i++){
-			containerList.get(i).setCurrentLocation(newcurrentLocation);
-		}
-		this.currentLocation = newcurrentLocation.toUpperCase();
-	}
+//	public void updateCurrentLocation(String newcurrentLocation) {
+//		for (int i=0; i < containerList.size(); i++){
+//			containerList.get(i).setCurrentLocation(newcurrentLocation);
+//		}
+//		this.currentLocation = newcurrentLocation.toUpperCase();
+//	}
 	
+	public void setCurrentLocation(String currentLocation) {
+		this.currentLocation = currentLocation;
+	}
+
 	public int getDistance() {
 		return distance;
 	}

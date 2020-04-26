@@ -1,15 +1,22 @@
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 public class TopMain {
@@ -178,18 +185,43 @@ public class TopMain {
 	
 
 
-	public void logOutButton(Database database, final JFrame login, JPanel menupanel) {
+	public void logOutButton(final Database database, final JFrame login, JPanel menupanel) {
 		// Logout as company user
 		
-		JButton logout = new JButton("Logout");
+		final JButton profile = new JButton("Profile");
+		try {
+		    Image img = ImageIO.read(getClass().getResource("/ContainerProject/src/main/resources/profile.png"));
+		    profile.setIcon(new ImageIcon(img));
+		  } catch (Exception ex) {
+		    System.out.println(ex);
+		  }
 		JPanel top = new JPanel(new BorderLayout());
 		menupanel.add(top, BorderLayout.NORTH);
-		top.add(logout, BorderLayout.EAST);
+		top.add(profile, BorderLayout.EAST);
+		final JPopupMenu menu = new JPopupMenu("Profile Options");
+		
+		JMenuItem setDetails = new JMenuItem("Update profile details");
+		JMenuItem logout = new JMenuItem("Logout");
+//		if (this instanceof ClientMain) {
+//			menu.add(setDetails);
+//		}
+		menu.add(logout);
+
+		profile.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				
+				Component b=(Component)e.getSource();
+				Point p=b.getLocationOnScreen();
+				menu.show(profile, 0, 0);;
+				menu.setLocation(p.x,p.y+b.getHeight());
+				
+			}
+		});
+		
 		logout.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				j.getwJourneys().clear();
-				cont.getwContainers().clear();
 				login.setVisible(true);
 				main1.dispose();
 			}

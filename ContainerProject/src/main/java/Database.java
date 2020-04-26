@@ -132,14 +132,15 @@ public class Database {
 			 journey.add(j);
 			 Container container = assignContainer(content, company, j.getId());
 			 j.getContainerList().add(container);
-			 j.updateCurrentLocation(origin);
+			 updateCurrentLocation(j, origin);
 			 support.firePropertyChange("journey",null,null);
 			 return j;
 		}
 		else {
-			Container container = assignContainer(content, company, findJourney( origin, destination).get(0).getId());
-			findJourney( origin, destination).get(0).getContainerList().add(container);
-			findJourney( origin, destination).get(0).updateCurrentLocation(origin);
+			Journey j = findJourney( origin, destination).get(0);
+			Container container = assignContainer(content, company, j.getId());
+			j.getContainerList().add(container);
+			updateCurrentLocation(j, origin);
 			support.firePropertyChange("journey",null,null);
 			return findJourney( origin, destination).get(0);
 		}
@@ -296,6 +297,27 @@ public class Database {
 			}
 		}
 		return result;
+	}
+	
+	public void updateCurrentLocation(Journey j, String newcurrentLocation) {
+		for (int i=0; i < j.getContainerList().size(); i++){
+			j.getContainerList().get(i).setCurrentLocation(newcurrentLocation);
+		}
+		j.setCurrentLocation(newcurrentLocation.toUpperCase());
+	}
+	
+	public void updateClientName(client c, String refname) {
+		c.setName(refname);
+	}
+	
+	public void updateClientMail(client c, String mail) {
+		c.setEmail(mail);
+	}
+	public void updateClientAddress(client c, String address) {
+		c.setAddress(address);
+	}
+	public void updateClientPassword(client c, String password) {
+		c.setPassword(password);
 	}
 	
 	

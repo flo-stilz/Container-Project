@@ -1,16 +1,24 @@
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Image;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.imageio.ImageIO;
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JMenuItem;
 import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 public class ClientMain extends TopMain{
@@ -116,7 +124,7 @@ public class ClientMain extends TopMain{
 		JLabel ref = new JLabel("Reference person: " + currentClient.getName());
 		JLabel mail = new JLabel("E-mail: " + currentClient.getEmail());
 		JLabel address = new JLabel("Address: " + currentClient.getAddress());
-		JLabel id = new JLabel("Company id: " + currentClient.getCompany());
+		JLabel id = new JLabel("Company id: " + currentClient.getId());
 		clientDetails.add(lbl);
 		clientDetails.add(company);
 		clientDetails.add(ref);
@@ -190,6 +198,125 @@ public class ClientMain extends TopMain{
 				}
 		});
 			
+	}
+	
+	@Override
+	public void logOutButton(final Database database, final JFrame login, final JPanel menupanel) {
+		// Logout as company user
+		
+		final JButton profile = new JButton("Profile");
+		try {
+		    Image img = ImageIO.read(getClass().getResource("/ContainerProject/src/main/resources/profile.png"));
+		    profile.setIcon(new ImageIcon(img));
+		  } catch (Exception ex) {
+		    System.out.println(ex);
+		  }
+		JPanel top = new JPanel(new BorderLayout());
+		menupanel.add(top, BorderLayout.NORTH);
+		top.add(profile, BorderLayout.EAST);
+		final JPopupMenu menu = new JPopupMenu("Profile Options");
+		
+		JMenuItem setDetails = new JMenuItem("Update profile details");
+		JMenuItem logout = new JMenuItem("Logout");
+
+		menu.add(setDetails);
+		menu.add(logout);
+
+		profile.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				
+				Component b=(Component)e.getSource();
+				Point p=b.getLocationOnScreen();
+				menu.show(profile, 0, 0);;
+				menu.setLocation(p.x,p.y+b.getHeight());
+				
+			}
+		});
+		
+		logout.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				login.setVisible(true);
+				getMain1().dispose();
+			}
+		});
+		
+		setDetails.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				updateClientDetails(database);
+			}		
+		});
+	}
+
+
+	public void updateClientDetails(final Database database) {
+		final JFrame updateDetails = new JFrame("Update details");
+		updateDetails.setPreferredSize(new Dimension(300, 200));
+		
+		JPanel textFields = new JPanel();
+		textFields.setLayout(new BoxLayout(textFields, BoxLayout.Y_AXIS));
+			
+//			JPanel company = new JPanel();
+//			company.add(new JLabel("Company name: "));
+//			JTextField companyText = new JTextField("companyname");
+//			companyText.setPreferredSize(new Dimension(100, 25));
+//			company.add(companyText);
+//			textFields.add(company);
+			
+		JPanel refname = new JPanel();
+		refname.add(new JLabel("Reference name: "));
+		final JTextField refnameText = new JTextField(currentClient.getName());
+		refnameText.setPreferredSize(new Dimension(100, 25));
+		refname.add(refnameText);
+		textFields.add(refname);
+			
+		JPanel email = new JPanel();
+		email.add(new JLabel("Email: "));
+		final JTextField emailText = new JTextField(currentClient.getEmail());
+		emailText.setPreferredSize(new Dimension(100, 25));
+		email.add(emailText);
+		textFields.add(email);
+			
+		JPanel address = new JPanel();
+		address.add(new JLabel("Address: "));
+		final JTextField addressText = new JTextField(currentClient.getAddress());
+		addressText.setPreferredSize(new Dimension(100, 25));
+		address.add(addressText);
+		textFields.add(address);
+		
+		JPanel password = new JPanel();
+		password.add(new JLabel("Password: "));
+		final JPasswordField passwordText = new JPasswordField(currentClient.getPassword());
+		passwordText.setPreferredSize(new Dimension(100, 25));
+		password.add(passwordText);
+		textFields.add(password);
+			
+		JButton confirm = new JButton("Confirm changes");
+		confirm.addActionListener(new ActionListener() {
+				
+			public void actionPerformed(ActionEvent e) {
+				String name = refnameText.getText();
+				String mail = emailText.getText();
+				String address = addressText.getText();
+				String password = new String(passwordText.getPassword());
+					
+				database.updateClientName(currentClient, name);
+				database.updateClientMail(currentClient,mail);
+				database.updateClientAddress(currentClient,address);
+				database.updateClientPassword(currentClient, password);
+					
+				updateDetails.dispose();
+				
+					
+			}
+		});
+			
+		updateDetails.add(textFields, BorderLayout.CENTER);
+		updateDetails.add(confirm, BorderLayout.SOUTH);
+		updateDetails.pack();
+		updateDetails.setVisible(true);
 	}
 	
 //	public void simulationButton(final Database database, JFrame main, JButton simulation) {	

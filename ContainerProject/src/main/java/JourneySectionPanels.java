@@ -187,7 +187,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				ArrayList<Journey> result = new ArrayList<Journey>();
 				result.addAll(database.findUsingLoop(id.getSelectedItem().toString(), database.getJourney()));
 				Journey j = result.get(0);
-				j.updateCurrentLocation(newcurrentLocation);
+				database.updateCurrentLocation(j, newcurrentLocation);
 			}
 		});
 		viewJourneys.add(update, BorderLayout.SOUTH);
