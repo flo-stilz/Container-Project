@@ -26,6 +26,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	private Database database;
 	private TopMain topmain;
 	private String keyword;
+	private boolean isPast;
 	
 	public ArrayList<Journey> getwJourneys() {
 		return wJourneys;
@@ -75,10 +76,11 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	public void showAllPast(final Database database, final TopMain topmain) {
 		JButton showAllPast = new JButton("Show All");
 		journeySearch.add(showAllPast);
-		showAllCommand = true;
 		showAllPast.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				isPast = true;
+				showAllCommand = true;
 				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(database, topmain));
 				wJourneys = result;
 				checksSearchEntryC(database, topmain);
@@ -96,10 +98,11 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		
 		JButton journeyPastSearch = new JButton("Search");
 		journeySearch.add(journeyPastSearch);
-		showAllCommand = false;
 		journeyPastSearch.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				isPast = true;
+				showAllCommand = false;
 				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(database, topmain));
 				keyword = searchjourneyPastTxt.getText();
 				wJourneys = database.findUsingLoop(keyword, result);
@@ -124,10 +127,11 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		
 		JButton showAllActive = new JButton("Show All");
 		journeySearch.add(showAllActive);
-		showAllCommand = true;
 		showAllActive.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				isPast = false;
+				showAllCommand = true;
 				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(database, topmain));
 				wJourneys = result;
 				checksSearchEntryC(database, topmain);
@@ -146,11 +150,12 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		
 		JButton searchActiveButton = new JButton("Search");
 		journeySearch.add(searchActiveButton);
-		showAllCommand = false;
 		
 		searchActiveButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				isPast = false;
+				showAllCommand = false;
 				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(database, topmain));
 				keyword = searchActive.getText();
 				database.findUsingLoop(keyword, result);
@@ -188,6 +193,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				result.addAll(database.findUsingLoop(id.getSelectedItem().toString(), database.getJourney()));
 				Journey j = result.get(0);
 				database.updateCurrentLocation(j, newcurrentLocation);
+				database.endOfJourney(j);
 			}
 		});
 		viewJourneys.add(update, BorderLayout.SOUTH);
@@ -299,20 +305,20 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		return containerids;
 	}
 	
-	public boolean checkJourneyListForPast(Database database) {
-		String journeyid = wJourneys.get(0).getId();
-		return (database.findUsingLoop(journeyid, database.getJourney()).size() == 0);
-	}
+//	public boolean checkJourneyListForPast(Database database) {
+//		String journeyid = wJourneys.get(0).getId();
+//		return (database.findUsingLoop(journeyid, database.getJourney()).size() == 0);
+//	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		Database dat = ((Database)evt.getSource());
 		if (wJourneys.size()!= 0) {
-			if ((checkJourneyListForPast(dat) && (evt.getPropertyName().contentEquals("history")))) {
+			if ((isPast && (evt.getPropertyName().contentEquals("history")))) {
 				
 				ArrayList<Journey> jList = new ArrayList<Journey>(filterPastJourneysForClient(dat, topmain));
 				showAllOrSearch(jList, dat);
 			}
-			else if (checkJourneyListForPast(dat) == false && (evt.getPropertyName().contentEquals("journey"))) {
+			else if (isPast == false && (evt.getPropertyName().contentEquals("journey"))) {
 				ArrayList<Journey> jList = new ArrayList<Journey>(filterActiveJourneysForClient(dat, topmain));
 				showAllOrSearch(jList, dat);
 			}
