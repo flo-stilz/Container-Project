@@ -7,7 +7,7 @@ import java.util.concurrent.TimeUnit;
 
 public class Simulator {
 	
-	private ArrayList<String> companies = new ArrayList<String>(Arrays.asList("Novo", "Maersk", "Netto", "Lidl", "Vestas", "Tops��", "TDC", "Carlsberg", "DanskBank", "Novozymes", "Nestle", "Ford", "Mercedes", "Volkswagen", "Amazon","Alibaba")); 
+	private ArrayList<String> companies = new ArrayList<String>(Arrays.asList("Novo", "Maersk", "Netto", "Lidl", "Vestas", "Topsoe", "TDC", "Carlsberg", "DanskBank", "Novozymes", "Nestle", "Ford", "Mercedes", "Volkswagen", "Amazon","Alibaba")); 
 	private ArrayList<String> firstnames = new ArrayList<String>(Arrays.asList("Mads", "Florian", "Martin", "Lucien", "Anna", "John", "Peter", "Sven", "Jorgen", "Brunhilde", "Heath", "Bill", "Phil", "Andrea", "Hubert", "Rebecca", "Emilie"));
 	private ArrayList<String> surnames = new ArrayList<String>(Arrays.asList("Nielsen", "Jensen", "Hansen", "Petersen", "Andersen", "Christensen", "Sorensen", "Moller", "Poulsen", "Ivanova", "Wang", "Kim", "Saito", "Gruber", "Mueller", "Peeters", "Smith", "Schmit", "Martin", "Garcia", "Silva", "Rossi"));
 	private ArrayList<String> addresses = new ArrayList<String>(Arrays.asList("Anker Engelundsvej 101", "Bill Clinton Street 390", "Kings Street 100", "Queens Street 102", "Strandvej 2", "Hovedgade 1000", "Frederiksundsvej 48", "Alexanderstrasse 19", "Via Appia 12", "Rue Du Moulin", "Hollywood Blvd. 123", "Lombard Street 4", "Chapel Street 796", "First Street 1", "Via De Ventura 12", "El Camino Drive 22"));

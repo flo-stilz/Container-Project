@@ -107,12 +107,26 @@ public class ClientMain extends TopMain{
 	
 	} 
 	@Override
-	public void menuButton(Database database, JFrame login, JButton menu) {
+	public void menuButton(final Database database, final JFrame login, JButton menu) {
 		final JPanel menupanel = new JPanel( new BorderLayout());
 		menupanel.setPreferredSize(new Dimension(800, 600));
 		menupanel.setBackground(Color.RED);
 		
 		getCards().add(menupanel, "menu");
+		menuPanel(database, login, menupanel);
+		
+		menu.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				emptyPreviousSearch(j, cont);
+				menuPanel(database, login, menupanel);
+				getCl().show(getCards(), "menu");
+			}
+		});
+	}
+
+	public void menuPanel(Database database, JFrame login, JPanel menupanel) {
+		menupanel.removeAll();
 		
 		JPanel clientDetails = new JPanel();
 		clientDetails.setLayout(new BoxLayout(clientDetails, BoxLayout.Y_AXIS));
@@ -134,14 +148,6 @@ public class ClientMain extends TopMain{
 		menupanel.add(clientDetails, BorderLayout.CENTER);
 		
 		logOutButton(database, login, menupanel);
-		
-		menu.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(j, cont);
-				getCl().show(getCards(), "menu");
-			}
-		});
 	}
 	
 //	public void clientButton(Database database, JFrame main, JButton clients) {
