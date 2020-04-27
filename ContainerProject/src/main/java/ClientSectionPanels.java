@@ -21,7 +21,6 @@ public class ClientSectionPanels implements PropertyChangeListener {
 	private boolean showAllCommand;
 	private String keyword;
 	private CompanyMain companymain;
-	private Database database;
 	
 	public ArrayList<client> getwClients() {;
 		return wClients;
@@ -29,7 +28,6 @@ public class ClientSectionPanels implements PropertyChangeListener {
 
 	public ClientSectionPanels(final Database database, final CompanyMain companymain) {
 		
-		this.database = database;
 		this.companymain = companymain;
 		// Search the clients
 		
@@ -51,8 +49,8 @@ public class ClientSectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				keyword = search.getText();
 				showAllCommand = false;
-				wClients = database.search(keyword);
-				displayClients();
+				wClients = new ArrayList<client>(database.search(keyword));
+				displayClients(database);
 			}
 		});
 		
@@ -62,8 +60,8 @@ public class ClientSectionPanels implements PropertyChangeListener {
 
 			public void actionPerformed(ActionEvent e) {
 				showAllCommand = true;
-				wClients = database.getClients();
-				displayClients();
+				wClients = new ArrayList<client>(database.getClients());
+				displayClients(database);
 			}
 		});
 
@@ -71,7 +69,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 	
 	// display the clients
 	
-	public void displayClients() {
+	public void displayClients(Database database) {
 		
 		viewClients.removeAll();
 		DefaultTableModel tableModel = new DefaultTableModel();
@@ -118,17 +116,17 @@ public class ClientSectionPanels implements PropertyChangeListener {
 			if (evt.getPropertyName().contentEquals("clients")) {
 				showAllOrSearch(dat);
 			}
-			displayClients();
+			displayClients(dat);
 			companymain.getMain1().revalidate();
 		}
 	}
 	
 	public void showAllOrSearch(Database dat) {
 		if (showAllCommand) {
-			wClients = dat.getClients();
+			wClients = new ArrayList<client>(dat.getClients());
 		}
 		else {
-			wClients = dat.search(keyword);
+			wClients = new ArrayList<client>(dat.search(keyword));
 		}
 	}
 }

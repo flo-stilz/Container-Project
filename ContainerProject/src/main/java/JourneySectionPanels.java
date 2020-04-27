@@ -79,7 +79,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		showAllPast.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Journey> result = filterPastJourneysForClient(database, topmain);
+				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(database, topmain));
 				wJourneys = result;
 				displayJourneys();
 			}
@@ -100,7 +100,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		journeyPastSearch.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Journey> result = filterPastJourneysForClient(database, topmain);
+				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(database, topmain));
 				keyword = searchjourneyPastTxt.getText();
 				wJourneys = database.findUsingLoop(keyword, result);
 				displayJourneys();
@@ -128,7 +128,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		showAllActive.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Journey> result = filterActiveJourneysForClient(database, topmain);
+				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(database, topmain));
 				wJourneys = result;
 				displayJourneys();
 			}
@@ -151,7 +151,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		searchActiveButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				ArrayList<Journey> result = filterActiveJourneysForClient(database, topmain);
+				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(database, topmain));
 				keyword = searchActive.getText();
 				database.findUsingLoop(keyword, result);
 				wJourneys = database.findUsingLoop(keyword, result);;
@@ -295,11 +295,11 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		if (wJourneys.size()!= 0) {
 			if ((checkJourneyListForPast(dat) && (evt.getPropertyName().contentEquals("history")))) {
 				
-				ArrayList<Journey> jList = filterPastJourneysForClient(dat, topmain);
+				ArrayList<Journey> jList = new ArrayList<Journey>(filterPastJourneysForClient(dat, topmain));
 				showAllOrSearch(jList, dat);
 			}
 			else if (checkJourneyListForPast(dat) == false && (evt.getPropertyName().contentEquals("journey"))) {
-				ArrayList<Journey> jList = filterActiveJourneysForClient(dat, topmain);
+				ArrayList<Journey> jList = new ArrayList<Journey>(filterActiveJourneysForClient(dat, topmain));
 				showAllOrSearch(jList, dat);
 			}
 			displayJourneys();

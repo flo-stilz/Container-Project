@@ -143,6 +143,8 @@ public class GUIMain {
 		final JFrame LoginFrame = new JFrame("Client Login");
 			
 		JLabel login = new JLabel("  Login:");
+		// TESTING ///////////////////////////////
+//		database.createClient("c", "c", "c", "c", "12345");
 	
 		JPanel usernamePanel = new JPanel();
 		JLabel userLbl = new JLabel("Username: ");			
