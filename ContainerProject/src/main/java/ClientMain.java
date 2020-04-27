@@ -205,12 +205,12 @@ public class ClientMain extends TopMain{
 		// Logout as company user
 		
 		final JButton profile = new JButton("Profile");
-		try {
-		    Image img = ImageIO.read(getClass().getResource("/ContainerProject/src/main/resources/profile.png"));
-		    profile.setIcon(new ImageIcon(img));
-		  } catch (Exception ex) {
-		    System.out.println(ex);
-		  }
+		ImageIcon img = new ImageIcon("src/main/resources/profile.png");
+		Image image = img.getImage(); // transform it 
+		Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		img = new ImageIcon(newimg);  // transform it back
+	    profile.setIcon(img);
+	    
 		JPanel top = new JPanel(new BorderLayout());
 		menupanel.add(top, BorderLayout.NORTH);
 		top.add(profile, BorderLayout.EAST);
