@@ -25,8 +25,8 @@ public class Container {
 
 
 
-//	private String containerID;
-//    private String journeyID;
+	private String containerID;
+    private String journeyID;
 //    private String uniqueID = containerID + "," + journeyID;   
 //    private String holdID1;
 //    private String holdID2;
@@ -109,13 +109,13 @@ public class Container {
 		return tempList;
 	}
 
-//	public void setContainerID(String containerID) {
-//        this.containerID = containerID;
-//    }
-//
-//	public void setJourneyID(String journeyID) {
-//		this.journeyID = journeyID;
-//	}
+	public void setContainerID(String containerID) {
+        this.containerID = containerID;
+    }
+
+	public void setJourneyID(String journeyID) {
+		this.journeyID = journeyID;
+	}
 
 //	public void getExpandedUniqueIDAll(String uniqueID) {
 //        holdID1 = uniqueID + "," + "pressure";
