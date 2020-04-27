@@ -115,7 +115,7 @@ public class CompanyMain extends TopMain{
 		clients.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch();
+				emptyPreviousSearch(getJ(),getCont());
 				getCl().show(getCards(), "clientSearch");
 			}
 		});
@@ -186,17 +186,17 @@ public class CompanyMain extends TopMain{
 		simulation.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch();
+				emptyPreviousSearch(getJ(),getCont());
 				getCl().show(getCards(), "sim");
 			}
 		});
 	}
 	
 	@Override
-	public void emptyPreviousSearch() {
+	public void emptyPreviousSearch(JourneySectionPanels j, ContainerSelectionPanels cont) {
 		getC().getwClients().clear();
-		getJ().getwJourneys().clear();
-		getCont().getwContainers().clear();
+		j.getwJourneys().clear();
+		cont.getwContainers().clear();
 	}
 	
 //	public void logOutButton(Database database, final JFrame main, final JFrame company, JPanel menupanel) {

@@ -225,7 +225,7 @@ public class Database {
 		}
 	}
 	
-	
+	// probably not needed anymore
 	public Set<Journey> findJourneysFromContainers(String search){
 		Set<Journey> result = new HashSet<Journey>();
 		for(Journey j : history) {
@@ -289,15 +289,15 @@ public class Database {
 		return result;
 	}
 	
-	public ArrayList<Container> findClientContainers(String client, ArrayList<Container> containerList){
-		ArrayList<Container> result = new ArrayList<Container>();
-		for ( Container c : containerList) {
-			if (client.contentEquals(c.getCompany())) {
-				result.add(c);
-			}
-		}
-		return result;
-	}
+//	public ArrayList<Container> findClientContainers(String client, ArrayList<Container> containerList){
+//		ArrayList<Container> result = new ArrayList<Container>();
+//		for ( Container c : containerList) {
+//			if (client.contentEquals(c.getCompany())) {
+//				result.add(c);
+//			}
+//		}
+//		return result;
+//	}
 	
 	public void updateCurrentLocation(Journey j, String newcurrentLocation) {
 		for (int i=0; i < j.getContainerList().size(); i++){

@@ -25,7 +25,7 @@ public class ErrorFrame {
 	public void createErrorFrame(JLabel lbl) {
 		
 		final JFrame eFrame = new JFrame("Error");
-		eFrame.setPreferredSize(new Dimension(300,100));
+		eFrame.setPreferredSize(new Dimension(330,100));
 		
 		JButton b = new JButton("OK");
 		b.addActionListener(new ActionListener() {
