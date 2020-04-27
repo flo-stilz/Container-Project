@@ -58,6 +58,10 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		journeyPastSearch(database, topmain);
 			
 		showAllPast(database, topmain);	
+		
+		if (topmain instanceof ClientMain) {
+			signUpGoods(database, topmain);
+		}
 	}
 	
 	public ArrayList<Journey> filterActiveJourneysForClient(final Database database, final TopMain topmain) {
@@ -201,8 +205,17 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	
 	public void signUpGoods(final Database database, final TopMain topmain) {
 		
+		JPanel journeySearchRest = new JPanel(new BorderLayout());
+		journeySearch.add(journeySearchRest);
+		// preferred would be a picture instead of space!!!
+		JPanel space = new JPanel();
+		space.setPreferredSize(new Dimension(350,320));
+		journeySearchRest.add(space, BorderLayout.NORTH);
 		JPanel signUp = new JPanel(new BorderLayout());
-		viewJourneys.add(signUp, BorderLayout.CENTER);
+		journeySearchRest.add(signUp, BorderLayout.CENTER);
+		JLabel lbl = new JLabel("Sign up your goods for a new journey here!");
+		lbl.setPreferredSize(new Dimension(100,70));
+		signUp.add(lbl, BorderLayout.NORTH);
 		String[] options = new String[database.getJourney().size()];
 		int i = 0;
 		for (Journey j : database.getJourney()) {
@@ -239,7 +252,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				database.createJourney(newOrigin, newDestination, newContent, topmain.getUserText());
 			}
 		});
-		viewJourneys.add(confirm, BorderLayout.SOUTH);
+		signUp.add(confirm, BorderLayout.SOUTH);
 	}
 	
 	public void checksSearchEntryC(final Database database, final TopMain topmain) {
@@ -263,9 +276,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		if (topmain instanceof CompanyMain) {
 			changeloc(database);
 		}
-		else if (topmain instanceof ClientMain) {
-			signUpGoods(database, topmain);
-		}
+		
 		DefaultTableModel tableModel = new DefaultTableModel();
 		JTable table = new JTable(tableModel);
 		String[] columnNames = {

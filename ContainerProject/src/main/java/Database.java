@@ -35,7 +35,7 @@ public class Database {
 		ArrayList<client> results = new ArrayList<client>();
 		for (client cl: clients) {
 
-			if ((cl.getAddress().contentEquals(keyword)||cl.getCompany().contentEquals(keyword)||cl.getEmail().contentEquals(keyword)||cl.getName().contentEquals(keyword))) {
+			if ((cl.getAddress().equalsIgnoreCase(keyword)||cl.getCompany().contentEquals(keyword)||cl.getEmail().equalsIgnoreCase(keyword)||cl.getName().equalsIgnoreCase(keyword))) {
 				results.add(cl);
 			}
 		}
