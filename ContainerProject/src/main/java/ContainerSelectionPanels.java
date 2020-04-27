@@ -158,13 +158,19 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 	
 	public void checksSearchEntryC(final Database database, final TopMain topmain) {
 		if (wContainers.size() == 0) {
-			// Window created
+			if (showAllCommand) {
+				new ErrorFrame();
+			}
+			else {
+				new ErrorFrame(keyword);
+			}
 		}
 		else {
 			displayContainers();
 		}
 	}
 	
+	// probably not needed either
 	public void checksSearchEntryJ(final Database database, final TopMain topmain) {
 		if (wJourneys.size() == 0) {
 			// Window created

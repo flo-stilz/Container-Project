@@ -50,7 +50,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 				keyword = search.getText();
 				showAllCommand = false;
 				wClients = new ArrayList<client>(database.search(keyword));
-				displayClients(database);
+				checksSearchEntryC(database);
 			}
 		});
 		
@@ -61,10 +61,24 @@ public class ClientSectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				showAllCommand = true;
 				wClients = new ArrayList<client>(database.getClients());
-				displayClients(database);
+				checksSearchEntryC(database);
 			}
 		});
 
+	}
+	
+	public void checksSearchEntryC(final Database database) {
+		if (wClients.size() == 0) {
+			if (showAllCommand) {
+				new ErrorFrame();
+			}
+			else {
+				new ErrorFrame(keyword);
+			}
+		}
+		else {
+			displayClients(database);
+		}
 	}
 	
 	// display the clients

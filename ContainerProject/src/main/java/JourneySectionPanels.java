@@ -81,7 +81,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(database, topmain));
 				wJourneys = result;
-				displayJourneys();
+				checksSearchEntryC(database, topmain);
 			}
 
 		});
@@ -103,7 +103,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(database, topmain));
 				keyword = searchjourneyPastTxt.getText();
 				wJourneys = database.findUsingLoop(keyword, result);
-				displayJourneys();
+				checksSearchEntryC(database, topmain);
 			}
 		});
 	}
@@ -130,7 +130,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(database, topmain));
 				wJourneys = result;
-				displayJourneys();
+				checksSearchEntryC(database, topmain);
 			}
 
 		});
@@ -155,7 +155,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				keyword = searchActive.getText();
 				database.findUsingLoop(keyword, result);
 				wJourneys = database.findUsingLoop(keyword, result);;
-				displayJourneys();
+				checksSearchEntryC(database, topmain);
 			}
 		});
 	}
@@ -234,6 +234,20 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			}
 		});
 		viewJourneys.add(confirm, BorderLayout.SOUTH);
+	}
+	
+	public void checksSearchEntryC(final Database database, final TopMain topmain) {
+		if (wJourneys.size() == 0) {
+			if (showAllCommand) {
+				new ErrorFrame();
+			}
+			else {
+				new ErrorFrame(keyword);
+			}
+		}
+		else {
+			displayJourneys();
+		}
 	}
 	
 	// view Journeys
