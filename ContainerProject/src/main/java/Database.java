@@ -19,7 +19,6 @@ public class Database {
 	private ArrayList<Container> containerWarehouse = new ArrayList<Container>();
 	private ArrayList<Journey> history = new ArrayList<Journey>();
 	private ArrayList<client> clients = new ArrayList<client>();
-	//private ArrayList<observer> obs = new ArrayList<observer>();
 	private ArrayList<chartobserver> cobs = new ArrayList<chartobserver>();
 	
 	private PropertyChangeSupport support = new PropertyChangeSupport(this);
@@ -252,11 +251,11 @@ public class Database {
 	
 	//review
 
-	public ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
+	public List<List<List<Integer>>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
 		ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
 		for(Journey j : history) {
 			for(Container c : j.getContainerList()) {
-				ArrayList<ArrayList<Integer>> measurements = new ArrayList<ArrayList<Integer>>();
+				List<List<Integer>> measurements = new ArrayList<ArrayList<Integer>>();
 				if (c.getContainerId().contentEquals(search)) {
 					measurements.add(c.getTempList());
 					measurements.add(c.getPressureList());
@@ -268,15 +267,6 @@ public class Database {
 		}
 		return containerInternalStatusHistoryList;
 	}
-//	public void addObserver(observer o) {
-//		obs.add(o);
-//	}
-//
-//	private void notifyObservers( Container c) {
-//		for (observer o: obs) {
-//			o.update(c.getTempList(),c.getPressureList(),c.getHumList());
-//		}
-//	}
 	
 	public void addchartObserver(chartobserver o) {
 		cobs.add(o);
