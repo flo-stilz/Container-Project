@@ -2,13 +2,14 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 
 public class Simulator {
-	private int one;
-	private ArrayList<String> companies = new ArrayList<String>(Arrays.asList("Novo", "Maersk", "Netto", "Lidl", "Vestas", "Topsø", "TDC", "Carlsberg", "DanskBank", "Novozymes", "Nestle", "Ford", "Mercedes", "Volkswagen", "Amazon","Alibaba")); 
-	private ArrayList<String> firstnames = new ArrayList<String>(Arrays.asList("Mads", "Florian", "Martin", "Lucien", "Anna", "John", "Peter", "Sven", "Jørgen", "Brunhilde", "Heath", "Bill", "Phil", "Andrea", "Hubert", "Rebecca", "Emilie"));
-	private ArrayList<String> surnames = new ArrayList<String>(Arrays.asList("Nielsen", "Jensen", "Hansen", "Petersen", "Andersen", "Christensen", "Sørensen", "Møller", "Poulsen", "Ivanova", "Wang", "Kim", "Saito", "Gruber", "Müller", "Peeters", "Smith", "Schmit", "Martin", "Garcia", "Silva", "Rossi"));
+	
+	private ArrayList<String> companies = new ArrayList<String>(Arrays.asList("Novo", "Maersk", "Netto", "Lidl", "Vestas", "Tops��", "TDC", "Carlsberg", "DanskBank", "Novozymes", "Nestle", "Ford", "Mercedes", "Volkswagen", "Amazon","Alibaba")); 
+	private ArrayList<String> firstnames = new ArrayList<String>(Arrays.asList("Mads", "Florian", "Martin", "Lucien", "Anna", "John", "Peter", "Sven", "Jorgen", "Brunhilde", "Heath", "Bill", "Phil", "Andrea", "Hubert", "Rebecca", "Emilie"));
+	private ArrayList<String> surnames = new ArrayList<String>(Arrays.asList("Nielsen", "Jensen", "Hansen", "Petersen", "Andersen", "Christensen", "Sorensen", "Moller", "Poulsen", "Ivanova", "Wang", "Kim", "Saito", "Gruber", "Mueller", "Peeters", "Smith", "Schmit", "Martin", "Garcia", "Silva", "Rossi"));
 	private ArrayList<String> addresses = new ArrayList<String>(Arrays.asList("Anker Engelundsvej 101", "Bill Clinton Street 390", "Kings Street 100", "Queens Street 102", "Strandvej 2", "Hovedgade 1000", "Frederiksundsvej 48", "Alexanderstrasse 19", "Via Appia 12", "Rue Du Moulin", "Hollywood Blvd. 123", "Lombard Street 4", "Chapel Street 796", "First Street 1", "Via De Ventura 12", "El Camino Drive 22"));
 	private ArrayList<String> contents = new ArrayList<String>(Arrays.asList("bananas", "apples", "cars", "towels", "vendingmachines", "calulators", "Steel", "medicine", "cameras", "computers", "iPads", "oil", "rice", "corn", "magazines"));
 	private ArrayList<String> locations = new ArrayList<String>(Arrays.asList("PBG", "CPH", "HAM", "LON", "NEW", "LAX", "BCN", "PEK", "BEN", "BOD", "POA", "RIX", "AAR", "RIO", "EBJ", "SKG", "SFL", "AAL", "SDQ", "SDJ", "SIN", "SPU", "LED", "TNG"));
@@ -47,8 +48,8 @@ public class Simulator {
 	private String name;
 	private String mail;
 	private String address;
-	client client;
-	
+	private String password;
+	private client client;
 	
 	
 	public String companySelection(int seed) {
@@ -175,14 +176,6 @@ public class Simulator {
 		return pressure;
 	}
 	
-//	Hubert's suggestion: The code should look like the commented section below, because of code reuse. 
-//hubert wants it done everywhere where the code is similair in this class
-	
-//	public int humidityInitialization(int seed) {
-//		r.setSeed(seed);
-//		return humidityInitialization();
-//	}
-	
 	public int humidityInitialization(int seed) {
 		r.setSeed(seed);
 		int value = r.nextInt(90);
@@ -196,7 +189,7 @@ public class Simulator {
 		return hum;
 	}
 	
-	public int temperatureGenerated(Container c,int seed) {
+	public int temperatureGenerator(Container c,int seed) {
 		r.setSeed(seed);
 		int value = r.nextInt(10);
 		int previousdataindex = c.getTempList().size()-1;
@@ -204,14 +197,14 @@ public class Simulator {
 		return temp;
 	}
 	
-	public int temperatureGenerated(Container c) {
+	public int temperatureGenerator(Container c) {
 		int value = r.nextInt(10);
 		int previousdataindex = c.getTempList().size()-1;
 		int temp = c.getTempList().get(previousdataindex) + value - 5 ;
 		return temp;
 	}
 	
-	public int pressureGenerated(Container c,int seed) {
+	public int pressureGenerator(Container c,int seed) {
 		r.setSeed(seed);
 		int value = r.nextInt(100);
 		int previousdataindex = c.getPressureList().size()-1;
@@ -219,14 +212,14 @@ public class Simulator {
 		return pressure;
 	}
 	
-	public int pressureGenerated(Container c) {
+	public int pressureGenerator(Container c) {
 		int value = r.nextInt(100);
 		int previousdataindex = c.getPressureList().size()-1;
 		int pressure = c.getPressureList().get(previousdataindex) + value - 50 ;
 		return pressure;
 	}
 	
-	public int humidityGenerated(Container c,int seed) {
+	public int humidityGenerator(Container c,int seed) {
 		r.setSeed(seed);
 		int value = r.nextInt(10);
 		int previousdataindex = c.getHumList().size()-1;
@@ -234,7 +227,7 @@ public class Simulator {
 		return hum;
 	}
 	
-	public int humidityGenerated(Container c) {
+	public int humidityGenerator(Container c) {
 		int value = r.nextInt(10);
 		int previousdataindex = c.getHumList().size()-1;
 		int hum = c.getHumList().get(previousdataindex) + value - 5 ;
@@ -251,9 +244,9 @@ public class Simulator {
 					database.updateData(j, c, temp, pressure, hum);
 				}
 				else {
-					int temp = temperatureGenerated(c);
-					int pressure = pressureGenerated(c);
-					int hum = humidityGenerated(c);
+					int temp = temperatureGenerator(c);
+					int pressure = pressureGenerator(c);
+					int hum = humidityGenerator(c);
 					database.updateData(j, c, temp, pressure, hum);
 				}
 			}
@@ -270,17 +263,19 @@ public class Simulator {
 					database.updateData(j, c, temp, pressure, hum);
 				}
 				else {
-					int temp = temperatureGenerated(c, seed);
-					int pressure = pressureGenerated(c, seed);
-					int hum = humidityGenerated(c, seed);
+					int temp = temperatureGenerator(c, seed);
+					int pressure = pressureGenerator(c, seed);
+					int hum = humidityGenerator(c, seed);
 					database.updateData(j, c, temp, pressure, hum);
 				}
 			}
 		}
 	}
 	
-	public void Simulation(Database database, int day) {
+	public void simulation(Database database, int day) {
 		for (int i = 0; i<day; i++) {
+			
+			
 			if (i == 0) {
 				for (int k = 0; k<2; k++) {
 					clientCreation(database);
@@ -292,6 +287,14 @@ public class Simulator {
 			}
 			
 			for (int j = 0; j<5; j++) {
+				
+				// sleep
+//				try {
+//					TimeUnit.SECONDS.sleep(2);
+//				} catch (InterruptedException e) {
+//					e.printStackTrace();
+//				}
+				
 				simulateData(database);
 			}
 			
@@ -307,34 +310,26 @@ public class Simulator {
 		company = companySelection(seed);
 		address = addressSelection(seed);
 		name = nameSelection(seed);
-		mail = emailCreation(name, company);
-		client = database.createClient(company, address, mail, name);
+		mail = emailCreation(company, name);
+		client = database.createClient(company, address, mail, name, password);
 	}
 	
 	public void clientCreation(Database database) {
 		company = companySelection();
 		address = addressSelection();
 		name = nameSelection();
-		mail = emailCreation(name, company);
-		client = database.createClient(company, address, mail, name);
+		mail = emailCreation(company, name);
+		client = database.createClient(company, address, mail, name, password);
 	}
 	
 	public void journeyCreation(Database database, int seed) {
 		client = clientSelection(database, seed);
 		content = contentSelection(seed);
 		origin = originSelection(seed);
-		System.out.println(locations.size());
-		System.out.println(origin);
 		destination = destinationSelection(seed, origin);
-		System.out.println(origin);
-		System.out.println(destination);
-		System.out.println(locations.size());
 		Journey j = database.createJourney(origin, destination, content, client.getCompany());
 		int originindex = locations.indexOf(origin) + 1;
 		int destinationindex = locations.indexOf(destination) + 1;
-		System.out.println(originindex);
-		System.out.println(locations.indexOf(origin));
-		System.out.println(destinationindex);
 		j.setDistance(5 + Integer.parseInt(travelTime[originindex][destinationindex]));
 	}
 	
@@ -375,9 +370,7 @@ public class Simulator {
 	public ArrayList<String> getAddress() {
 		return addresses;
 	}
-	public ArrayList<String> getContents() {
-		return contents;
-	}
+
 	
 	
 }
