@@ -138,8 +138,7 @@ public class ClientMain extends TopMain{
 		menu.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				getJ().getwJourneys().clear();
-				getCont().getwContainers().clear();
+				emptyPreviousSearch();
 				getCl().show(getCards(), "menu");
 			}
 		});
@@ -170,8 +169,7 @@ public class ClientMain extends TopMain{
 		journeys.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				getJ().getwJourneys().clear();
-				getCont().getwContainers().clear();
+				emptyPreviousSearch();
 				getCl().show(getCards(),  "journeySearch");
 			}
 		});
@@ -192,8 +190,7 @@ public class ClientMain extends TopMain{
 		
 		containers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				getJ().getwJourneys().clear();
-				getCont().getwContainers().clear();
+				emptyPreviousSearch();
 				getCl().show(getCards(),  "containerSearch");
 				}
 		});

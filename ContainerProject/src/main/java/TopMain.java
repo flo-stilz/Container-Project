@@ -134,8 +134,7 @@ public class TopMain {
 		menu.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				j.getwJourneys().clear();
-				cont.getwContainers().clear();
+				emptyPreviousSearch();
 				cl.show(cards, "menu");
 			}
 		});
@@ -154,8 +153,7 @@ public class TopMain {
 		journeys.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				j.getwJourneys().clear();
-				cont.getwContainers().clear();
+				emptyPreviousSearch();
 				cl.show(cards,  "journeySearch");
 			}
 		});
@@ -175,8 +173,7 @@ public class TopMain {
 		
 		containers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				j.getwJourneys().clear();	
-				cont.getwContainers().clear();
+				emptyPreviousSearch();
 				cl.show(cards,  "containerSearch");
 				}
 		});
@@ -226,6 +223,11 @@ public class TopMain {
 				main1.dispose();
 			}
 		});
+	}
+	
+	public void emptyPreviousSearch() {
+		j.getwJourneys().clear();
+		cont.getwContainers().clear();
 	}
 	
 }
