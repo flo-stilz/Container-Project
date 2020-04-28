@@ -45,7 +45,7 @@ public class Database {
 		return false;
 	}
 	
-	public ArrayList<client> search (String keyword){
+	public ArrayList<client> search (String keyword, ArrayList<client> clients){
 		ArrayList<client> results = new ArrayList<client>();
 		for (client cl: clients) {
 
@@ -460,6 +460,19 @@ public class Database {
 
 	public void setClients(ArrayList<client> clients) {
 		this.clients = clients;
+	}
+	
+	
+	
+	public ArrayList<Journey> containerJourneyHistory(String search, ArrayList<Journey> history){
+		for(Journey j : history) {
+			for(Container c : j.getContainerList()) {
+				if (c.getContainerId().equals(search)) {
+					containerJourneyHistoryList.add(j);	
+				}
+			}
+		}
+		return containerJourneyHistoryList;			
 	}
 	
 }
