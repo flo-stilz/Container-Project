@@ -121,6 +121,7 @@ public class Database {
 			 j.getContainerList().add(container);
 			 updateCurrentLocation(j, origin);
 			 support.firePropertyChange("journey",null,null);
+			 storeActiveJourneys();
 			 return j;
 		}
 		else {
@@ -150,7 +151,8 @@ public class Database {
 		return containers;
 	}
 	
-	// rename it afterwards
+	
+	//needs testing
 	public ArrayList<Container> getfilteredContainers(boolean isPast, ArrayList<Journey> jList) {
 
 		ArrayList<Container> Containers = new ArrayList<Container>();
@@ -162,6 +164,7 @@ public class Database {
 		return Containers;
 	}
 	
+	//needs testing
 	public ArrayList<Container> getAllContainers(boolean isPastOrClient, ArrayList<Journey> jList) {
 		
 		ArrayList<Container> Containers = getfilteredContainers(isPastOrClient, jList);
@@ -188,6 +191,7 @@ public class Database {
 				storeContainerWarehouse();
 			}
 			journey.remove(j);
+			storeActiveJourneys();
 		} 
 		notifychartOberver();
 		support.firePropertyChange("history",null,null);
@@ -197,11 +201,12 @@ public class Database {
 	public void addData(Container c, int temp, int pressure, int humidity) {
 		c.addData(temp, pressure, humidity);
 		support.firePropertyChange("journey",null,null);
+		storeActiveJourneys();
 //		c.getTempList().add(temp);
 //		c.getPressureList().add(pressure);
 //		c.getHumList().add(humidity);
 //		notifyObservers(c);
-	}
+	} 
 	
 	public void updateData(Journey j, Container c, int temp, int pressure, int humidity) {
 		if (c.isEmpty()) {
@@ -215,6 +220,7 @@ public class Database {
 	}
 	
 	// probably not needed anymore
+	
 	public Set<Journey> findJourneysFromContainers(String search){
 		Set<Journey> result = new HashSet<Journey>();
 		for(Journey j : history) {
@@ -228,8 +234,9 @@ public class Database {
 		}
 		return result;			
 	}
-
-
+	
+	
+	//Needs to loose a arraylist from the output. 
 	public ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
 		for(Journey j : history) {
 			for(Container c : j.getContainerList()) {
@@ -244,6 +251,26 @@ public class Database {
 		}
 		return containerInternalStatusHistoryList;
 	}
+	
+	
+//	public ArrayList<ArrayList<Integer>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
+//		ArrayList<Integer> a = new ArrayList<Integer>();
+//		ArrayList<Integer> a1 = new ArrayList<Integer>();
+//		ArrayList<Integer> a2 = new ArrayList<Integer>();
+//		ArrayList<ArrayList<Integer>> measurement = new ArrayList<ArrayList<Integer>>();
+//		for(Journey j : history) {
+//			for(Container c : j.getContainerList()) {
+//				if (c.getContainerId().contentEquals(search)) {
+//					measurement.add(c.getTempList());
+//					measurement.add(c.getPressureList());
+//					measurement.add(c.getHumList());
+//					containerInternalStatusHistoryList.add(measurement);
+//				}
+//			}	
+//		}
+//		return containerInternalStatusHistoryList;
+//	}
+	
 	
 	
 //	public void addObserver(observer o) {
@@ -293,7 +320,7 @@ public class Database {
 			j.getContainerList().get(i).setCurrentLocation(newcurrentLocation);
 		}
 		j.setCurrentLocation(newcurrentLocation.toUpperCase());
-	}
+	} 
 	
 	public void updateClientName(client c, String refname) {
 		c.updateName(refname);
@@ -311,8 +338,6 @@ public class Database {
 	
 	
 	
-	
-
 	
 	public void storeClients() {
 		storeClients(clients);
@@ -342,6 +367,8 @@ public class Database {
 		decoder.close();
 		return clients;
 	}
+	
+	
 	
 	public void storeActiveJourneys() {
 		storeActiveJourneys(journey);

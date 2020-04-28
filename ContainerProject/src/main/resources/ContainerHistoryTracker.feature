@@ -60,3 +60,23 @@ Feature: Container Tracking
     And a container with id "C1" not used in the journey "j12"
     And the container id is searched for in the journey history to find the internal-status of all journeys the container has been used for
     Then the empty internal-status history of the unused container "C1" should be returned
+    
+  Scenario: Filtering for all active containers
+    Given a journey "j12" with origin "bdp" destination "tor" content "pencils" and company "novo"
+    And a journey "j13" with origin "cph" destination "bej" content "books" and company "novo"
+    When filtering for all the active containers
+    Then a list of all the active containers is returned
+  
+  Scenario: Filtering for all containers in the containerwarehoues
+    Given a journey "j12" with origin "bdp" destination "tor" content "pencils" and company "novo"
+    And a journey "j13" with origin "cph" destination "bej" content "books" and company "novo"
+    And the journey "j12" is completed
+    When filtering for all the containers in the containerwarehouse
+    Then a list of all containers in the containerwarehouse is returned
+    
+  Scenario: Retrieving all containers
+    Given a journey "j12" with origin "bdp" destination "tor" content "pencils" and company "novo"
+    And a journey "j13" with origin "cph" destination "bej" content "books" and company "novo"
+    And the journey "j12" is completed
+    When all containers have been retrieved
+    Then a list of all containers are returned

@@ -10,7 +10,7 @@ public class client {
 	private static int count = 69420;
 	
 	public client(String company, String address, String email, String name, String password) {
-		count= count +1;
+		count = count +1;
 		this.company = company;
 		this.address = address;
 		this.email = email;
@@ -19,7 +19,39 @@ public class client {
 		id=count;
 	}
 	
+	//for persistency layer
+	public client() {
+	}
+	
 		
+	public void setCompany(String company) {
+		this.company = company;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public static void setCount(int count) {
+		client.count = count;
+	}
+
 	public String toString() {
 		return getCompany();
 	}

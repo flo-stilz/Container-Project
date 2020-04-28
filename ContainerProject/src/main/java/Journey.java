@@ -12,7 +12,9 @@ public class Journey {
 	private static int counter = 0;
 	private ArrayList<Container> containerList = new ArrayList<Container>();
 	
-	
+	//for persistency layer
+	public Journey() {
+	}
 
 
 	public Journey(String origin, String destination, String content, String company) {

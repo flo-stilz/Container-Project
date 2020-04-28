@@ -29,6 +29,10 @@ public class Container {
 		this.pressureList = pressureList;
 	}
 
+	public void setContainerId(String containerId) {
+		this.containerId = containerId;
+	}
+
 	public void setHumList(ArrayList<Integer> humList) {
 		this.humList = humList;
 	}
@@ -37,6 +41,7 @@ public class Container {
 		this.tempList = tempList;
 	}
     
+	//FOr persistency layer
 	public Container() {
 	}
     

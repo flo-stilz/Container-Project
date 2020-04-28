@@ -49,7 +49,7 @@ Feature: Journey Registration functionality
     Scenario: Update a journeys current location
     Given a journey "j12" with origin "Mum" destination "Nav" content "Cotton" and company "East India Cotton Manufacturing Co., Limited"
     When the journeys current location is found
-    Then the current location of the journey is returned to the custumor
+    Then the current location of the journey is returned to the custumor   
     
     Scenario: Update current location of a journey
     Given a journey "j13" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
@@ -68,6 +68,7 @@ Feature: Journey Registration functionality
     And the containers corresponding to the journey are stored in the warehouse
     
     Scenario: Assigning container from containerwarehouse
+    Given Journey and container counter is set to zero, where the counter describes the name of the corresponding id's
     Given a journey "j14" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
     And a new location "Cat"
     And the journeys current location is updated 
@@ -75,4 +76,29 @@ Feature: Journey Registration functionality
     When a journey "j15" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
     Then the container should be taken from containerwarehouse
     And the container for the old journey is reused for the new journey
+    
+    Scenario: Searching for container using a keyword of type content
+    Given a journey "j16" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
+    Given a journey "j17" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
+    When searching for the container containing the content "Diamonds"
+    Then a list of containers possessing this content is returned 
+    
+    Scenario: Searching for container using a keyword of type company
+    Given a journey "j16" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
+    Given a journey "j17" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
+    When searching for the container containing the company "Riceland"
+    Then a list of containers possessing this company is returned   
+    
+    Scenario: Searching for container using a keyword of type currentlocation
+    Given a journey "j16" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
+    Given a journey "j17" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
+    When searching for the container containing the currentlocation "Gwa"
+    Then a list of containers possessing this currentlocation is returned     
+    
+    Scenario: Searching for container using a keyword that no containers contain
+    Given a journey "j16" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
+    Given a journey "j17" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
+    When searching for the container containing the content "guns"
+    Then an empty list of containers will be returned   
+    
     
