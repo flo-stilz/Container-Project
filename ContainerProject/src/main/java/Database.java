@@ -294,17 +294,17 @@ public class Database {
 	}
 	
 	public void updateClientName(client c, String refname) {
-		c.setName(refname);
+		c.updateName(refname);
 	}
 	
 	public void updateClientMail(client c, String mail) {
-		c.setEmail(mail);
+		c.updateEmail(mail);
 	}
 	public void updateClientAddress(client c, String address) {
-		c.setAddress(address);
+		c.updateAddress(address);
 	}
 	public void updateClientPassword(client c, String password) {
-		c.setPassword(password);
+		c.updatePassword(password);
 	}
 	
 	
