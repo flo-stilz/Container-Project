@@ -304,17 +304,21 @@ public class Database {
 			j.getContainerList().get(i).setCurrentLocation(newcurrentLocation);
 		}
 		j.setCurrentLocation(newcurrentLocation.toUpperCase());
+		support.firePropertyChange("journey",null,null);
 	}
 	
 	public void updateClientName(client c, String refname) {
 		c.setName(refname);
+		support.firePropertyChange("clients",null,null);
 	}
 	
 	public void updateClientMail(client c, String mail) {
 		c.setEmail(mail);
+		support.firePropertyChange("clients",null,null);
 	}
 	public void updateClientAddress(client c, String address) {
 		c.setAddress(address);
+		support.firePropertyChange("clients",null,null);
 	}
 	public void updateClientPassword(client c, String password) {
 		c.setPassword(password);

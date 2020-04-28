@@ -337,10 +337,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 
 			public void actionPerformed(ActionEvent e) {
 				
-				// clear Containerlist result
-				wContainers.clear();
 				// get Container
-				// does not pick the right container!!!
 				Container c = chooseContainerForPlot(database, id.getSelectedItem().toString());
 				
 				 createPlots(database, topmain, c);

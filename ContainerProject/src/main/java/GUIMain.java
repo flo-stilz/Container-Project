@@ -1,9 +1,11 @@
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.BoxLayout;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -140,9 +142,14 @@ public class GUIMain {
 	
 	public static void main(String[] args) {
 		
-		final JFrame LoginFrame = new JFrame("Client Login");
+		final JFrame LoginFrame = new JFrame("Login");
 			
-		JLabel login = new JLabel("  Login:");
+		ImageIcon img = new ImageIcon("src/main/resources/logo.png");
+		Image image = img.getImage(); // transform it 
+		Image newimg = image.getScaledInstance(400, 200,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+		img = new ImageIcon(newimg);
+		JLabel logo = new JLabel("");
+		logo.setIcon(img);
 	
 		JPanel usernamePanel = new JPanel();
 		JLabel userLbl = new JLabel("Username: ");			
@@ -202,7 +209,7 @@ public class GUIMain {
 			
 		JPanel loginField = new JPanel();
 			
-		LoginFrame.add(login, BorderLayout.NORTH);
+		LoginFrame.add(logo, BorderLayout.NORTH);
 		LoginFrame.add(choices, BorderLayout.SOUTH);		
 		LoginFrame.add(loginField, BorderLayout.CENTER);
 		choices.add(confirm);

@@ -121,20 +121,15 @@ public class TopMain {
 	} 
 	
 	public void menuButton(Database database, JFrame login, JButton menu) {
-		final JPanel menupanel = new JPanel();
-		menupanel.setPreferredSize(new Dimension(800, 600));
-		menupanel.setBackground(Color.RED);
-		
-		cards.add(menupanel, "menu");
-		
-		JLabel lbl = new JLabel("Description");
-		menupanel.add(lbl, BorderLayout.NORTH);
-		logOutButton(database, login, menupanel);
+		MenuSectionPanels m = new MenuSectionPanels(database, this, login);
+		getCards().add(m.getMenupanel(), "menu");
+		database.addObserver(m);
 		
 		menu.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				cl.show(cards, "menu");
+//				m.menuPanel(database, login, m.getMenupanel());
+				getCl().show(getCards(), "menu");
 			}
 		});
 	}
@@ -179,47 +174,47 @@ public class TopMain {
 	
 
 
-	public void logOutButton(final Database database, final JFrame login, JPanel menupanel) {
-		// Logout as company user
-		
-		final JButton profile = new JButton("Profile");
-		ImageIcon img = new ImageIcon("src/main/resources/profile.png");
-		Image image = img.getImage(); // transform it 
-		Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-		img = new ImageIcon(newimg);  // transform it back
-	    profile.setIcon(img);
-
-		JPanel top = new JPanel(new BorderLayout());
-		menupanel.add(top, BorderLayout.NORTH);
-		top.add(profile, BorderLayout.EAST);
-		final JPopupMenu menu = new JPopupMenu("Profile Options");
-		
-		JMenuItem setDetails = new JMenuItem("Update profile details");
-		JMenuItem logout = new JMenuItem("Logout");
-//		if (this instanceof ClientMain) {
-//			menu.add(setDetails);
-//		}
-		menu.add(logout);
-
-		profile.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				
-				Component b=(Component)e.getSource();
-				Point p=b.getLocationOnScreen();
-				menu.show(profile, 0, 0);;
-				menu.setLocation(p.x,p.y+b.getHeight());
-				
-			}
-		});
-		
-		logout.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				login.setVisible(true);
-				main1.dispose();
-			}
-		});
-	}
+//	public void logOutButton(final Database database, final JFrame login, JPanel menupanel) {
+//		// Logout as company user
+//		
+//		final JButton profile = new JButton("Profile");
+//		ImageIcon img = new ImageIcon("src/main/resources/profile.png");
+//		Image image = img.getImage(); // transform it 
+//		Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+//		img = new ImageIcon(newimg);  // transform it back
+//	    profile.setIcon(img);
+//
+//		JPanel top = new JPanel(new BorderLayout());
+//		menupanel.add(top, BorderLayout.NORTH);
+//		top.add(profile, BorderLayout.EAST);
+//		final JPopupMenu menu = new JPopupMenu("Profile Options");
+//		
+//		JMenuItem setDetails = new JMenuItem("Update profile details");
+//		JMenuItem logout = new JMenuItem("Logout");
+////		if (this instanceof ClientMain) {
+////			menu.add(setDetails);
+////		}
+//		menu.add(logout);
+//
+//		profile.addActionListener(new ActionListener() {
+//			
+//			public void actionPerformed(ActionEvent e) {
+//				
+//				Component b=(Component)e.getSource();
+//				Point p=b.getLocationOnScreen();
+//				menu.show(profile, 0, 0);;
+//				menu.setLocation(p.x,p.y+b.getHeight());
+//				
+//			}
+//		});
+//		
+//		logout.addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent e) {
+//				login.setVisible(true);
+//				main1.dispose();
+//			}
+//		});
+//	}
 	
 }
