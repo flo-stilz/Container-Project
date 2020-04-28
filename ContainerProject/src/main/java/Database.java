@@ -1,8 +1,16 @@
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 public class Database {
 	
@@ -12,6 +20,12 @@ public class Database {
 	private ArrayList<client> clients = new ArrayList<client>();
 	//private ArrayList<observer> obs = new ArrayList<observer>();
 	private ArrayList<chartobserver> cobs = new ArrayList<chartobserver>();
+	
+	private ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
+	private ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
+	
+	
+	
 	
 	private PropertyChangeSupport support = new PropertyChangeSupport(this);
 	void addObserver(PropertyChangeListener l) {
@@ -35,6 +49,8 @@ public class Database {
 	}
 	
 	public ArrayList<client> search (String keyword){
+
+//	public ArrayList<client> search (String keyword, ArrayList<client> clients){
 		ArrayList<client> results = new ArrayList<client>();
 		for (client cl: clients) {
 
@@ -44,40 +60,11 @@ public class Database {
 		}
 		return results;	
 	}
-	public ArrayList<Journey> getJourney() {
-		return journey;
-	}
-
-	public void setJourney(ArrayList<Journey> journey) {
-		this.journey = journey;
-	}
-	
-	public ArrayList<Journey> getHistory() {
-		return history;
-	}
-
-	public void setHistory(ArrayList<Journey> history) {
-		this.history = history;
-	}
-
-	public ArrayList<Container> getContainerWarehouse() {
-		return containerWarehouse;
-	}
-
-	public void setContainerWarehouse(ArrayList<Container> containerWarehouse) {
-		this.containerWarehouse = containerWarehouse;
-	}
-	public ArrayList<client> getClients() {
-		return clients;
-	}
-
-	public void setClients(ArrayList<client> clients) {
-		this.clients = clients;
-	}
 	
 	public client createClient( String company, String address, String email, String name, String password) {
 		client c = new client(company, address, email, name, password);
 		clients.add(c);
+		storeClients(); 
 		support.firePropertyChange("clients",null,null);
 		return c;
 	}
@@ -137,6 +124,7 @@ public class Database {
 			 j.getContainerList().add(container);
 			 updateCurrentLocation(j, origin);
 			 support.firePropertyChange("journey",null,null);
+			 storeActiveJourneys();
 			 return j;
 		}
 		else {
@@ -166,7 +154,8 @@ public class Database {
 		return containers;
 	}
 	
-	// rename it afterwards
+	
+	//needs testing
 	public ArrayList<Container> getfilteredContainers(boolean isPast, ArrayList<Journey> jList) {
 
 		ArrayList<Container> Containers = new ArrayList<Container>();
@@ -178,6 +167,7 @@ public class Database {
 		return Containers;
 	}
 	
+	//needs testing
 	public ArrayList<Container> getAllContainers(boolean isPastOrClient, ArrayList<Journey> jList) {
 		
 		ArrayList<Container> Containers = getfilteredContainers(isPastOrClient, jList);
@@ -190,6 +180,7 @@ public class Database {
 	public void endOfJourney(Journey j) {
 		if (j.getDestination().equals(j.getCurrentLocation())) {
 			history.add(j);
+			storeEndedJourneys();
 			for (Container c : j.getContainerList()) {
 				Container container = new Container(c);
 				container.setContainerID(c.getContainerId());
@@ -200,8 +191,10 @@ public class Database {
 				container.getPressureList().clear();
 				container.getHumList().clear();
 				getContainerWarehouse().add(container);
+				storeContainerWarehouse();
 			}
 			journey.remove(j);
+			storeActiveJourneys();
 		} 
 		notifychartOberver();
 		support.firePropertyChange("history",null,null);
@@ -211,11 +204,12 @@ public class Database {
 	public void addData(Container c, int temp, int pressure, int humidity) {
 		c.addData(temp, pressure, humidity);
 		support.firePropertyChange("journey",null,null);
+		storeActiveJourneys();
 //		c.getTempList().add(temp);
 //		c.getPressureList().add(pressure);
 //		c.getHumList().add(humidity);
 //		notifyObservers(c);
-	}
+	} 
 	
 	public void updateData(Journey j, Container c, int temp, int pressure, int humidity) {
 		if (c.isEmpty()) {
@@ -229,6 +223,7 @@ public class Database {
 	}
 	
 	// probably not needed anymore
+	
 	public Set<Journey> findJourneysFromContainers(String search){
 		Set<Journey> result = new HashSet<Journey>();
 		for(Journey j : history) {
@@ -242,24 +237,45 @@ public class Database {
 		}
 		return result;			
 	}
-
-
+	
+	
+	//Needs to loose a arraylist from the output. 
 	public ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
-		ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
 		for(Journey j : history) {
 			for(Container c : j.getContainerList()) {
-				ArrayList<ArrayList<Integer>> measurements = new ArrayList<ArrayList<Integer>>();
+				ArrayList<ArrayList<Integer>> measurement = new ArrayList<ArrayList<Integer>>();
 				if (c.getContainerId().contentEquals(search)) {
-					measurements.add(c.getTempList());
-					measurements.add(c.getPressureList());
-					measurements.add(c.getHumList());
-					containerInternalStatusHistoryList.add(measurements);
+					measurement.add(c.getTempList());
+					measurement.add(c.getPressureList());
+					measurement.add(c.getHumList());
+					containerInternalStatusHistoryList.add(measurement);
 				}
 			}	
-		
 		}
 		return containerInternalStatusHistoryList;
 	}
+	
+	
+//	public ArrayList<ArrayList<Integer>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
+//		ArrayList<Integer> a = new ArrayList<Integer>();
+//		ArrayList<Integer> a1 = new ArrayList<Integer>();
+//		ArrayList<Integer> a2 = new ArrayList<Integer>();
+//		ArrayList<ArrayList<Integer>> measurement = new ArrayList<ArrayList<Integer>>();
+//		for(Journey j : history) {
+//			for(Container c : j.getContainerList()) {
+//				if (c.getContainerId().contentEquals(search)) {
+//					measurement.add(c.getTempList());
+//					measurement.add(c.getPressureList());
+//					measurement.add(c.getHumList());
+//					containerInternalStatusHistoryList.add(measurement);
+//				}
+//			}	
+//		}
+//		return containerInternalStatusHistoryList;
+//	}
+	
+	
+	
 //	public void addObserver(observer o) {
 //		obs.add(o);
 //	}
@@ -307,6 +323,7 @@ public class Database {
 			j.getContainerList().get(i).setCurrentLocation(newcurrentLocation);
 		}
 		j.setCurrentLocation(newcurrentLocation.toUpperCase());
+
 		support.firePropertyChange("journey",null,null);
 	}
 	
@@ -323,11 +340,178 @@ public class Database {
 		c.setAddress(address);
 		support.firePropertyChange("clients",null,null);
 	}
+  
 	public void updateClientPassword(client c, String password) {
-		c.setPassword(password);
+		c.updatePassword(password);
 	}
 	
 	
+	
+	
+	public void storeClients() {
+		storeClients(clients);
+	}
+	
+	public void storeClients(ArrayList<client> clients) {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./Clients.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(clients);
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	} 
+	
+	public ArrayList<client> readClientFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./Clients.xml"));
+			} catch (FileNotFoundException e) {
+				throw new Error(e);
+				}
+		XMLDecoder decoder = new XMLDecoder(fis);
+		clients = (ArrayList<client>)decoder.readObject(); 
+		decoder.close();
+		return clients;
+	}
+	
+	
+	
+	public void storeActiveJourneys() {
+		storeActiveJourneys(journey);
+	}
+	
+	public void storeActiveJourneys(ArrayList<Journey> journey) {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./ActiveJourneys.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(journey);
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace(); 
+		} 
+	}
+	 
+	public ArrayList<Journey> readActiveJourneyFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./ActiveJourneys.xml"));
+			} catch (FileNotFoundException e) {
+				throw new Error(e);
+				}
+		XMLDecoder decoder = new XMLDecoder(fis);
+		journey = (ArrayList<Journey>)decoder.readObject();
+		decoder.close();
+		return journey;
+		}
+	
+	
+	public void storeEndedJourneys() {
+		storeEndedJourneys(history);
+	}
+	
+	public void storeEndedJourneys(ArrayList<Journey> history) {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./EndedJourneys.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(history);
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) { 
+			ex.printStackTrace();
+		}
+	}
+
+	public ArrayList<Journey> readEndedJourneyFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./EndedJourneys.xml"));
+		} catch (FileNotFoundException e) {
+			throw new Error(e);
+		}
+		XMLDecoder decoder = new XMLDecoder(fis);
+		journey = (ArrayList<Journey>)decoder.readObject();
+		decoder.close();
+		return journey;
+	}
+	
+	public void storeContainerWarehouse() {
+		storeContainerWarehouse(containerWarehouse);
+	}
+	
+	public void storeContainerWarehouse(ArrayList<Container> ContainerWarehouse) {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./ContainerWarehouse.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(ContainerWarehouse);
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public ArrayList<Container> readContainerWarehouseFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./ContainerWarehouse.xml"));
+		} catch (FileNotFoundException e) {
+			throw new Error(e);
+		}
+		XMLDecoder decoder = new XMLDecoder(fis);
+		containerWarehouse = (ArrayList<Container>)decoder.readObject();
+		decoder.close();
+		return containerWarehouse;
+	}
+	
+
+
+	public ArrayList<Journey> getJourney() {
+		return journey;
+	}
+
+	public void setJourney(ArrayList<Journey> journey) {
+		this.journey = journey;
+	}
+	
+	public ArrayList<Journey> getHistory() {
+		return history;
+	}
+
+	public void setHistory(ArrayList<Journey> history) {
+		this.history = history;
+	}
+
+	public ArrayList<Container> getContainerWarehouse() {
+		return containerWarehouse;
+	}
+
+	public void setContainerWarehouse(ArrayList<Container> containerWarehouse) {
+		this.containerWarehouse = containerWarehouse;
+	}
+	public ArrayList<client> getClients() {
+		return clients;
+	}
+
+	public void setClients(ArrayList<client> clients) {
+		this.clients = clients;
+	}
+	
+	
+	
+	public ArrayList<Journey> containerJourneyHistory(String search, ArrayList<Journey> history){
+		for(Journey j : history) {
+			for(Container c : j.getContainerList()) {
+				if (c.getContainerId().equals(search)) {
+					containerJourneyHistoryList.add(j);	
+				}
+			}
+		}
+		return containerJourneyHistoryList;			
+	}
 	
 }
 		

@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.List;
 
 public class Container {
 	private String containerId;
@@ -14,18 +15,22 @@ public class Container {
     
     private String containerID;
     private String journeyID;
-    private String uniqueID = containerID + "," + journeyID;   
-    private String holdID1;
-    private String holdID2;
-    private String holdID3;
-    private ArrayList <String> outPressure = new ArrayList<String>(); 
-    private ArrayList <String> outHum = new ArrayList<String>(); 
-    private ArrayList <String> outTemp = new ArrayList<String>();
+//    private String uniqueID = containerID + "," + journeyID;   
+//    private String holdID1;
+//    private String holdID2;
+//    private String holdID3;
+//    private ArrayList <String> outPressure = new ArrayList<String>(); 
+//    private ArrayList <String> outHum = new ArrayList<String>(); 
+//    private ArrayList <String> outTemp = new ArrayList<String>();
     private static int cCounter = 0;
     private ArrayList<observer> obs = new ArrayList<observer>();
     
     public void setPressureList(ArrayList<Integer> pressureList) {
 		this.pressureList = pressureList;
+	}
+
+	public void setContainerId(String containerId) {
+		this.containerId = containerId;
 	}
 
 	public void setHumList(ArrayList<Integer> humList) {
@@ -36,6 +41,9 @@ public class Container {
 		this.tempList = tempList;
 	}
     
+	//FOr persistency layer
+	public Container() {
+	}
     
     public Container(Container org) {
     	this.containerId = org.getContainerId();
@@ -112,18 +120,18 @@ public class Container {
 		this.journeyID = journeyID;
 	}
 
-	public void getExpandedUniqueIDAll(String uniqueID) {
-        holdID1 = uniqueID + "," + "pressure";
-        holdID2 = uniqueID + "," + "hum";
-        holdID3 = uniqueID + "," + "temp";
-        outPressure.add(holdID1);
-        outHum.add(holdID2);
-        outTemp.add(holdID3);
-    }
-    
-    public String getUniqueID() {
-		return uniqueID;
-	}
+//	public void getExpandedUniqueIDAll(String uniqueID) {
+//        holdID1 = uniqueID + "," + "pressure";
+//        holdID2 = uniqueID + "," + "hum";
+//        holdID3 = uniqueID + "," + "temp";
+//        outPressure.add(holdID1);
+//        outHum.add(holdID2);
+//        outTemp.add(holdID3);
+//    }
+//    
+//    public String getUniqueID() {
+//		return uniqueID;
+//	}
 	public String getContainerId() {
 		return containerId;
 	}

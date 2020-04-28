@@ -6,15 +6,17 @@ public class Journey {
 	private String id;
 	private String currentLocation;
 	private int distance;
-	
-
-	private ArrayList<Container> containerList = new ArrayList<Container>();
-
-	
-	
+	private int temp;
+	private int pressure;
+	private int humidity;
 	private static int counter = 0;
+	private ArrayList<Container> containerList = new ArrayList<Container>();
 	
-	
+	//for persistency layer
+	public Journey() {
+	}
+
+
 	public Journey(String origin, String destination, String content, String company) {
 		
 			this.origin = origin.toUpperCase();
@@ -70,6 +72,41 @@ public class Journey {
 
 	public void setDistance(int distance) {
 		this.distance = distance;
+	}
+	public int getTemp() {
+		return temp;
+	}
+
+	public void setTemp(int temp) {
+		this.temp = temp;
+	}
+
+	public int getPressure() {
+		return pressure;
+	}
+
+	public void setPressure(int pressure) {
+		this.pressure = pressure;
+	}
+
+	public int getHumidity() {
+		return humidity;
+	}
+
+	public void setHumidity(int humidity) {
+		this.humidity = humidity;
+	}
+
+	public void setDestination(String destination) {
+		this.destination = destination;
+	}
+
+	public void setOrigin(String origin) {
+		this.origin = origin;
+	}
+
+	public void setId(String id) {
+		this.id = id;
 	}
 
 	// finds containers within a journey depending on a keyword

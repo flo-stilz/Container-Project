@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.imageio.ImageIO;
@@ -61,9 +62,9 @@ public class plot extends ApplicationFrame implements observer{
 		}
 	}
 	
-	public void linePlot(ArrayList<Integer> a) {
+	public void linePlot(List<Integer> data) {
 		JFreeChart lineChart = ChartFactory.createLineChart("this is the " + plottitle + " plot", "Time elapsed (min)",
-				plottitle, createDataset(a, plottitle), PlotOrientation.VERTICAL, true, true, false);
+				plottitle, createDataset(data, plottitle), PlotOrientation.VERTICAL, true, true, false);
 
 		chartPanel = new ChartPanel(lineChart);
 		chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
@@ -75,10 +76,10 @@ public class plot extends ApplicationFrame implements observer{
 
 
 
-	protected DefaultCategoryDataset createDataset(ArrayList<Integer> a, String type) {
+	protected DefaultCategoryDataset createDataset(List<Integer> data, String type) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		int t = 0;
-		for (int i : a) {
+		for (int i : data) {
 
 			dataset.addValue(i, type, Integer.toString(t));
 			t = t + 10;
@@ -88,22 +89,22 @@ public class plot extends ApplicationFrame implements observer{
 	}
 
 
-	protected XYDataset create2Dataset(ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h) {
+	protected XYDataset create2Dataset(List<Integer> temp2, List<Integer> pres, List<Integer> hum2) {
 		final XYSeries temp = new XYSeries("Temperature");
 		int c = 0;
-		for (int i : t) {
+		for (int i : temp2) {
 			temp.add(c, i);
 			c = c + 10;
 		}
 		final XYSeries pre = new XYSeries("Pressure");
 		c = 0;
-		for (int i : p) {
+		for (int i : pres) {
 			pre.add(c, i);
 			c = c + 10;
 		}
 		final XYSeries hum = new XYSeries("Humidity");
 		c = 0;
-		for (int i : h) {
+		for (int i : hum2) {
 			hum.add(c, i);
 			c = c + 10;
 		}
@@ -114,8 +115,8 @@ public class plot extends ApplicationFrame implements observer{
 		return dataset;
 	}
 
-	int range(ArrayList<Integer> a) {
-		int r = Collections.max(a) - Collections.min(a);
+	int range(List<Integer> t) {
+		int r = Collections.max(t) - Collections.min(t);
 		return r;
 
 	}
