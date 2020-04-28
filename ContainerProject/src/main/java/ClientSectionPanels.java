@@ -125,6 +125,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
+
 		Database dat = ((Database)evt.getSource());
 		if (wClients.size()!= 0) {
 			if (evt.getPropertyName().contentEquals("clients")) {

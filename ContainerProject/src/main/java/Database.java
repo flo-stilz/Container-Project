@@ -17,6 +17,9 @@ public class Database {
 	void addObserver(PropertyChangeListener l) {
 		support.addPropertyChangeListener(l);
 	}
+	public void removeObserver(PropertyChangeListener l) {
+         support.removePropertyChangeListener(l);
+     }
 		
 	void add (client c) {
 		if (!exists(c)) {

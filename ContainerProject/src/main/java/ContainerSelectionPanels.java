@@ -39,7 +39,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 
 	private JPanel containerSearch;
 	private JPanel viewContainers;
-	private ArrayList<Journey> wJourneys = new ArrayList<Journey>();
 	private ArrayList<Container> wContainers = new ArrayList<Container>();
 	private String keyword;
 	private JPanel extraOptions;
@@ -337,6 +336,8 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 
 			public void actionPerformed(ActionEvent e) {
 				
+				// stop the containerselectionpanels from listening to the application layer
+				database.removeObserver(csp);
 				// get Container
 				Container c = chooseContainerForPlot(database, id.getSelectedItem().toString());
 				

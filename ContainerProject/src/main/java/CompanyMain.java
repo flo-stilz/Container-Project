@@ -15,6 +15,8 @@ import javax.swing.JTextField;
 
 public class CompanyMain extends TopMain{
 	
+	private ClientSectionPanels c;
+	private Database database;
 //	private JPanel options;
 //	private JPanel cards;
 //	private CardLayout cl;
@@ -29,6 +31,8 @@ public class CompanyMain extends TopMain{
 
 	public CompanyMain(String userText, final Database database, final JFrame login) {
 		super(userText, database, login);
+		
+		this.database = database;
 //		final JFrame company = new JFrame("Company Overview");
 
 		// CardLayout
@@ -102,14 +106,15 @@ public class CompanyMain extends TopMain{
 //		});
 //	}
 	
-	public void clientButton(Database database, JFrame login, JButton clients) {
-		ClientSectionPanels c = new ClientSectionPanels(database, this);
-		database.addObserver(c);
+	public void clientButton(final Database database, JFrame login, JButton clients) {
+		c = new ClientSectionPanels(database, this);
 		getCards().add(c.getClientSearch(), "clientSearch");
 		getCards().add(c.getViewClients(), "viewClients");
 		clients.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				removeListeners();
+				database.addObserver(c);
 				getCl().show(getCards(), "clientSearch");
 			}
 		});
@@ -180,6 +185,7 @@ public class CompanyMain extends TopMain{
 		simulation.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				removeListeners();
 				getCl().show(getCards(), "sim");
 			}
 		});
@@ -198,6 +204,14 @@ public class CompanyMain extends TopMain{
 //			}
 //		});
 //	}
+	
+	@Override
+	public void removeListeners() {
+		database.removeObserver(getM());
+		database.removeObserver(getJ());
+		database.removeObserver(getCont());
+		database.removeObserver(c);
+	}
 	
 	
 }

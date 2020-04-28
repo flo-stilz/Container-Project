@@ -322,6 +322,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 //	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
+
 		Database dat = ((Database)evt.getSource());
 		if (wJourneys.size()!= 0) {
 			if ((isPast && (evt.getPropertyName().contentEquals("history")))) {

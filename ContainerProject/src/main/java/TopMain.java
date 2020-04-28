@@ -25,9 +25,32 @@ public class TopMain {
 	private JFrame main1;
 	private JPanel options;
 	private JPanel cards;
+	public void setJ(JourneySectionPanels j) {
+		this.j = j;
+	}
+
+	public JourneySectionPanels getJ() {
+		return j;
+	}
+
+	public ContainerSelectionPanels getCont() {
+		return cont;
+	}
+
+	public MenuSectionPanels getM() {
+		return m;
+	}
+
+	public void setCont(ContainerSelectionPanels cont) {
+		this.cont = cont;
+	}
+
+
 	private CardLayout cl;
-//	private JourneySectionPanels j;
-//	private ContainerSelectionPanels cont;
+	private JourneySectionPanels j;
+	private ContainerSelectionPanels cont;
+	private MenuSectionPanels m;
+	private Database database;
 
 //	public JourneySectionPanels getJ() {
 //		return j;
@@ -78,6 +101,7 @@ public class TopMain {
 
 	public TopMain(String userText, final Database database, final JFrame login) {
 		
+		this.database = database;
 		this.userText = userText;
 		main1 = new JFrame("Company Overview");
 
@@ -120,15 +144,15 @@ public class TopMain {
 			
 	} 
 	
-	public void menuButton(Database database, JFrame login, JButton menu) {
-		MenuSectionPanels m = new MenuSectionPanels(database, this, login);
+	public void menuButton(final Database database, JFrame login, JButton menu) {
+		final MenuSectionPanels m = new MenuSectionPanels(database, this, login);
 		getCards().add(m.getMenupanel(), "menu");
-		database.addObserver(m);
 		
 		menu.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-//				m.menuPanel(database, login, m.getMenupanel());
+				removeListeners();
+				database.addObserver(m);
 				getCl().show(getCards(), "menu");
 			}
 		});
@@ -136,17 +160,18 @@ public class TopMain {
 	
 
 	
-	public void journeyButton(Database database, JFrame login, JButton journeys) {
+	public void journeyButton(final Database database, JFrame login, JButton journeys) {
 		// journey section
 		
-		JourneySectionPanels j = new JourneySectionPanels(database, this);
-		database.addObserver(j);
+		j = new JourneySectionPanels(database, this);
 		cards.add(j.getJourneySearch(), "journeySearch");
 		cards.add(j.getViewJourneys(), "viewJourneys");
 		
 		journeys.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				removeListeners();
+				database.addObserver(j);
 				cl.show(cards,  "journeySearch");
 			}
 		});
@@ -155,17 +180,18 @@ public class TopMain {
 		
 	}
 
-	public void containerButton(Database database, JFrame login, JButton containers) {
+	public void containerButton(final Database database, JFrame login, JButton containers) {
 	// container section
 	
-		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);
-		database.addObserver(cont);
+		cont = new ContainerSelectionPanels(database, this);
 		cards.add(cont.getContainerSearch(), "containerSearch");
 		cards.add(cont.getViewContainers(), "viewContainers");
 		cards.add(cont.getPlotPanel(), "plotPanel");
 		
 		containers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				removeListeners();
+				database.addObserver(cont);
 				cl.show(cards,  "containerSearch");
 				}
 		});
@@ -216,5 +242,11 @@ public class TopMain {
 //			}
 //		});
 //	}
+	
+	public void removeListeners() {
+		database.removeObserver(m);
+		database.removeObserver(j);
+		database.removeObserver(cont);
+	}
 	
 }

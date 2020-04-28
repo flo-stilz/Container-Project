@@ -53,8 +53,6 @@ public class ClientMain extends TopMain{
 
 	public ClientMain(String userText, final Database database, final JFrame login) {
 		super(userText, database, login);
-		System.out.println("client");
-
 
 //		final JFrame client = new JFrame("Client Overview");
 //
@@ -151,17 +149,18 @@ public class ClientMain extends TopMain{
 //		
 //	}
 	@Override
-	public void journeyButton(Database database, JFrame login, JButton journeys) {
+	public void journeyButton(final Database database, JFrame login, JButton journeys) {
 		// journey section
 		
-		JourneySectionPanels j = new JourneySectionPanels(database, this);
-		database.addObserver(j);
-		getCards().add(j.getJourneySearch(), "journeySearch");
-		getCards().add(j.getViewJourneys(), "viewJourneys");
+		setJ(new JourneySectionPanels(database, this));
+		getCards().add(getJ().getJourneySearch(), "journeySearch");
+		getCards().add(getJ().getViewJourneys(), "viewJourneys");
 		
 		journeys.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
+				removeListeners();
+				database.addObserver(getJ());
 				getCl().show(getCards(),  "journeySearch");
 			}
 		});
@@ -171,17 +170,18 @@ public class ClientMain extends TopMain{
 	}
 	
 	@Override
-	public void containerButton(Database database, JFrame login, JButton containers) {
+	public void containerButton(final Database database, JFrame login, JButton containers) {
 	// container section
 	
-		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);
-		database.addObserver(cont);
-		getCards().add(cont.getContainerSearch(), "containerSearch");
-		getCards().add(cont.getViewContainers(), "viewContainers");
-		getCards().add(cont.getPlotPanel(), "plotPanel");
+		setCont(new ContainerSelectionPanels(database, this));
+		getCards().add(getCont().getContainerSearch(), "containerSearch");
+		getCards().add(getCont().getViewContainers(), "viewContainers");
+		getCards().add(getCont().getPlotPanel(), "plotPanel");
 		
 		containers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				removeListeners();
+				database.addObserver(getCont());
 				getCl().show(getCards(),  "containerSearch");
 				}
 		});
