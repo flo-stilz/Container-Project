@@ -1,8 +1,16 @@
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
+import java.beans.XMLDecoder;
+import java.beans.XMLEncoder;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.List;
 
 public class Database {
 	
@@ -12,6 +20,12 @@ public class Database {
 	private ArrayList<client> clients = new ArrayList<client>();
 	//private ArrayList<observer> obs = new ArrayList<observer>();
 	private ArrayList<chartobserver> cobs = new ArrayList<chartobserver>();
+	
+	private ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
+	private List<List<List<Integer>>> containerInternalStatusHistoryList = new ArrayList<List<List<Integer>>>();
+	
+	
+	
 	
 	private PropertyChangeSupport support = new PropertyChangeSupport(this);
 	void addObserver(PropertyChangeListener l) {
@@ -41,40 +55,11 @@ public class Database {
 		}
 		return results;	
 	}
-	public ArrayList<Journey> getJourney() {
-		return journey;
-	}
-
-	public void setJourney(ArrayList<Journey> journey) {
-		this.journey = journey;
-	}
-	
-	public ArrayList<Journey> getHistory() {
-		return history;
-	}
-
-	public void setHistory(ArrayList<Journey> history) {
-		this.history = history;
-	}
-
-	public ArrayList<Container> getContainerWarehouse() {
-		return containerWarehouse;
-	}
-
-	public void setContainerWarehouse(ArrayList<Container> containerWarehouse) {
-		this.containerWarehouse = containerWarehouse;
-	}
-	public ArrayList<client> getClients() {
-		return clients;
-	}
-
-	public void setClients(ArrayList<client> clients) {
-		this.clients = clients;
-	}
 	
 	public client createClient( String company, String address, String email, String name, String password) {
 		client c = new client(company, address, email, name, password);
 		clients.add(c);
+		storeClients(); 
 		support.firePropertyChange("clients",null,null);
 		return c;
 	}
@@ -187,6 +172,7 @@ public class Database {
 	public void endOfJourney(Journey j) {
 		if (j.getDestination().equals(j.getCurrentLocation())) {
 			history.add(j);
+			storeEndedJourneys();
 			for (Container c : j.getContainerList()) {
 				Container container = new Container(c);
 				container.setContainerID(c.getContainerId());
@@ -197,6 +183,7 @@ public class Database {
 				container.getPressureList().clear();
 				container.getHumList().clear();
 				getContainerWarehouse().add(container);
+				storeContainerWarehouse();
 			}
 			journey.remove(j);
 		} 
@@ -225,27 +212,26 @@ public class Database {
 		}
 	}
 	
-	// probably not needed anymore
-	public Set<Journey> findJourneysFromContainers(String search){
-		Set<Journey> result = new HashSet<Journey>();
-		for(Journey j : history) {
-			for(Container c : j.getContainerList()) {
-				if ((c.getContainerId().equals(search)) 
-					|| (c.getContent().equals(search))
-					|| (c.getCompany().equals(search))) {
-					result.add(j);	
-				}
-			}
-		}
-		return result;			
-	}
+//	// probably not needed anymore
+//	public Set<Journey> findJourneysFromContainers(String search){
+//		Set<Journey> result = new HashSet<Journey>();
+//		for(Journey j : history) {
+//			for(Container c : j.getContainerList()) {
+//				if ((c.getContainerId().equals(search)) 
+//					|| (c.getContent().equals(search))
+//					|| (c.getCompany().equals(search))) {
+//					result.add(j);	
+//				}
+//			}
+//		}
+//		return result;			
+//	}
 
 
-	public ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
-		ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
+	public List<List<List<Integer>>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
 		for(Journey j : history) {
 			for(Container c : j.getContainerList()) {
-				ArrayList<ArrayList<Integer>> measurements = new ArrayList<ArrayList<Integer>>();
+				List<List<Integer>> measurements = new ArrayList<List<Integer>>();
 				if (c.getContainerId().contentEquals(search)) {
 					measurements.add(c.getTempList());
 					measurements.add(c.getPressureList());
@@ -253,10 +239,11 @@ public class Database {
 					containerInternalStatusHistoryList.add(measurements);
 				}
 			}	
-		
 		}
 		return containerInternalStatusHistoryList;
 	}
+	
+	
 //	public void addObserver(observer o) {
 //		obs.add(o);
 //	}
@@ -321,6 +308,159 @@ public class Database {
 	}
 	
 	
+	
+	
+
+	
+	public void storeClients() {
+		storeClients(clients);
+	}
+	
+	public void storeClients(ArrayList<client> clients) {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./Clients.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(clients);
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	} 
+	
+	public ArrayList<client> readClientFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./Clients.xml"));
+			} catch (FileNotFoundException e) {
+				throw new Error(e);
+				}
+		XMLDecoder decoder = new XMLDecoder(fis);
+		clients = (ArrayList<client>)decoder.readObject(); 
+		decoder.close();
+		return clients;
+	}
+	
+	public void storeActiveJourneys() {
+		storeActiveJourneys(journey);
+	}
+	
+	public void storeActiveJourneys(ArrayList<Journey> journey) {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./ActiveJourneys.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(journey);
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace(); 
+		} 
+	}
+	 
+	public ArrayList<Journey> readActiveJourneyFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./ActiveJourneys.xml"));
+			} catch (FileNotFoundException e) {
+				throw new Error(e);
+				}
+		XMLDecoder decoder = new XMLDecoder(fis);
+		journey = (ArrayList<Journey>)decoder.readObject();
+		decoder.close();
+		return journey;
+		}
+	
+	
+	public void storeEndedJourneys() {
+		storeEndedJourneys(history);
+	}
+	
+	public void storeEndedJourneys(ArrayList<Journey> history) {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./EndedJourneys.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(history);
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) { 
+			ex.printStackTrace();
+		}
+	}
+
+	public ArrayList<Journey> readEndedJourneyFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./EndedJourneys.xml"));
+		} catch (FileNotFoundException e) {
+			throw new Error(e);
+		}
+		XMLDecoder decoder = new XMLDecoder(fis);
+		journey = (ArrayList<Journey>)decoder.readObject();
+		decoder.close();
+		return journey;
+	}
+	
+	public void storeContainerWarehouse() {
+		storeContainerWarehouse(containerWarehouse);
+	}
+	
+	public void storeContainerWarehouse(ArrayList<Container> ContainerWarehouse) {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./ContainerWarehouse.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(ContainerWarehouse);
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	}
+
+	public ArrayList<Container> readContainerWarehouseFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./ContainerWarehouse.xml"));
+		} catch (FileNotFoundException e) {
+			throw new Error(e);
+		}
+		XMLDecoder decoder = new XMLDecoder(fis);
+		containerWarehouse = (ArrayList<Container>)decoder.readObject();
+		decoder.close();
+		return containerWarehouse;
+	}
+	
+
+
+	public ArrayList<Journey> getJourney() {
+		return journey;
+	}
+
+	public void setJourney(ArrayList<Journey> journey) {
+		this.journey = journey;
+	}
+	
+	public ArrayList<Journey> getHistory() {
+		return history;
+	}
+
+	public void setHistory(ArrayList<Journey> history) {
+		this.history = history;
+	}
+
+	public ArrayList<Container> getContainerWarehouse() {
+		return containerWarehouse;
+	}
+
+	public void setContainerWarehouse(ArrayList<Container> containerWarehouse) {
+		this.containerWarehouse = containerWarehouse;
+	}
+	public ArrayList<client> getClients() {
+		return clients;
+	}
+
+	public void setClients(ArrayList<client> clients) {
+		this.clients = clients;
+	}
 	
 }
 		
