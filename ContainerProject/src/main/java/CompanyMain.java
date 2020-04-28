@@ -16,10 +16,7 @@ import javax.swing.JTextField;
 public class CompanyMain extends TopMain{
 	
 	private ClientSectionPanels c;
-
-	public ClientSectionPanels getC() {
-		return c;
-	}
+	private Database database;
 //	private JPanel options;
 //	private JPanel cards;
 //	private CardLayout cl;
@@ -34,6 +31,8 @@ public class CompanyMain extends TopMain{
 
 	public CompanyMain(String userText, final Database database, final JFrame login) {
 		super(userText, database, login);
+		
+		this.database = database;
 //		final JFrame company = new JFrame("Company Overview");
 
 		// CardLayout
@@ -107,15 +106,15 @@ public class CompanyMain extends TopMain{
 //		});
 //	}
 	
-	public void clientButton(Database database, JFrame login, JButton clients) {
+	public void clientButton(final Database database, JFrame login, JButton clients) {
 		c = new ClientSectionPanels(database, this);
-		database.addObserver(c);
 		getCards().add(c.getClientSearch(), "clientSearch");
 		getCards().add(c.getViewClients(), "viewClients");
 		clients.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(getJ(),getCont());
+				removeListeners();
+				database.addObserver(c);
 				getCl().show(getCards(), "clientSearch");
 			}
 		});
@@ -186,17 +185,10 @@ public class CompanyMain extends TopMain{
 		simulation.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(getJ(),getCont());
+				removeListeners();
 				getCl().show(getCards(), "sim");
 			}
 		});
-	}
-	
-	@Override
-	public void emptyPreviousSearch(JourneySectionPanels j, ContainerSelectionPanels cont) {
-		getC().getwClients().clear();
-		j.getwJourneys().clear();
-		cont.getwContainers().clear();
 	}
 	
 //	public void logOutButton(Database database, final JFrame main, final JFrame company, JPanel menupanel) {
@@ -212,6 +204,14 @@ public class CompanyMain extends TopMain{
 //			}
 //		});
 //	}
+	
+	@Override
+	public void removeListeners() {
+		database.removeObserver(getM());
+		database.removeObserver(getJ());
+		database.removeObserver(getCont());
+		database.removeObserver(c);
+	}
 	
 	
 }

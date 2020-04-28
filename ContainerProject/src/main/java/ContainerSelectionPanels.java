@@ -7,6 +7,7 @@ import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.swing.BoxLayout;
@@ -38,7 +39,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 
 	private JPanel containerSearch;
 	private JPanel viewContainers;
-	private ArrayList<Journey> wJourneys = new ArrayList<Journey>();
 	private ArrayList<Container> wContainers = new ArrayList<Container>();
 	private String keyword;
 	private JPanel extraOptions;
@@ -94,14 +94,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		
 		// Search Containers
 		
-		// Container History
-		
-		searchContainerPast(database, topmain);
-		
-		// Filter among past Containers
-		
-		searchForItemsInContainerPast(database, topmain);
-		
 		// Filter among active Containers
 		
 		searchActiveContainers(database, topmain);
@@ -109,6 +101,14 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		// Show all Containers at the current status
 		
 		showAllActiveContainers(database, topmain);
+		
+		// Filter among past Containers
+		
+		searchForPastContainers(database, topmain);
+		
+		// Show all past Containers at their final status
+		
+		showAllPastContainers(database, topmain);
 		
 	}
 
@@ -167,51 +167,8 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		}
 		else {
 			displayContainers();
+			topmain.getCl().show(topmain.getCards(), "viewContainers");
 		}
-	}
-	
-	// probably not needed either
-	public void checksSearchEntryJ(final Database database, final TopMain topmain) {
-		if (wJourneys.size() == 0) {
-			// Window created
-		}
-		else {
-			displayJourneys(database, topmain);
-		}
-	}
-	
-	// might not be needed?
-	public ArrayList<Journey> filterActiveContainersforClients(final Database database, final TopMain topmain) {
-		if (topmain instanceof ClientMain) {
-			ArrayList<Journey> result = new ArrayList<Journey>();
-			result.addAll(database.findClientJourneys(topmain.getUserText(), database.getJourney()));
-			return result;
-		}
-		else {
-			return database.getJourney();
-		}
-	}
-
-	public void searchContainerPast(final Database database, final TopMain topmain) {
-		JLabel containerpast = new JLabel("Container's History");
-		containerSearch.add(containerpast);
-		final JTextField searchContainerevol = new JTextField();
-		searchContainerevol.setPreferredSize(new Dimension(100, 25));
-		containerSearch.add(searchContainerevol);
-		
-		JButton search = new JButton("Search");
-		containerSearch.add(search);
-		search.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				keyword = searchContainerevol.getText();
-				ArrayList<Journey> results = new ArrayList<Journey>();
-				results.addAll(database.findJourneysFromContainers(keyword));
-				ArrayList<Journey> result = filterJourneysForClients(database, topmain, results);
-				wJourneys = result;
-				checksSearchEntryJ(database, topmain);
-			}
-		});
 	}
 	
 	public ArrayList<Journey> filterJourneysForClients(final Database database, final TopMain topmain, ArrayList<Journey> unfiltered) {
@@ -225,7 +182,22 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		}
 	}
 	
-	public void searchForItemsInContainerPast(final Database database, final TopMain topmain) {
+	public void showAllPastContainers(final Database database, final TopMain topmain) {
+		JButton showAllPast = new JButton("Show All");
+		containerSearch.add(showAllPast);
+		showAllPast.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				showAllCommand = true;
+				isPast = true;
+				ArrayList<Journey> result = filterJourneysForClients(database, topmain, database.getHistory());
+				wContainers = database.getAllContainers(true, result);
+				checksSearchEntryC(database, topmain);
+			}
+		});
+	}
+	
+	public void searchForPastContainers(final Database database, final TopMain topmain) {
 		JLabel containeritempast = new JLabel("History of Containers");
 		containerSearch.add(containeritempast);
 		final JTextField searchPastContainers = new JTextField();
@@ -247,18 +219,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			}
 		});
 	}
-
-	// might not be needed?
-	public ArrayList<Journey> filterPastContainersforClients(final Database database, final TopMain topmain) {
-		if (topmain instanceof ClientMain) {
-			ArrayList<Journey> result = new ArrayList<Journey>();
-			result.addAll(database.findClientJourneys(topmain.getUserText(), database.getHistory()));
-			return result;
-		}
-		else {
-			return database.getHistory();
-		}
-	}
 	
 	public void additionalInformation(Database database, TopMain topmain) {
 		
@@ -276,10 +236,22 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 	public JComboBox<String> chooseContainerOptions(Database database) {
 		ArrayList<Container> op;
 		if (isPast) {
-			op = database.findContainer(keyword,database.getHistory());
+			ArrayList<Journey> filtered = new ArrayList<Journey>(filterJourneysForClients(database,topmain, database.getHistory()));
+			if (showAllCommand) {
+				op = new ArrayList<Container>(database.getfilteredContainers(true, filtered));
+			}
+			else {
+				op = new ArrayList<Container>(database.findContainer(keyword, filtered));
+			}
 		}
 		else {
-			op = database.getfilteredContainers(false, database.getJourney());
+			ArrayList<Journey> filtered = new ArrayList<Journey>(filterJourneysForClients(database,topmain, database.getJourney()));
+			if (showAllCommand) {
+				op = new ArrayList<Container>(database.getfilteredContainers(false, filtered));
+			}
+			else {
+				op = new ArrayList<Container>(database.findContainer(keyword, filtered));
+			}
 		}
 		String[] options = new String[op.size()];
 		int i = 0;
@@ -287,17 +259,13 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			options[i] = c.getContainerId();
 			i++;
 		}
+		// remove duplicates from the check options
+		Set<String> filter = new HashSet<String>(Arrays.asList(options));
+		options = filter.toArray(new String[]{});
+		
 		final JComboBox<String> id = new JComboBox<String>(options);
 		return id;
 	}
-	
-	// Using the first item in the container list to check whether the containers are active
-	
-//	public boolean checkContainerListForPast(Database database) {
-//		Container firstContainer = wContainers.get(0);
-//		String journeyid = firstContainer.getId();
-//		return (database.findUsingLoop(journeyid, database.getJourney()).size() == 0);
-//	}
 	
 	// Give the company the option to update current Containers measurements
 	
@@ -368,8 +336,9 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 
 			public void actionPerformed(ActionEvent e) {
 				
+				// stop the containerselectionpanels from listening to the application layer
+				database.removeObserver(csp);
 				// get Container
-				// does not pick the right container!!!
 				Container c = chooseContainerForPlot(database, id.getSelectedItem().toString());
 				
 				 createPlots(database, topmain, c);
@@ -474,8 +443,8 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		plotPanel.add(linePanel);
 	}
 
-	
 	public void updateAllPlots(TopMain topmain) {
+		
 		plotPanel.removeAll();
 		if (checkBoxTemp.isSelected()) {
 			// updateTempPlot
@@ -507,37 +476,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		JPanel barplot = bPlot.getChartPanel();
 		plotPanel.add(barplot);
 	}
-
-	
-	public void displayJourneys(Database database, TopMain topmain) {
-
-		viewContainers.removeAll();
-		//additionalInformation(database, topmain);
-		DefaultTableModel tableModel = new DefaultTableModel();
-		JTable table = new JTable(tableModel);
-		String[] columnNames = {
-				"Journey ID",
-                "Origin",
-                "Destination",
-                "cur. Location",
-                "company",
-                "content",
-                "temp. Data",
-                "pressure Data",
-                "hum. Data"
-                };
-		
-		for (String s : columnNames) {
-			tableModel.addColumn(s);
-		}
-
-		for (Journey j : wJourneys) {
-
-			tableModel.insertRow(0, new Object[] {j.getId(),j.getOrigin(),j.getDestination(),j.getCurrentLocation(), j.findContainers(keyword).get(0).getCompany(), j.findContainers(keyword).get(0).getContent(), j.findContainers(keyword).get(0).getTempList(), j.findContainers(keyword).get(0).getPressureList(), j.findContainers(keyword).get(0).getHumList()});
-		}
-		viewContainers.add(new JScrollPane(table), BorderLayout.NORTH);
-		topmain.getCl().show(topmain.getCards(), "viewContainers");
-	}
 	
 	public void displayContainers() {
 		
@@ -568,7 +506,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			
 		}
 		viewContainers.add(new JScrollPane(table), BorderLayout.NORTH);
-		topmain.getCl().show(topmain.getCards(), "viewContainers");
 	}
 
 	public void formRowForContainer(DefaultTableModel tableModel, Container c, Database database) {
@@ -581,16 +518,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			tableModel.insertRow(0, new Object[] {c.getContainerId(), c.getId(), c.getCompany(), c.getContent(), c.getCurrentLocation(), c.getTempList().get(c.getTempList().size()-1), c.getPressureList().get(c.getPressureList().size()-1), c.getHumList().get(c.getHumList().size()-1), c.getTempList(), c.getPressureList(), c.getHumList()});
 		}
 	}
-	
-//	public static void doesItemExist(ArrayList<Container> c) throws MyException {
-//			
-//			if (c.size() == 0) {
-//				throw new MyException("Nothing matches your search!");
-//			}
-//			else {
-//				System.out.println("All good");
-//			}
-//		}
 	 
 
 	public void propertyChange(PropertyChangeEvent evt) {
