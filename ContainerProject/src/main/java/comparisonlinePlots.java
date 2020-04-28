@@ -3,6 +3,7 @@
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -33,11 +34,11 @@ public class comparisonlinePlots extends plot implements observer {
 	//display();
 	
 	}
-	public comparisonlinePlots(String plottitle, ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h, ContainerSelectionPanels csp, TopMain topmain) {
+	public comparisonlinePlots(String plottitle, List<Integer> temp, List<Integer> pres, List<Integer> hum, ContainerSelectionPanels csp, TopMain topmain) {
 		super(plottitle, csp, topmain);
 
 	JFreeChart xylineChart = ChartFactory.createXYLineChart("Changes in Container's Enviornment",
-			"Time elapsed from Journey", "changes", create2Dataset(t, p, h), PlotOrientation.VERTICAL, true, true,
+			"Time elapsed from Journey", "changes", create2Dataset(temp, pres, hum), PlotOrientation.VERTICAL, true, true,
 			false);
 
 	chartPanel = new ChartPanel(xylineChart);

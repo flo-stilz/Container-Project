@@ -94,16 +94,16 @@ public class Container {
 	}
     
     
-    public List<Integer> getPressureList() {
+    public ArrayList<Integer> getPressureList() {
 		return pressureList;
 	}
 
 
-	public List<Integer> getHumList() {
+	public ArrayList<Integer> getHumList() {
 		return humList;
 	}
 	
-	public List<Integer> getTempList() {
+	public ArrayList<Integer> getTempList() {
 		return tempList;
 	}
 

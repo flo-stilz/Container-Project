@@ -75,7 +75,7 @@ public class stepDef {
 	
 	//Imports for Container Status Tracking
 	ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
-	List<List<List<Integer>>> containerInternalStatusHistoryList = new ArrayList<List<List<Integer>>>();
+	ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
 	
 	Journey journey;
 	private Integer seed2;
@@ -170,7 +170,7 @@ public class stepDef {
 	//SCENARIO 5: Search for a client with a specific email email
 	@When("searching for client in client database using email {string}")
 	public void searching_for_client_in_client_database_using_email(String mail) {
-		results = database.search(mail, database.getClients());
+		results = database.search(mail);
 	}
 	
 	@Then("the corresponding client is returned")
@@ -182,7 +182,7 @@ public class stepDef {
 	//SCENARIO 6: Search for a client that is not present in the clientlist using a specific address
 	@When("searching for client in client database using address {string}")
 	public void searching_for_client_in_client_database_using_address(String address) {
-	    results = database.search(address, database.getClients());
+	    results = database.search(address);
 	}
 
 	@Then("an empty list of clients in the client database matching the keyword is returned")

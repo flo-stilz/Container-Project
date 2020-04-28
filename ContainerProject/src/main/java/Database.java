@@ -22,7 +22,7 @@ public class Database {
 	private ArrayList<chartobserver> cobs = new ArrayList<chartobserver>();
 	
 	private ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
-	private List<List<List<Integer>>> containerInternalStatusHistoryList = new ArrayList<List<List<Integer>>>();
+	private ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
 	
 	
 	
@@ -45,7 +45,9 @@ public class Database {
 		return false;
 	}
 	
-	public ArrayList<client> search (String keyword, ArrayList<client> clients){
+	public ArrayList<client> search (String keyword){
+
+//	public ArrayList<client> search (String keyword, ArrayList<client> clients){
 		ArrayList<client> results = new ArrayList<client>();
 		for (client cl: clients) {
 
@@ -212,31 +214,31 @@ public class Database {
 		}
 	}
 	
-//	// probably not needed anymore
-//	public Set<Journey> findJourneysFromContainers(String search){
-//		Set<Journey> result = new HashSet<Journey>();
-//		for(Journey j : history) {
-//			for(Container c : j.getContainerList()) {
-//				if ((c.getContainerId().equals(search)) 
-//					|| (c.getContent().equals(search))
-//					|| (c.getCompany().equals(search))) {
-//					result.add(j);	
-//				}
-//			}
-//		}
-//		return result;			
-//	}
-
-
-	public List<List<List<Integer>>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
+	// probably not needed anymore
+	public Set<Journey> findJourneysFromContainers(String search){
+		Set<Journey> result = new HashSet<Journey>();
 		for(Journey j : history) {
 			for(Container c : j.getContainerList()) {
-				List<List<Integer>> measurements = new ArrayList<List<Integer>>();
+				if ((c.getContainerId().equals(search)) 
+					|| (c.getContent().equals(search))
+					|| (c.getCompany().equals(search))) {
+					result.add(j);	
+				}
+			}
+		}
+		return result;			
+	}
+
+
+	public ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
+		for(Journey j : history) {
+			for(Container c : j.getContainerList()) {
+				ArrayList<ArrayList<Integer>> measurement = new ArrayList<ArrayList<Integer>>();
 				if (c.getContainerId().contentEquals(search)) {
-					measurements.add(c.getTempList());
-					measurements.add(c.getPressureList());
-					measurements.add(c.getHumList());
-					containerInternalStatusHistoryList.add(measurements);
+					measurement.add(c.getTempList());
+					measurement.add(c.getPressureList());
+					measurement.add(c.getHumList());
+					containerInternalStatusHistoryList.add(measurement);
 				}
 			}	
 		}

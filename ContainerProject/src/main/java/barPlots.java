@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
 
@@ -44,13 +45,13 @@ public class barPlots extends plot implements observer {
 		//display();
 	}
 
-	public barPlots(String plottitle, ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h, ContainerSelectionPanels csp, TopMain topmain) {
+	public barPlots(String plottitle, ArrayList<Integer> temp, ArrayList<Integer> pres, ArrayList<Integer> hum, ContainerSelectionPanels csp, TopMain topmain) {
 		super(plottitle, csp, topmain);
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
-		dataset.setValue(range(t), "hum", "Temperature");
-		dataset.setValue(range(p), "hum", "Pressure");
-		dataset.setValue(range(h), "hum", "Volume");
+		dataset.setValue(range(temp), "hum", "Temperature");
+		dataset.setValue(range(pres), "hum", "Pressure");
+		dataset.setValue(range(hum), "hum", "Volume");
 
 		JFreeChart chart = ChartFactory.createBarChart(" Maximum change in Conditions", "Internal Status",
 				"change in values overtime", dataset, PlotOrientation.VERTICAL, false, false, false);

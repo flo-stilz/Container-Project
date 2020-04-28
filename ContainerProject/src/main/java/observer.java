@@ -1,9 +1,10 @@
 
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface observer {
 
-	void update(List<Integer> t, List<Integer> p, List<Integer> h);
+	void update(ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h);
 	
 }
