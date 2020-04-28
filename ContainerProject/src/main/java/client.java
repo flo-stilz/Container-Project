@@ -1,5 +1,6 @@
 
-
+////////7
+/////////7
 public class client {
 	private String company;
 	private String address;
