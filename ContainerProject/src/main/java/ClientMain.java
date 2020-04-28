@@ -24,16 +24,16 @@ import javax.swing.JTextField;
 public class ClientMain extends TopMain{
 	
 	private client currentClient;
-	private JourneySectionPanels j;
-	private ContainerSelectionPanels cont;
+//	private JourneySectionPanels j;
+//	private ContainerSelectionPanels cont;
 
-	public JourneySectionPanels getJ() {
-		return j;
-	}
-
-	public ContainerSelectionPanels getCont() {
-		return cont;
-	}
+//	public JourneySectionPanels getJ() {
+//		return j;
+//	}
+//
+//	public ContainerSelectionPanels getCont() {
+//		return cont;
+//	}
 	
 //	private JPanel options;
 //	private JPanel cards;
@@ -118,7 +118,6 @@ public class ClientMain extends TopMain{
 		menu.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(j, cont);
 				menuPanel(database, login, menupanel);
 				getCl().show(getCards(), "menu");
 			}
@@ -167,7 +166,7 @@ public class ClientMain extends TopMain{
 	public void journeyButton(Database database, JFrame login, JButton journeys) {
 		// journey section
 		
-		j = new JourneySectionPanels(database, this);
+		JourneySectionPanels j = new JourneySectionPanels(database, this);
 		database.addObserver(j);
 		getCards().add(j.getJourneySearch(), "journeySearch");
 		getCards().add(j.getViewJourneys(), "viewJourneys");
@@ -175,7 +174,6 @@ public class ClientMain extends TopMain{
 		journeys.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(j, cont);
 				getCl().show(getCards(),  "journeySearch");
 			}
 		});
@@ -188,7 +186,7 @@ public class ClientMain extends TopMain{
 	public void containerButton(Database database, JFrame login, JButton containers) {
 	// container section
 	
-		cont = new ContainerSelectionPanels(database, this);
+		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);
 		database.addObserver(cont);
 		getCards().add(cont.getContainerSearch(), "containerSearch");
 		getCards().add(cont.getViewContainers(), "viewContainers");
@@ -196,7 +194,6 @@ public class ClientMain extends TopMain{
 		
 		containers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(j, cont);
 				getCl().show(getCards(),  "containerSearch");
 				}
 		});

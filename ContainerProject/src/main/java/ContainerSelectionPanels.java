@@ -168,6 +168,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		}
 		else {
 			displayContainers();
+			topmain.getCl().show(topmain.getCards(), "viewContainers");
 		}
 	}
 	
@@ -507,7 +508,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			
 		}
 		viewContainers.add(new JScrollPane(table), BorderLayout.NORTH);
-		topmain.getCl().show(topmain.getCards(), "viewContainers");
 	}
 
 	public void formRowForContainer(DefaultTableModel tableModel, Container c, Database database) {

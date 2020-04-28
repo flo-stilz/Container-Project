@@ -26,16 +26,16 @@ public class TopMain {
 	private JPanel options;
 	private JPanel cards;
 	private CardLayout cl;
-	private JourneySectionPanels j;
-	private ContainerSelectionPanels cont;
+//	private JourneySectionPanels j;
+//	private ContainerSelectionPanels cont;
 
-	public JourneySectionPanels getJ() {
-		return j;
-	}
-
-	public ContainerSelectionPanels getCont() {
-		return cont;
-	}
+//	public JourneySectionPanels getJ() {
+//		return j;
+//	}
+//
+//	public ContainerSelectionPanels getCont() {
+//		return cont;
+//	}
 
 	public JPanel getCards() {
 		return cards;
@@ -134,7 +134,6 @@ public class TopMain {
 		menu.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(j, cont);
 				cl.show(cards, "menu");
 			}
 		});
@@ -145,7 +144,7 @@ public class TopMain {
 	public void journeyButton(Database database, JFrame login, JButton journeys) {
 		// journey section
 		
-		j = new JourneySectionPanels(database, this);
+		JourneySectionPanels j = new JourneySectionPanels(database, this);
 		database.addObserver(j);
 		cards.add(j.getJourneySearch(), "journeySearch");
 		cards.add(j.getViewJourneys(), "viewJourneys");
@@ -153,7 +152,6 @@ public class TopMain {
 		journeys.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(j, cont);
 				cl.show(cards,  "journeySearch");
 			}
 		});
@@ -165,7 +163,7 @@ public class TopMain {
 	public void containerButton(Database database, JFrame login, JButton containers) {
 	// container section
 	
-		cont = new ContainerSelectionPanels(database, this);
+		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);
 		database.addObserver(cont);
 		cards.add(cont.getContainerSearch(), "containerSearch");
 		cards.add(cont.getViewContainers(), "viewContainers");
@@ -173,7 +171,6 @@ public class TopMain {
 		
 		containers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(j, cont);
 				cl.show(cards,  "containerSearch");
 				}
 		});
@@ -223,11 +220,6 @@ public class TopMain {
 				main1.dispose();
 			}
 		});
-	}
-	
-	public void emptyPreviousSearch(JourneySectionPanels j, ContainerSelectionPanels cont) {
-		j.getwJourneys().clear();
-		cont.getwContainers().clear();
 	}
 	
 }

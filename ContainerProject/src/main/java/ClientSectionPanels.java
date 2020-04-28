@@ -78,6 +78,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 		}
 		else {
 			displayClients(database);
+			companymain.getCl().show(companymain.getCards(), "viewClients");
 		}
 	}
 	
@@ -112,7 +113,6 @@ public class ClientSectionPanels implements PropertyChangeListener {
 			tableModel.insertRow(0, new Object[] {c.getCompany(),c.getName(),c.getEmail(),c.getAddress(), c.getId(), containerids});
 		}
 		viewClients.add(new JScrollPane(table), BorderLayout.NORTH);
-		companymain.getCl().show(companymain.getCards(), "viewClients");
 	}
 	
 	

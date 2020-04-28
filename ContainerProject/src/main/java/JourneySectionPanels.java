@@ -87,7 +87,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				showAllCommand = true;
 				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(database, topmain));
 				wJourneys = result;
-				checksSearchEntryC(database, topmain);
+				checksSearchEntryJ(database, topmain);
 			}
 
 		});
@@ -110,7 +110,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(database, topmain));
 				keyword = searchjourneyPastTxt.getText();
 				wJourneys = database.findUsingLoop(keyword, result);
-				checksSearchEntryC(database, topmain);
+				checksSearchEntryJ(database, topmain);
 			}
 		});
 	}
@@ -138,7 +138,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				showAllCommand = true;
 				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(database, topmain));
 				wJourneys = result;
-				checksSearchEntryC(database, topmain);
+				checksSearchEntryJ(database, topmain);
 			}
 
 		});
@@ -164,7 +164,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				keyword = searchActive.getText();
 				database.findUsingLoop(keyword, result);
 				wJourneys = database.findUsingLoop(keyword, result);;
-				checksSearchEntryC(database, topmain);
+				checksSearchEntryJ(database, topmain);
 			}
 		});
 	}
@@ -255,7 +255,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		signUp.add(confirm, BorderLayout.SOUTH);
 	}
 	
-	public void checksSearchEntryC(final Database database, final TopMain topmain) {
+	public void checksSearchEntryJ(final Database database, final TopMain topmain) {
 		if (wJourneys.size() == 0) {
 			if (showAllCommand) {
 				new ErrorFrame();
@@ -266,6 +266,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		}
 		else {
 			displayJourneys();
+			topmain.getCl().show(topmain.getCards(), "viewJourneys");
 		}
 	}
 	
@@ -295,7 +296,6 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			tableModel.insertRow(0, new Object[] {j.getId(),j.getOrigin(),j.getDestination(),j.getCurrentLocation(), containerids});
 		}
 		viewJourneys.add(new JScrollPane(table), BorderLayout.NORTH);
-		topmain.getCl().show(topmain.getCards(), "viewJourneys");
 	}
 	
 	public ArrayList<String> filterClientContainers(Database database, TopMain topmain, Journey j){
