@@ -31,6 +31,9 @@ public class Database {
 	void addObserver(PropertyChangeListener l) {
 		support.addPropertyChangeListener(l);
 	}
+	public void removeObserver(PropertyChangeListener l) {
+         support.removePropertyChangeListener(l);
+     }
 		
 	void add (client c) {
 		if (!exists(c)) {
@@ -51,7 +54,7 @@ public class Database {
 		ArrayList<client> results = new ArrayList<client>();
 		for (client cl: clients) {
 
-			if ((cl.getAddress().contentEquals(keyword)||cl.getCompany().contentEquals(keyword)||cl.getEmail().contentEquals(keyword)||cl.getName().contentEquals(keyword))) {
+			if ((cl.getAddress().equalsIgnoreCase(keyword)||cl.getCompany().contentEquals(keyword)||cl.getEmail().equalsIgnoreCase(keyword)||cl.getName().equalsIgnoreCase(keyword))) {
 				results.add(cl);
 			}
 		}
@@ -320,18 +323,24 @@ public class Database {
 			j.getContainerList().get(i).setCurrentLocation(newcurrentLocation);
 		}
 		j.setCurrentLocation(newcurrentLocation.toUpperCase());
-	} 
+
+		support.firePropertyChange("journey",null,null);
+	}
 	
 	public void updateClientName(client c, String refname) {
-		c.updateName(refname);
+		c.setName(refname);
+		support.firePropertyChange("clients",null,null);
 	}
 	
 	public void updateClientMail(client c, String mail) {
-		c.updateEmail(mail);
+		c.setEmail(mail);
+		support.firePropertyChange("clients",null,null);
 	}
 	public void updateClientAddress(client c, String address) {
-		c.updateAddress(address);
+		c.setAddress(address);
+		support.firePropertyChange("clients",null,null);
 	}
+  
 	public void updateClientPassword(client c, String password) {
 		c.updatePassword(password);
 	}

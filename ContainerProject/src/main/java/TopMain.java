@@ -25,9 +25,9 @@ public class TopMain {
 	private JFrame main1;
 	private JPanel options;
 	private JPanel cards;
-	private CardLayout cl;
-	private JourneySectionPanels j;
-	private ContainerSelectionPanels cont;
+	public void setJ(JourneySectionPanels j) {
+		this.j = j;
+	}
 
 	public JourneySectionPanels getJ() {
 		return j;
@@ -36,6 +36,29 @@ public class TopMain {
 	public ContainerSelectionPanels getCont() {
 		return cont;
 	}
+
+	public MenuSectionPanels getM() {
+		return m;
+	}
+
+	public void setCont(ContainerSelectionPanels cont) {
+		this.cont = cont;
+	}
+
+
+	private CardLayout cl;
+	private JourneySectionPanels j;
+	private ContainerSelectionPanels cont;
+	private MenuSectionPanels m;
+	private Database database;
+
+//	public JourneySectionPanels getJ() {
+//		return j;
+//	}
+//
+//	public ContainerSelectionPanels getCont() {
+//		return cont;
+//	}
 
 	public JPanel getCards() {
 		return cards;
@@ -78,6 +101,7 @@ public class TopMain {
 
 	public TopMain(String userText, final Database database, final JFrame login) {
 		
+		this.database = database;
 		this.userText = userText;
 		main1 = new JFrame("Company Overview");
 
@@ -120,40 +144,34 @@ public class TopMain {
 			
 	} 
 	
-	public void menuButton(Database database, JFrame login, JButton menu) {
-		final JPanel menupanel = new JPanel();
-		menupanel.setPreferredSize(new Dimension(800, 600));
-		menupanel.setBackground(Color.RED);
-		
-		cards.add(menupanel, "menu");
-		
-		JLabel lbl = new JLabel("Description");
-		menupanel.add(lbl, BorderLayout.NORTH);
-		logOutButton(database, login, menupanel);
+	public void menuButton(final Database database, JFrame login, JButton menu) {
+		final MenuSectionPanels m = new MenuSectionPanels(database, this, login);
+		getCards().add(m.getMenupanel(), "menu");
 		
 		menu.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(j, cont);
-				cl.show(cards, "menu");
+				removeListeners();
+				database.addObserver(m);
+				getCl().show(getCards(), "menu");
 			}
 		});
 	}
 	
 
 	
-	public void journeyButton(Database database, JFrame login, JButton journeys) {
+	public void journeyButton(final Database database, JFrame login, JButton journeys) {
 		// journey section
 		
 		j = new JourneySectionPanels(database, this);
-		database.addObserver(j);
 		cards.add(j.getJourneySearch(), "journeySearch");
 		cards.add(j.getViewJourneys(), "viewJourneys");
 		
 		journeys.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(j, cont);
+				removeListeners();
+				database.addObserver(j);
 				cl.show(cards,  "journeySearch");
 			}
 		});
@@ -162,18 +180,18 @@ public class TopMain {
 		
 	}
 
-	public void containerButton(Database database, JFrame login, JButton containers) {
+	public void containerButton(final Database database, JFrame login, JButton containers) {
 	// container section
 	
 		cont = new ContainerSelectionPanels(database, this);
-		database.addObserver(cont);
 		cards.add(cont.getContainerSearch(), "containerSearch");
 		cards.add(cont.getViewContainers(), "viewContainers");
 		cards.add(cont.getPlotPanel(), "plotPanel");
 		
 		containers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				emptyPreviousSearch(j, cont);
+				removeListeners();
+				database.addObserver(cont);
 				cl.show(cards,  "containerSearch");
 				}
 		});
@@ -182,52 +200,53 @@ public class TopMain {
 	
 
 
-	public void logOutButton(final Database database, final JFrame login, JPanel menupanel) {
-		// Logout as company user
-		
-		final JButton profile = new JButton("Profile");
-		ImageIcon img = new ImageIcon("src/main/resources/profile.png");
-		Image image = img.getImage(); // transform it 
-		Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-		img = new ImageIcon(newimg);  // transform it back
-	    profile.setIcon(img);
-
-		JPanel top = new JPanel(new BorderLayout());
-		menupanel.add(top, BorderLayout.NORTH);
-		top.add(profile, BorderLayout.EAST);
-		final JPopupMenu menu = new JPopupMenu("Profile Options");
-		
-		JMenuItem setDetails = new JMenuItem("Update profile details");
-		JMenuItem logout = new JMenuItem("Logout");
-//		if (this instanceof ClientMain) {
-//			menu.add(setDetails);
-//		}
-		menu.add(logout);
-
-		profile.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				
-				Component b=(Component)e.getSource();
-				Point p=b.getLocationOnScreen();
-				menu.show(profile, 0, 0);;
-				menu.setLocation(p.x,p.y+b.getHeight());
-				
-			}
-		});
-		
-		logout.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				login.setVisible(true);
-				main1.dispose();
-			}
-		});
-	}
+//	public void logOutButton(final Database database, final JFrame login, JPanel menupanel) {
+//		// Logout as company user
+//		
+//		final JButton profile = new JButton("Profile");
+//		ImageIcon img = new ImageIcon("src/main/resources/profile.png");
+//		Image image = img.getImage(); // transform it 
+//		Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+//		img = new ImageIcon(newimg);  // transform it back
+//	    profile.setIcon(img);
+//
+//		JPanel top = new JPanel(new BorderLayout());
+//		menupanel.add(top, BorderLayout.NORTH);
+//		top.add(profile, BorderLayout.EAST);
+//		final JPopupMenu menu = new JPopupMenu("Profile Options");
+//		
+//		JMenuItem setDetails = new JMenuItem("Update profile details");
+//		JMenuItem logout = new JMenuItem("Logout");
+////		if (this instanceof ClientMain) {
+////			menu.add(setDetails);
+////		}
+//		menu.add(logout);
+//
+//		profile.addActionListener(new ActionListener() {
+//			
+//			public void actionPerformed(ActionEvent e) {
+//				
+//				Component b=(Component)e.getSource();
+//				Point p=b.getLocationOnScreen();
+//				menu.show(profile, 0, 0);;
+//				menu.setLocation(p.x,p.y+b.getHeight());
+//				
+//			}
+//		});
+//		
+//		logout.addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent e) {
+//				login.setVisible(true);
+//				main1.dispose();
+//			}
+//		});
+//	}
 	
-	public void emptyPreviousSearch(JourneySectionPanels j, ContainerSelectionPanels cont) {
-		j.getwJourneys().clear();
-		cont.getwContainers().clear();
+	public void removeListeners() {
+		database.removeObserver(m);
+		database.removeObserver(j);
+		database.removeObserver(cont);
 	}
 	
 }
