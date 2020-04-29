@@ -21,6 +21,9 @@ import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
+import model.Application;
+import model.client;
+
 public class ClientMain extends TopMain{
 	
 	private client currentClient;
@@ -51,8 +54,8 @@ public class ClientMain extends TopMain{
 		return currentClient;
 	}
 
-	public ClientMain(String userText, final Database database, final JFrame login) {
-		super(userText, database, login);
+	public ClientMain(String userText, final Application application, final JFrame login) {
+		super(userText, application, login);
 
 //		final JFrame client = new JFrame("Client Overview");
 //
@@ -73,15 +76,15 @@ public class ClientMain extends TopMain{
 	}
 	
 	@Override
-	public void options(Database database, JFrame login) {
-		currentClient = database.search(getUserText()).get(0);
+	public void options(Application application, JFrame login) {
+		currentClient = application.search(getUserText()).get(0);
 		setOptions(new JPanel());
 		getOptions().setLayout(new BoxLayout(getOptions(), BoxLayout.Y_AXIS));
 		
 		JButton menu = new JButton("Profile");
 		menu.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(menu);
-		menuButton(database, login, menu);
+		menuButton(application, login, menu);
 		
 //		JButton clients = new JButton("View Clients");
 //		clients.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
@@ -92,13 +95,13 @@ public class ClientMain extends TopMain{
 		JButton journeys = new JButton("My Journeys");
 		journeys.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(journeys);
-		journeyButton(database, login, journeys);
+		journeyButton(application, login, journeys);
 		
 		
 		JButton containers = new JButton("My Containers");
 		containers.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(containers);
-		containerButton(database, login, containers);
+		containerButton(application, login, containers);
 		
 		
 //		JButton simulation = new JButton("Start Simulation");
@@ -149,10 +152,10 @@ public class ClientMain extends TopMain{
 //		
 //	}
 	@Override
-	public void journeyButton(final Database database, JFrame login, JButton journeys) {
+	public void journeyButton(final Application application, JFrame login, JButton journeys) {
 		// journey section
 		
-		setJ(new JourneySectionPanels(database, this));
+		setJ(new JourneySectionPanels(application, this));
 		getCards().add(getJ().getJourneySearch(), "journeySearch");
 		getCards().add(getJ().getViewJourneys(), "viewJourneys");
 		
@@ -160,7 +163,7 @@ public class ClientMain extends TopMain{
 
 			public void actionPerformed(ActionEvent e) {
 				removeListeners();
-				database.addObserver(getJ());
+				application.addObserver(getJ());
 				getCl().show(getCards(),  "journeySearch");
 			}
 		});
@@ -170,10 +173,10 @@ public class ClientMain extends TopMain{
 	}
 	
 	@Override
-	public void containerButton(final Database database, JFrame login, JButton containers) {
+	public void containerButton(final Application application, JFrame login, JButton containers) {
 	// container section
 	
-		setCont(new ContainerSelectionPanels(database, this));
+		setCont(new ContainerSelectionPanels(application, this));
 		getCards().add(getCont().getContainerSearch(), "containerSearch");
 		getCards().add(getCont().getViewContainers(), "viewContainers");
 		getCards().add(getCont().getPlotPanel(), "plotPanel");
@@ -181,7 +184,7 @@ public class ClientMain extends TopMain{
 		containers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				removeListeners();
-				database.addObserver(getCont());
+				application.addObserver(getCont());
 				getCl().show(getCards(),  "containerSearch");
 				}
 		});

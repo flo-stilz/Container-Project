@@ -4,6 +4,9 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 
+import model.Container;
+import model.client;
+
 public class clientTable implements chartobserver {
 	private String company;
 	private String address;

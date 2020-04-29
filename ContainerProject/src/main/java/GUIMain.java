@@ -13,9 +13,12 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import model.Application;
+import model.client;
+
 public class GUIMain {
 
-	static Database database = new Database(); 
+	static Application application = new Application(); 
 	static private JFrame failedLogin;
 	static private JFrame failedReg;
 	static private String name = "Mads M�ller";
@@ -26,7 +29,7 @@ public class GUIMain {
 	 * When the frame is called, text fields can be filled out with the necessary info
 	 * and this will be used with the createClient method from database. 
 	 */
-	public static void register(final Database database) {
+	public static void register(final Application application) {
 		
 		final JFrame registration = new JFrame("Registration");
 		JPanel info = new JPanel();
@@ -76,10 +79,10 @@ public class GUIMain {
 				 * or if the password is shorter than 5 characters long.
 				 * If the inputs fails one of these requirements it will open a frame indicating a failed registration.
 				 */
-				if ((database.search(user.getText()).size() == 0)
+				if ((application.search(user.getText()).size() == 0)
 						&& (passTextReg.length()>4)) {
 					
-					database.createClient(user.getText(), address.getText(), mail.getText(), ref.getText(), passTextReg);
+					application.createClient(user.getText(), address.getText(), mail.getText(), ref.getText(), passTextReg);
 					registration.dispose();
 					// possibly add another frame to confirm registration
 				}
@@ -174,15 +177,15 @@ public class GUIMain {
 				String userText = username.getText();
 				
 				if (userText.equals(name) && passtext.equals(pass)) {
-					new CompanyMain(username.getText(), database, LoginFrame);
+					new CompanyMain(username.getText(), application, LoginFrame);
 //					company.dispose();
 				}
-				else if ((database.search(userText).size())!= 0) {
+				else if ((application.search(userText).size())!= 0) {
 						
-					client client = database.search(userText).get(0);
+					client client = application.search(userText).get(0);
 						
 					if (client.getPassword().contentEquals(passtext)) {
-						new ClientMain(userText, database, LoginFrame);
+						new ClientMain(userText, application, LoginFrame);
 //						LoginFrame.dispose();
 					}
 					else {
@@ -202,7 +205,7 @@ public class GUIMain {
 		register.addActionListener(new ActionListener() {
 	
 			public void actionPerformed(ActionEvent e) {
-				register(database);
+				register(application);
 			}
 		});
 			

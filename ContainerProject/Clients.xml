@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="13.0.1" class="java.beans.XMLDecoder">
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="model.client">
+    <void property="address">
+     <string>madisonsquaregarden</string>
+    </void>
+    <void property="company">
+     <string>Nike</string>
+    </void>
+    <void property="email">
+     <string>nike@administration.com</string>
+    </void>
+    <void property="id">
+     <int>69451</int>
+    </void>
+    <void property="name">
+     <string>Mads Mikkelsen</string>
+    </void>
+    <void property="password">
+     <string>peter</string>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>

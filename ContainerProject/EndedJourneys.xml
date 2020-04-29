@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="13.0.1" class="java.beans.XMLDecoder">
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="model.Journey" id="Journey0">
+    <void property="containerList">
+     <void method="add">
+      <object class="model.Container" id="Container0">
+       <void property="company">
+        <string>gls</string>
+       </void>
+       <void property="containerId">
+        <string>C0</string>
+       </void>
+       <void property="content">
+        <string>phones</string>
+       </void>
+       <void property="currentLocation">
+        <string>MAL</string>
+       </void>
+       <void property="humList">
+        <void method="add">
+         <int>56</int>
+        </void>
+       </void>
+       <void property="id">
+        <string>TRIMAL0</string>
+       </void>
+       <void property="pressureList">
+        <void method="add">
+         <int>980</int>
+        </void>
+       </void>
+       <void property="tempList">
+        <void method="add">
+         <int>17</int>
+        </void>
+       </void>
+      </object>
+     </void>
+     <void method="add">
+      <object class="model.Container" id="Container1">
+       <void property="company">
+        <string>gls</string>
+       </void>
+       <void property="containerId">
+        <string>C1</string>
+       </void>
+       <void property="content">
+        <string>phones</string>
+       </void>
+       <void property="currentLocation">
+        <string>MAL</string>
+       </void>
+       <void property="humList">
+        <void method="add">
+         <int>56</int>
+        </void>
+       </void>
+       <void property="id">
+        <string>TRIMAL0</string>
+       </void>
+       <void property="pressureList">
+        <void method="add">
+         <int>980</int>
+        </void>
+       </void>
+       <void property="tempList">
+        <void method="add">
+         <int>17</int>
+        </void>
+       </void>
+      </object>
+     </void>
+    </void>
+    <void property="currentLocation">
+     <string>MAL</string>
+    </void>
+    <void property="destination">
+     <string>MAL</string>
+    </void>
+    <void property="id">
+     <string>TRIMAL0</string>
+    </void>
+    <void property="origin">
+     <string>TRI</string>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>

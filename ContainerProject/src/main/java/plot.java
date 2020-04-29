@@ -18,6 +18,9 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.RefineryUtilities;
+
+import model.observer;
+
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;

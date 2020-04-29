@@ -12,6 +12,8 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 
+import model.observer;
+
 public class comparisonlinePlots extends plot implements observer {
 	
 	private ChartPanel chartPanel;

@@ -13,6 +13,10 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import model.Container;
+import model.Application;
+import model.client;
+
 public class ClientSectionPanels implements PropertyChangeListener {
 
 	private JPanel clientSearch;
@@ -26,7 +30,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 		return wClients;
 	}
 
-	public ClientSectionPanels(final Database database, final CompanyMain companymain) {
+	public ClientSectionPanels(final Application application, final CompanyMain companymain) {
 		
 		this.companymain = companymain;
 		// Search the clients
@@ -49,8 +53,8 @@ public class ClientSectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				keyword = search.getText();
 				showAllCommand = false;
-				wClients = new ArrayList<client>(database.search(keyword));
-				checksSearchEntryC(database);
+				wClients = new ArrayList<client>(application.search(keyword));
+				checksSearchEntryC(application);
 			}
 		});
 		
@@ -60,14 +64,14 @@ public class ClientSectionPanels implements PropertyChangeListener {
 
 			public void actionPerformed(ActionEvent e) {
 				showAllCommand = true;
-				wClients = new ArrayList<client>(database.getClients());
-				checksSearchEntryC(database);
+				wClients = new ArrayList<client>(application.getClientDat().getClients());
+				checksSearchEntryC(application);
 			}
 		});
 
 	}
 	
-	public void checksSearchEntryC(final Database database) {
+	public void checksSearchEntryC(final Application application) {
 		if (wClients.size() == 0) {
 			if (showAllCommand) {
 				new ErrorFrame();
@@ -77,14 +81,14 @@ public class ClientSectionPanels implements PropertyChangeListener {
 			}
 		}
 		else {
-			displayClients(database);
+			displayClients(application);
 			companymain.getCl().show(companymain.getCards(), "viewClients");
 		}
 	}
 	
 	// display the clients
 	
-	public void displayClients(Database database) {
+	public void displayClients(Application application) {
 		
 		viewClients.removeAll();
 		DefaultTableModel tableModel = new DefaultTableModel();
@@ -105,7 +109,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 		
 		for (client c : wClients) {
 			ArrayList<String> containerids = new ArrayList<String>();
-			ArrayList<Container> containers = database.findContainer(c.getCompany(), database.getJourney());
+			ArrayList<Container> containers = application.findContainer(c.getCompany(), application.getJourneyContainerDat().getActiveJourneys());
 			for (Container x : containers) {
 				containerids.add(x.getContainerId());
 			}
@@ -126,7 +130,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 
 	public void propertyChange(PropertyChangeEvent evt) {
 
-		Database dat = ((Database)evt.getSource());
+		Application dat = ((Application)evt.getSource());
 		if (wClients.size()!= 0) {
 			if (evt.getPropertyName().contentEquals("clients")) {
 				showAllOrSearch(dat);
@@ -136,9 +140,9 @@ public class ClientSectionPanels implements PropertyChangeListener {
 		}
 	}
 	
-	public void showAllOrSearch(Database dat) {
+	public void showAllOrSearch(Application dat) {
 		if (showAllCommand) {
-			wClients = new ArrayList<client>(dat.getClients());
+			wClients = new ArrayList<client>(dat.getClientDat().getClients());
 		}
 		else {
 			wClients = new ArrayList<client>(dat.search(keyword));

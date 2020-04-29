@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import model.Application;
+
 public class CompanyLoginFrame {
 	
 	private String name = "Mads M�ller";
@@ -17,7 +19,7 @@ public class CompanyLoginFrame {
 	
 	
 	
-	public CompanyLoginFrame(final Database database, final JFrame main) {
+	public CompanyLoginFrame(final Application application, final JFrame main) {
 		final JFrame company = new JFrame("Company Login");
 
 		
@@ -44,7 +46,7 @@ public class CompanyLoginFrame {
 			public void actionPerformed(ActionEvent e) {
 				String passtext = new String(password.getPassword());
 				if (username.getText().equals(name) && passtext.equals(pass)) {
-					new CompanyMain(username.getText(), database, main);
+					new CompanyMain(username.getText(), application, main);
 					company.dispose();
 				}
 				else {

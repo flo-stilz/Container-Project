@@ -1,3 +1,4 @@
+package model;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -7,10 +8,12 @@ import java.util.concurrent.TimeUnit;
 
 public class Simulator {
 	
-	private ArrayList<String> companies = new ArrayList<String>(Arrays.asList("Novo", "Maersk", "Netto", "Lidl", "Vestas", "Topsoe", "TDC", "Carlsberg", "DanskBank", "Novozymes", "Nestle", "Ford", "Mercedes", "Volkswagen", "Amazon","Alibaba", "Google", "Tesla", "Porsche", "UPS", "PostNord", "ASUS", "Dell", "Apple", "Smirnoff", "JBL", "RedBull")); 
-	private ArrayList<String> firstnames = new ArrayList<String>(Arrays.asList("Mads", "Florian", "Martin", "Lucien", "Anna", "John", "Peter", "Sven", "Jorgen", "Brunhilde", "Heath", "Bill", "Phil", "Andrea", "Hubert", "Rebecca", "Emilie"));
-	private ArrayList<String> surnames = new ArrayList<String>(Arrays.asList("Nielsen", "Jensen", "Hansen", "Petersen", "Andersen", "Christensen", "Sorensen", "Moller", "Poulsen", "Ivanova", "Wang", "Kim", "Saito", "Gruber", "Mueller", "Peeters", "Smith", "Schmit", "Martin", "Garcia", "Silva", "Rossi"));
-	private ArrayList<String> addresses = new ArrayList<String>(Arrays.asList("Anker Engelundsvej 101", "Bill Clinton Street 390", "Kings Street 100", "Queens Street 102", "Strandvej 2", "Hovedgade 1000", "Frederiksundsvej 48", "Alexanderstrasse 19", "Via Appia 12", "Rue Du Moulin", "Hollywood Blvd. 123", "Lombard Street 4", "Chapel Street 796", "First Street 1", "Via De Ventura 12", "El Camino Drive 22"));
+	private ArrayList<String> companies = new ArrayList<String>(Arrays.asList("Lego", "COOPDanmark", "EnergiDanmark", "Pandora", "DanishCrown", "Lundbeck", "Bestseller", "Velux", "JPMorganChase", "AppleInc", "MicrosoftCorp", "NovoNordisk", "Netto", "Lidl", "SallingGroup", "VestasWindSystems", "TDCGroup", "Carlsberg", "Amazon", "Novozymes", "Ford", "Mercedes-Benz", "SamsungElectronics", "IntelCorporation", "DeutcheTelekom", "Coloplast", "DVSPanalpina", "KMD", "ArlaFoods", "Maersk", "Topsoe", "Novozymes", "Nestle", "Volkswagen", "Alibaba", "Google", "Tesla", "Porsche", "UPS", "PostNord", "ASUS", "Dell", "Smirnoff", "JBL", "RedBull")); 
+	private ArrayList<String> firstnames = new ArrayList<String>(Arrays.asList("Mads", "Florian", "Martin", "Lucien", "Anna", "John", "Peter", "Sven", "Jorgen", "Brunhilde", "Heath", "Bill", "Phil", "Andrea", "Hubert", "Emilie", " Maria", "Louise", "Mette", "Micheal", "Thomas", "Jesper", "Rasmus", "Christian", "Tina", "Alexander", "Mikkel", "Adam", "Sebastian", "Erik", "Phillip", "Samuel", "Conrad", "Agnes", "Victoria", "Ellen", "Marie", "Asta", "Silja", "Frederik", "Klara", "Ellinor", "Rebecca"));
+	private ArrayList<String> surnames = new ArrayList<String>(Arrays.asList("Nielsen", "Jensen", "Hansen", "Petersen", "Andersen", "Christensen", "Sorensen", "Moller", "Poulsen", "Ivanova", "Wang", "Kim", "Saito", "Gruber", "Mueller", "Peeters", "Smith", "Schmit", "Martin", "Garcia", "Silva", "Rossi", "Olsen", "Rasmussen", "Poulsen", "Madsen", "Als", "Beck", "Breum", "Brevig", "Brun-Andersen", "Clausen", "Clemensen", "Dahl", "Jacobsen", "Kampman", "Koldborg", "Lund", "Strandberg"));
+	private ArrayList<String> addresses = new ArrayList<String>(Arrays.asList("Anker Engelundsvej 101", "Bill Clinton Street 390", "Kings Street 100", "Queens Street 102", "Strandvej 2", "Hovedgade 1000", "Frederiksundsvej 48", "Alexanderstrasse 19", "Via Appia 12", "Rue Du Moulin", "Hollywood Blvd. 123", "Lombard Street 4", "Chapel Street 796", "First Street 1", "Via De Ventura 12", "El Camino Drive 22", "Enighedsvej 2, 2800 Kongens Lyngby", "Kongebakken 40, 4000 Roskilde", "Eriksenvej 17, Roskilde 4000", 
+			"Gydevej 6, 3520 Farum", "Fasanvej 7, 8370 Hadsten", "Stemannsgade 15, 8900 Randers", "Vestervang 8, 8000 Aarhus", "Priorgade 14, 9000 Aalborg", "Vodroffsvej 15, 1900 Frederiksberg", "Fiskedamsgade 28, 2100 Koebenhavn", "Wilder Pl. 13, 1403 Koebenhavn", "Edvard Falcks Gade 5, 1569 Koebenhavn", "Bjergbygade 1, 4200 Slagelse", "Nyvangsvej 3, 4400 Kalundborg", "Odinsvej 19, 5800 Nyborg",
+			"Strandgade 25, 7100 Vejle", "Gedstenvej 17, 2770 Kaastrup", "Holmbladsgade 44, 2300 Koebenhavn", "Frimestervej 32, 2400 Koebenhavn", "Hededammen 6, 2730 Herlev", "Harhoffs Alle 5, 4100 Ringsted", "Kirkegade 105, 6700 Esbjerg", "Havrebakken 55, 8200 Aarhus" ));
 	private ArrayList<String> contents = new ArrayList<String>(Arrays.asList("bananas", "apples", "cars", "towels", "vendingmachines", "calulators", "Steel", "medicine", "cameras", "computers", "iPads", "oil", "rice", "corn", "magazines"));
 	private ArrayList<String> locations = new ArrayList<String>(Arrays.asList("PBG", "CPH", "HAM", "LON", "NEW", "LAX", "BCN", "PEK", "BEN", "BOD", "POA", "RIX", "AAR", "RIO", "EBJ", "SKG", "SFL", "AAL", "SDQ", "SDJ", "SIN", "SPU", "LED", "TNG"));
 	private String[][] travelTime = {
@@ -52,14 +55,19 @@ public class Simulator {
 	private client client;
 	
 	
-	public String companySelection(int seed) {
+	public void setSeed(int seed) {
 		r.setSeed(seed);
-		int value = r.nextInt(companies.size()-1);
-		String company = companies.get(value);
-		companies.remove(value);
-		return company;
-		
 	}
+	
+	
+//	public String companySelection(int seed) {
+//		r.setSeed(seed);
+//		int value = r.nextInt(companies.size()-1);
+//		String company = companies.get(value);
+//		companies.remove(value);
+//		return company;
+//		
+//	}
 	public String companySelection() {
 		int value = r.nextInt(companies.size()-1);
 		String company = companies.get(value);
@@ -67,12 +75,12 @@ public class Simulator {
 		return company;
 		
 	}
-	public String nameSelection(int seed) {
-		r.setSeed(seed);
-		int value1 = r.nextInt(firstnames.size()-1);
-		int value2 = r.nextInt(surnames.size()-1);
-		return firstnames.get(value1) + " " + surnames.get(value2);
-	}
+//	public String nameSelection(int seed) {
+//		r.setSeed(seed);
+//		int value1 = r.nextInt(firstnames.size()-1);
+//		int value2 = r.nextInt(surnames.size()-1);
+//		return firstnames.get(value1) + " " + surnames.get(value2);
+//	}
 	public String nameSelection() {
 		int value1 = r.nextInt(firstnames.size()-1);
 		int value2 = r.nextInt(surnames.size()-1);
@@ -83,13 +91,13 @@ public class Simulator {
 			
 		return name + "@" + companyName + ".com";
 	}
-	public String addressSelection(int seed) {
-		r.setSeed(seed);
-		int value = r.nextInt(addresses.size()-1);
-		String address = addresses.get(value);
-		addresses.remove(value);
-		return address;
-	}
+//	public String addressSelection(int seed) {
+//		r.setSeed(seed);
+//		int value = r.nextInt(addresses.size()-1);
+//		String address = addresses.get(value);
+//		addresses.remove(value);
+//		return address;
+//	}
 	public String addressSelection() {
 		int value = r.nextInt(addresses.size()-1);
 		String address = addresses.get(value);
@@ -97,37 +105,37 @@ public class Simulator {
 		return address;
 	}
 	
-	public client clientSelection(Database database, int seed) {
-		r.setSeed(seed);
-		int value = r.nextInt(database.getClients().size()-1);
-		client client = database.getClients().get(value);
-		return client;
-	}	
+//	public client clientSelection(Application application, int seed) {
+//		r.setSeed(seed);
+//		int value = r.nextInt(application.getClientDa().getClients().size()-1);
+//		client client = application.getClientDat().getClients().get(value);
+//		return client;
+//	}	
 	
-	public client clientSelection(Database database) {
-		int value = r.nextInt(database.getClients().size()-1);
-		client client = database.getClients().get(value);
+	public client clientSelection(Application application) {
+		int value = r.nextInt(application.getClientDat().getClients().size()-1);
+		client client = application.getClientDat().getClients().get(value);
 		return client;
 	}
 	
-	public String contentSelection(int seed) {
-		r.setSeed(seed);
-		int value = r.nextInt(contents.size()-1);
-		String content = contents.get(value);
-		return content;
-	}
+//	public String contentSelection(int seed) {
+//		r.setSeed(seed);
+//		int value = r.nextInt(contents.size()-1);
+//		String content = contents.get(value);
+//		return content;
+//	}
 	public String contentSelection() {
 		int value = r.nextInt(contents.size()-1);
 		String content = contents.get(value);
 		return content;
 	}
 	
-	public String originSelection(int seed) {
-		r.setSeed(seed);
-		int value = r.nextInt(locations.size()-1);
-		String origin = locations.get(value);
-		return origin;
-	}
+//	public String originSelection(int seed) {
+//		r.setSeed(seed);
+//		int value = r.nextInt(locations.size()-1);
+//		String origin = locations.get(value);
+//		return origin;
+//	}
 	
 	public String originSelection() {
 		int value = r.nextInt(locations.size()-1);
@@ -135,27 +143,29 @@ public class Simulator {
 		return origin;
 	}
 	
-	public String destinationSelection(int seed, String origin) {
+//	public String destinationSelection(int seed, String origin) {
+//		ArrayList<String> possiblelocations = new ArrayList<String>(locations);
+//		possiblelocations.remove(origin);
+//		r.setSeed(seed);
+//		int value = r.nextInt(possiblelocations.size()-1);
+//		String destination = possiblelocations.get(value);
+//		return destination;
+//	}
+	
+	public String destinationSelection(String origin) {
 		ArrayList<String> possiblelocations = new ArrayList<String>(locations);
 		possiblelocations.remove(origin);
-		r.setSeed(seed);
 		int value = r.nextInt(possiblelocations.size()-1);
 		String destination = possiblelocations.get(value);
 		return destination;
 	}
 	
-	public String destinationSelection(String origin) {
-		int value = r.nextInt(locations.size()-1);
-		String destination = locations.get(value);
-		return destination;
-	}
-	
-	public int temperatureInitialization(int seed) {
-		r.setSeed(seed);
-		int value = r.nextInt(45);
-		int temp = value;
-		return temp;
-	}
+//	public int temperatureInitialization(int seed) {
+//		r.setSeed(seed);
+//		int value = r.nextInt(45);
+//		int temp = value;
+//		return temp;
+//	}
 	
 	public int temperatureInitialization() {
 		int value = r.nextInt(45);
@@ -163,12 +173,12 @@ public class Simulator {
 		return temp;
 	}
 	
-	public int pressureInitialization(int seed) {
-		r.setSeed(seed);
-		int value = r.nextInt(120);
-		int pressure = 930+value;
-		return pressure;
-	}
+//	public int pressureInitialization(int seed) {
+//		r.setSeed(seed);
+//		int value = r.nextInt(120);
+//		int pressure = 930+value;
+//		return pressure;
+//	}
 	
 	public int pressureInitialization() {
 		int value = r.nextInt(120);
@@ -176,12 +186,12 @@ public class Simulator {
 		return pressure;
 	}
 	
-	public int humidityInitialization(int seed) {
-		r.setSeed(seed);
-		int value = r.nextInt(90);
-		int hum = value;
-		return hum;
-	}
+//	public int humidityInitialization(int seed) {
+//		r.setSeed(seed);
+//		int value = r.nextInt(90);
+//		int hum = value;
+//		return hum;
+//	}
 	
 	public int humidityInitialization() {
 		int value = r.nextInt(90);
@@ -189,13 +199,13 @@ public class Simulator {
 		return hum;
 	}
 	
-	public int temperatureGenerator(Container c,int seed) {
-		r.setSeed(seed);
-		int value = r.nextInt(10);
-		int previousdataindex = c.getTempList().size()-1;
-		int temp = c.getTempList().get(previousdataindex) + value - 5 ;
-		return temp;
-	}
+//	public int temperatureGenerator(Container c,int seed) {
+//		r.setSeed(seed);
+//		int value = r.nextInt(10);
+//		int previousdataindex = c.getTempList().size()-1;
+//		int temp = c.getTempList().get(previousdataindex) + value - 5 ;
+//		return temp;
+//	}
 	
 	public int temperatureGenerator(Container c) {
 		int value = r.nextInt(10);
@@ -204,13 +214,13 @@ public class Simulator {
 		return temp;
 	}
 	
-	public int pressureGenerator(Container c,int seed) {
-		r.setSeed(seed);
-		int value = r.nextInt(100);
-		int previousdataindex = c.getPressureList().size()-1;
-		int pressure = c.getPressureList().get(previousdataindex) + value - 50 ;
-		return pressure;
-	}
+//	public int pressureGenerator(Container c,int seed) {
+//		r.setSeed(seed);
+//		int value = r.nextInt(100);
+//		int previousdataindex = c.getPressureList().size()-1;
+//		int pressure = c.getPressureList().get(previousdataindex) + value - 50 ;
+//		return pressure;
+//	}
 	
 	public int pressureGenerator(Container c) {
 		int value = r.nextInt(100);
@@ -219,13 +229,13 @@ public class Simulator {
 		return pressure;
 	}
 	
-	public int humidityGenerator(Container c,int seed) {
-		r.setSeed(seed);
-		int value = r.nextInt(10);
-		int previousdataindex = c.getHumList().size()-1;
-		int hum = c.getHumList().get(previousdataindex) + value - 5 ;
-		return hum;
-	}
+//	public int humidityGenerator(Container c,int seed) {
+//		r.setSeed(seed);
+//		int value = r.nextInt(10);
+//		int previousdataindex = c.getHumList().size()-1;
+//		int hum = c.getHumList().get(previousdataindex) + value - 5 ;
+//		return hum;
+//	}
 	
 	public int humidityGenerator(Container c) {
 		int value = r.nextInt(10);
@@ -234,56 +244,56 @@ public class Simulator {
 		return hum;
 	}
 	
-	public void simulateData(Database database) {
-		for (Journey j : database.getJourney()) {
+	public void simulateData(Application application) {
+		for (Journey j : application.getJourneyContainerDat().getActiveJourneys()) {
 			for (Container c : j.getContainerList()) {
 				if (c.isEmpty()) {
 					int temp = temperatureInitialization();
 					int pressure = pressureInitialization();
 					int hum = humidityInitialization();
-					database.updateData(j, c, temp, pressure, hum);
+					application.updateData(j, c, temp, pressure, hum);
 				}
 				else {
 					int temp = temperatureGenerator(c);
 					int pressure = pressureGenerator(c);
 					int hum = humidityGenerator(c);
-					database.updateData(j, c, temp, pressure, hum);
+					application.updateData(j, c, temp, pressure, hum);
 				}
 			}
 		}
 	}
 	
-	public void simulateData(Database database, int seed) {
-		for (Journey j : database.getJourney()) {
-			for (Container c : j.getContainerList()) {
-				if (c.isEmpty()) {
-					int temp = temperatureInitialization(seed);
-					int pressure = pressureInitialization(seed);
-					int hum = humidityInitialization(seed);
-					database.updateData(j, c, temp, pressure, hum);
-				}
-				else {
-					int temp = temperatureGenerator(c, seed);
-					int pressure = pressureGenerator(c, seed);
-					int hum = humidityGenerator(c, seed);
-					database.updateData(j, c, temp, pressure, hum);
-				}
-			}
-		}
-	}
+//	public void simulateData(Application application, int seed) {
+//		for (Journey j : application.getJourney()) {
+//			for (Container c : j.getContainerList()) {
+//				if (c.isEmpty()) {
+//					int temp = temperatureInitialization(seed);
+//					int pressure = pressureInitialization(seed);
+//					int hum = humidityInitialization(seed);
+//					application.updateData(j, c, temp, pressure, hum);
+//				}
+//				else {
+//					int temp = temperatureGenerator(c, seed);
+//					int pressure = pressureGenerator(c, seed);
+//					int hum = humidityGenerator(c, seed);
+//					application.updateData(j, c, temp, pressure, hum);
+//				}
+//			}
+//		}
+//	}
 	
-	public void simulation(Database database, int day) {
+	public void simulation(Application application, int day) {
 		for (int i = 0; i<day; i++) {
 			
 			
 			if (i == 0) {
 				for (int k = 0; k<2; k++) {
-					clientCreation(database);
+					clientCreation(application);
 				}
 			}
 			
 			if (i%2 == 0) {
-				journeyCreation(database);
+				journeyCreation(application);
 			}
 			
 			for (int j = 0; j<5; j++) {
@@ -295,68 +305,68 @@ public class Simulator {
 //					e.printStackTrace();
 //				}
 				
-				simulateData(database);
+				simulateData(application);
 			}
 			
 			if (i%10 == 0) {
-				clientCreation(database);
+				clientCreation(application);
 			}
 			
-			updateLocation(database);
+			updateLocation(application);
 		}
 	}
 	
-	public void clientCreation(Database database, int seed) {
-		company = companySelection(seed);
-		address = addressSelection(seed);
-		name = nameSelection(seed);
-		mail = emailCreation(company, name);
-		client = database.createClient(company, address, mail, name, password);
-	}
+//	public void clientCreation(Application application, int seed) {
+//		company = companySelection(seed);
+//		address = addressSelection(seed);
+//		name = nameSelection(seed);
+//		mail = emailCreation(company, name);
+//		client = application.createClient(company, address, mail, name, password);
+//	}
 	
-	public void clientCreation(Database database) {
+	public void clientCreation(Application application) {
 		company = companySelection();
 		address = addressSelection();
 		name = nameSelection();
 		mail = emailCreation(company, name);
-		client = database.createClient(company, address, mail, name, password);
+		client = application.createClient(company, address, mail, name, password);
 	}
 	
-	public void journeyCreation(Database database, int seed) {
-		client = clientSelection(database, seed);
-		content = contentSelection(seed);
-		origin = originSelection(seed);
-		destination = destinationSelection(seed, origin);
-		Journey j = database.createJourney(origin, destination, content, client.getCompany());
-		int originindex = locations.indexOf(origin) + 1;
-		int destinationindex = locations.indexOf(destination) + 1;
-		j.setDistance(5 + Integer.parseInt(travelTime[originindex][destinationindex]));
-	}
+//	public void journeyCreation(Application application, int seed) {
+//		client = clientSelection(application, seed);
+//		content = contentSelection(seed);
+//		origin = originSelection(seed);
+//		destination = destinationSelection(seed, origin);
+//		Journey j = application.createJourney(origin, destination, content, client.getCompany());
+//		int originindex = locations.indexOf(origin) + 1;
+//		int destinationindex = locations.indexOf(destination) + 1;
+//		j.setDistance(5 + Integer.parseInt(travelTime[originindex][destinationindex]));
+//	}
 	
-	public void journeyCreation(Database database) {
-		client = clientSelection(database);
+	public void journeyCreation(Application application) {
+		client = clientSelection(application);
 		content = contentSelection();
 		origin = originSelection();
 		destination = destinationSelection(origin);
-		Journey j = database.createJourney(origin, destination, content, client.getCompany());
+		Journey j = application.createJourney(origin, destination, content, client.getCompany());
 		int originindex = locations.indexOf(origin) + 1;
 		int destinationindex = locations.indexOf(destination) + 1;
 		j.setDistance(5 + Integer.parseInt(travelTime[originindex][destinationindex]));
 	}
 	
-	public void updateLocation(Database database) {
+	public void updateLocation(Application application) {
 		
-		for (int h = 0; h < database.getJourney().size(); h++) {
-			Journey j = database.getJourney().get(h);
+		for (int h = 0; h < application.getJourneyContainerDat().getActiveJourneys().size(); h++) {
+			Journey j = application.getJourneyContainerDat().getActiveJourneys().get(h);
 			if (j.getDistance() == 0) {
-				database.updateCurrentLocation(j, j.getDestination());
-				database.endOfJourney(j);
+				application.updateCurrentLocation(j, j.getDestination());
+				application.endOfJourney(j);
 			}
 			else {
 				int originindex = locations.indexOf(j.getOrigin()) + 1;
 				int destinationindex = locations.indexOf(j.getDestination()) + 1;
 				if (Integer.parseInt(travelTime[originindex][destinationindex]) == j.getDistance()) {
-					database.updateCurrentLocation(j, "In Transit from " + j.getOrigin() + " to " + j.getDestination());
+					application.updateCurrentLocation(j, "In Transit from " + j.getOrigin() + " to " + j.getDestination());
 				}
 				j.setDistance(j.getDistance()-1);
 			}

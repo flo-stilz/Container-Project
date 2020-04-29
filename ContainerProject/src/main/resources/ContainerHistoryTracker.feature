@@ -6,8 +6,8 @@ Feature: Container Tracking
     And a journey "j5" with origin "bua" destination "mia" content "covid19" and company "novo"
     And the journey "j5" is completed
     And a container with id "C0" used in the journey "j5"
-    When the container id is searched for in the journey history to find all journeys the container has been used for
-    Then the journey history of container "C0" should be returned
+    When the container id is searched for in the journey history to find all appearences of the given container
+    Then the container history of container C0 should be returned
     
   Scenario: Journey-History Tracking of reused container
     Given Journey and container counter is set to zero, where the counter describes the name of the corresponding id's
@@ -16,7 +16,7 @@ Feature: Container Tracking
     And a journey "j7" with origin "bua" destination "mia" content "iphones" and company "EmiratesAirlines"
     And the journey "j7" is completed
     And a container with id "C0" used in journey "j6" and journey "j7"
-    When the container id is searched for in the journey history to find all journeys the container has been used for
+    When the container id is searched for in the journey history to find all appearences of the given container
     Then the journey history of the resued container "C0" should be returned
     
   Scenario: Journey-History Tracking of unused container
@@ -24,7 +24,7 @@ Feature: Container Tracking
     And a journey "j8" with origin "nyc" destination "mad" content "covid19" and company "novo"
     And the journey "j8" is completed
     And an unsused container with id "C1"
-    When the container id is searched for in the journey history to find all journeys the container has been used for
+    When the container id is searched for in the journey history to find all appearences of the given container
     Then the empty journey history of the unsued container "C1" should be returned
     
   Scenario: Internal-Status tracking of container

@@ -9,14 +9,14 @@ Feature: Journey Simulator
     
 	Scenario: Picking a name and email for the client
     Given a seed 123 pointing to a particular instance in the simulator
-    When a specific company out of the 16 available is selected based on the value of the seed
+    When a specific company out of the 39 available is selected based on the value of the seed
     Then a specific name and email is selected based on the value of the seed
-    And that name and email will be "Bill Silva" and "Bill.Silva@Netto.com"
+    And that name and email will be "Hubert Saito" and "Hubert.Saito@MicrosoftCorp.com"
     
 	Scenario: Picking an address for the client
     Given a seed 123 pointing to a particular instance in the simulator
-    When a specific address out of the 16 available is selected based on the value of the seed
-    Then that selected address will be "Kings Street 100"
+    When a specific address out of the 39 available is selected based on the value of the seed
+    Then that selected address will be "Frimestervej 32, 2400 Koebenhavn"
     And that address will be removed from the list of addresses
     
 	Scenario: Creating a client
@@ -73,8 +73,7 @@ Feature: Journey Simulator
   		And the data is added to the containers in the journey "j17"
   		When the internal-status measurements are generated based on the previously generated internal-status measurements 
   		Then the internal-status measurements are added to all the containers in the journey
-  		Then the internal-status measurements are different from the internal-status measurements initially generated
-  		
+
 	Scenario: Simulate data for 3 times
 			Given a client "client5" with seed 1909
 			And a client "client4" with seed 20313
@@ -98,7 +97,7 @@ Feature: Journey Simulator
 			And a simulated client "client8" is created with seed 1909
 			And a simulated client "client9" is created with seed 429
 			And a simulated journey "j4" is created
-			And a number of days 7
+			And a number of days 8
 			When the number of days pass by and the location gets updated 
 			Then the current location should be the destination
 			

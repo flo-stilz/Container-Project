@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="13.0.1" class="java.beans.XMLDecoder">
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="model.Container">
+    <void property="company">
+     <string>empty</string>
+    </void>
+    <void property="containerId">
+     <string>C0</string>
+    </void>
+    <void property="content">
+     <string>empty</string>
+    </void>
+    <void property="currentLocation">
+     <string>container warehouse</string>
+    </void>
+    <void property="id">
+     <string>TRIMAL0</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Container">
+    <void property="company">
+     <string>empty</string>
+    </void>
+    <void property="containerId">
+     <string>C1</string>
+    </void>
+    <void property="content">
+     <string>empty</string>
+    </void>
+    <void property="currentLocation">
+     <string>container warehouse</string>
+    </void>
+    <void property="id">
+     <string>TRIMAL0</string>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>

@@ -17,13 +17,17 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import model.Container;
+import model.Application;
+import model.Journey;
+
 public class JourneySectionPanels implements PropertyChangeListener {
 
 	private JPanel journeySearch;
 	private JPanel viewJourneys;
 	private ArrayList<Journey> wJourneys = new ArrayList<Journey>();
 	private boolean showAllCommand;
-	private Database database;
+	private Application application;
 	private TopMain topmain;
 	private String keyword;
 	private boolean isPast;
@@ -40,9 +44,9 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		return viewJourneys;
 	}
 
-	public JourneySectionPanels(final Database database, final TopMain topmain) {
+	public JourneySectionPanels(final Application application, final TopMain topmain) {
 		
-		this.database = database;
+		this.application = application;
 		this.topmain = topmain;
 		
 		journeySearch = new JPanel();
@@ -51,33 +55,33 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		viewJourneys = new JPanel(new BorderLayout());
 		viewJourneys.setPreferredSize(new Dimension(800, 600));
 			
-		searchActiveJourneys(database, topmain);
+		searchActiveJourneys(application, topmain);
 			
-		showAllActiveJourneys(database, topmain);
+		showAllActiveJourneys(application, topmain);
 			
-		journeyPastSearch(database, topmain);
+		journeyPastSearch(application, topmain);
 			
-		showAllPast(database, topmain);	
+		showAllPast(application, topmain);	
 		
 		if (topmain instanceof ClientMain) {
-			signUpGoods(database, topmain);
+			signUpGoods(application, topmain);
 		}
 	}
 	
-	public ArrayList<Journey> filterActiveJourneysForClient(final Database database, final TopMain topmain) {
+	public ArrayList<Journey> filterActiveJourneysForClient(final Application application, final TopMain topmain) {
 		if (topmain instanceof ClientMain) {
-			Set<Journey> clientJourneys = database.findClientJourneys(topmain.getUserText(),database.getJourney());
+			Set<Journey> clientJourneys = application.findClientJourneys(topmain.getUserText(),application.getJourneyContainerDat().getActiveJourneys());
 			ArrayList<Journey> result = new ArrayList<Journey>();
 			result.addAll(clientJourneys);
 			return result;
 		}
 		else {
-			return database.getJourney();
+			return application.getJourneyContainerDat().getActiveJourneys();
 		}
 		
 	}
 
-	public void showAllPast(final Database database, final TopMain topmain) {
+	public void showAllPast(final Application application, final TopMain topmain) {
 		JButton showAllPast = new JButton("Show All");
 		journeySearch.add(showAllPast);
 		showAllPast.addActionListener(new ActionListener() {
@@ -85,15 +89,15 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				isPast = true;
 				showAllCommand = true;
-				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(database, topmain));
+				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(application, topmain));
 				wJourneys = result;
-				checksSearchEntryJ(database, topmain);
+				checksSearchEntryJ(application, topmain);
 			}
 
 		});
 	}
 
-	public void journeyPastSearch(final Database database, final TopMain topmain) {
+	public void journeyPastSearch(final Application application, final TopMain topmain) {
 		JLabel journeyPast = new JLabel("Journey's History");
 		journeySearch.add(journeyPast);
 		final JTextField searchjourneyPastTxt = new JTextField();
@@ -107,27 +111,27 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				isPast = true;
 				showAllCommand = false;
-				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(database, topmain));
+				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(application, topmain));
 				keyword = searchjourneyPastTxt.getText();
-				wJourneys = database.findUsingLoop(keyword, result);
-				checksSearchEntryJ(database, topmain);
+				wJourneys = application.findUsingLoop(keyword, result);
+				checksSearchEntryJ(application, topmain);
 			}
 		});
 	}
 
-	public ArrayList<Journey> filterPastJourneysForClient(Database database, TopMain topmain) {
+	public ArrayList<Journey> filterPastJourneysForClient(Application application, TopMain topmain) {
 		if (topmain instanceof ClientMain) {
-			Set<Journey> clientJourneys = database.findClientJourneys(topmain.getUserText(),database.getHistory());
+			Set<Journey> clientJourneys = application.findClientJourneys(topmain.getUserText(),application.getJourneyContainerDat().getPastJourneys());
 			ArrayList<Journey> result = new ArrayList<Journey>();
 			result.addAll(clientJourneys);
 			return result;
 		}
 		else {
-			return database.getHistory();
+			return application.getJourneyContainerDat().getPastJourneys();
 		}
 	}
 
-	public void showAllActiveJourneys(final Database database, final TopMain topmain) {
+	public void showAllActiveJourneys(final Application application, final TopMain topmain) {
 		
 		JButton showAllActive = new JButton("Show All");
 		journeySearch.add(showAllActive);
@@ -136,15 +140,15 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				isPast = false;
 				showAllCommand = true;
-				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(database, topmain));
+				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(application, topmain));
 				wJourneys = result;
-				checksSearchEntryJ(database, topmain);
+				checksSearchEntryJ(application, topmain);
 			}
 
 		});
 	}
 
-	public void searchActiveJourneys(final Database database, final TopMain topmain) {
+	public void searchActiveJourneys(final Application application, final TopMain topmain) {
 		
 		JLabel journeyActive = new JLabel("Active Journeys");
 		final JTextField searchActive = new JTextField();
@@ -160,24 +164,24 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				isPast = false;
 				showAllCommand = false;
-				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(database, topmain));
+				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(application, topmain));
 				keyword = searchActive.getText();
-				database.findUsingLoop(keyword, result);
-				wJourneys = database.findUsingLoop(keyword, result);;
-				checksSearchEntryJ(database, topmain);
+				application.findUsingLoop(keyword, result);
+				wJourneys = application.findUsingLoop(keyword, result);;
+				checksSearchEntryJ(application, topmain);
 			}
 		});
 	}
 	
 	// Change current location of a journey
 	
-	public void changeloc(final Database database) {
+	public void changeloc(final Application application) {
 		
 		JPanel updateLocation = new JPanel(new BorderLayout());
 		viewJourneys.add(updateLocation, BorderLayout.CENTER);
-		String[] options = new String[database.getJourney().size()];
+		String[] options = new String[application.getJourneyContainerDat().getActiveJourneys().size()];
 		int i = 0;
-		for (Journey j : database.getJourney()) {
+		for (Journey j : application.getJourneyContainerDat().getActiveJourneys()) {
 			options[i] = j.getId();
 			i++;
 		}
@@ -194,16 +198,16 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				String newcurrentLocation = loc.getText();
 				ArrayList<Journey> result = new ArrayList<Journey>();
-				result.addAll(database.findUsingLoop(id.getSelectedItem().toString(), database.getJourney()));
+				result.addAll(application.findUsingLoop(id.getSelectedItem().toString(), application.getJourneyContainerDat().getActiveJourneys()));
 				Journey j = result.get(0);
-				database.updateCurrentLocation(j, newcurrentLocation);
-				database.endOfJourney(j);
+				application.updateCurrentLocation(j, newcurrentLocation);
+				application.endOfJourney(j);
 			}
 		});
 		viewJourneys.add(update, BorderLayout.SOUTH);
 	}
 	
-	public void signUpGoods(final Database database, final TopMain topmain) {
+	public void signUpGoods(final Application application, final TopMain topmain) {
 		
 		JPanel journeySearchRest = new JPanel(new BorderLayout());
 		journeySearch.add(journeySearchRest);
@@ -216,9 +220,9 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		JLabel lbl = new JLabel("Sign up your goods for a new journey here!");
 		lbl.setPreferredSize(new Dimension(100,70));
 		signUp.add(lbl, BorderLayout.NORTH);
-		String[] options = new String[database.getJourney().size()];
+		String[] options = new String[application.getJourneyContainerDat().getActiveJourneys().size()];
 		int i = 0;
-		for (Journey j : database.getJourney()) {
+		for (Journey j : application.getJourneyContainerDat().getActiveJourneys()) {
 			options[i] = j.getId();
 			i++;
 		}
@@ -249,13 +253,13 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				String newContent = content.getText();
 				String newOrigin = origin.getText();
 				String newDestination = destination.getText();
-				database.createJourney(newOrigin, newDestination, newContent, topmain.getUserText());
+				application.createJourney(newOrigin, newDestination, newContent, topmain.getUserText());
 			}
 		});
 		signUp.add(confirm, BorderLayout.SOUTH);
 	}
 	
-	public void checksSearchEntryJ(final Database database, final TopMain topmain) {
+	public void checksSearchEntryJ(final Application application, final TopMain topmain) {
 		if (wJourneys.size() == 0) {
 			if (showAllCommand) {
 				new ErrorFrame();
@@ -275,7 +279,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	public void displayJourneys() {
 		viewJourneys.removeAll();
 		if (topmain instanceof CompanyMain) {
-			changeloc(database);
+			changeloc(application);
 		}
 		
 		DefaultTableModel tableModel = new DefaultTableModel();
@@ -292,13 +296,13 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			tableModel.addColumn(s);
 		}
 		for (Journey j : wJourneys) {
-			ArrayList<String> containerids = filterClientContainers(database, topmain, j);
+			ArrayList<String> containerids = filterClientContainers(application, topmain, j);
 			tableModel.insertRow(0, new Object[] {j.getId(),j.getOrigin(),j.getDestination(),j.getCurrentLocation(), containerids});
 		}
 		viewJourneys.add(new JScrollPane(table), BorderLayout.NORTH);
 	}
 	
-	public ArrayList<String> filterClientContainers(Database database, TopMain topmain, Journey j){
+	public ArrayList<String> filterClientContainers(Application application, TopMain topmain, Journey j){
 		ArrayList<String> containerids = new ArrayList<String>();
 		if ( topmain instanceof CompanyMain) {
 			for (Container c : j.getContainerList()) {
@@ -323,7 +327,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 
 	public void propertyChange(PropertyChangeEvent evt) {
 
-		Database dat = ((Database)evt.getSource());
+		Application dat = ((Application)evt.getSource());
 		if (wJourneys.size()!= 0) {
 			if ((isPast && (evt.getPropertyName().contentEquals("history")))) {
 				
@@ -339,7 +343,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		}
 	}
 
-	public void showAllOrSearch(ArrayList<Journey> jList, Database dat) {
+	public void showAllOrSearch(ArrayList<Journey> jList, Application dat) {
 		if (showAllCommand) {
 			wJourneys = jList;
 		}

@@ -12,12 +12,15 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
+import model.Application;
+import model.client;
+
 public class ClientLoginFrame {
 	
 	private JFrame failedLogin;
 	private JFrame failedReg;
 
-	public ClientLoginFrame(final Database database, final JFrame main) {
+	public ClientLoginFrame(final Application application, final JFrame main) {
 		
 		final JFrame clientfield = new JFrame("Client Login");
 
@@ -45,12 +48,12 @@ public class ClientLoginFrame {
 			public void actionPerformed(ActionEvent e) {
 				String passtext = new String(password.getPassword());
 				String userText = username.getText();
-				if ((database.search(userText).size())!= 0) {
+				if ((application.search(userText).size())!= 0) {
 					
-					client client = database.search(userText).get(0);
+					client client = application.search(userText).get(0);
 					
 					if (client.getPassword().contentEquals(passtext)) {
-						new ClientMain(userText, database, main);
+						new ClientMain(userText, application, main);
 						clientfield.dispose();
 					}
 					else {
@@ -70,7 +73,7 @@ public class ClientLoginFrame {
 		register.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				register(database);
+				register(application);
 			}
 		});
 		
@@ -89,7 +92,7 @@ public class ClientLoginFrame {
 		clientfield.setVisible(true);
 	}
 	
-	public void register(final Database database) {
+	public void register(final Application application) {
 		
 		final JFrame registration = new JFrame("Registration");
 		JPanel info = new JPanel();
@@ -132,10 +135,10 @@ public class ClientLoginFrame {
 				
 				String passTextReg = new String(passwordReg.getPassword());
 
-				if ((database.search(user.getText()).size() == 0)
+				if ((application.search(user.getText()).size() == 0)
 						&& (passTextReg.length()>4)) {
 					
-					database.createClient(user.getText(), address.getText(), mail.getText(), ref.getText(), passTextReg);
+					application.createClient(user.getText(), address.getText(), mail.getText(), ref.getText(), passTextReg);
 					registration.dispose();
 					// possibly add another frame to confirm registration
 				}

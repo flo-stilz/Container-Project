@@ -15,6 +15,8 @@ import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.TextAnchor;
 
+import model.observer;
+
 public class barPlots extends plot implements observer {
 	
 	private ChartPanel chartPanel;

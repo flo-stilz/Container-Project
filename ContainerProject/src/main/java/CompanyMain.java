@@ -12,11 +12,14 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import model.Application;
+import model.Simulator;
+
 
 public class CompanyMain extends TopMain{
 	
 	private ClientSectionPanels c;
-	private Database database;
+	private Application application;
 //	private JPanel options;
 //	private JPanel cards;
 //	private CardLayout cl;
@@ -29,10 +32,10 @@ public class CompanyMain extends TopMain{
 //		return cl;
 //	}
 
-	public CompanyMain(String userText, final Database database, final JFrame login) {
-		super(userText, database, login);
+	public CompanyMain(String userText, final Application application, final JFrame login) {
+		super(userText, application, login);
 		
-		this.database = database;
+		this.application = application;
 //		final JFrame company = new JFrame("Company Overview");
 
 		// CardLayout
@@ -52,37 +55,37 @@ public class CompanyMain extends TopMain{
 	}
 	
 	@Override
-	public void options(Database database, JFrame login) {
+	public void options(Application application, JFrame login) {
 		setOptions(new JPanel());
 		getOptions().setLayout(new BoxLayout(getOptions(), BoxLayout.Y_AXIS));
 		
 		JButton menu = new JButton("Menu");
 		menu.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(menu);
-		menuButton(database, login, menu);
+		menuButton(application, login, menu);
 		
 		JButton clients = new JButton("View Clients");
 		clients.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(clients);
-		clientButton(database, login, clients);
+		clientButton(application, login, clients);
 		
 		
 		JButton journeys = new JButton("View Journeys");
 		journeys.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(journeys);
-		journeyButton(database, login, journeys);
+		journeyButton(application, login, journeys);
 		
 		
 		JButton containers = new JButton("View Containers");
 		containers.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(containers);
-		containerButton(database, login, containers);
+		containerButton(application, login, containers);
 		
 		
 		JButton simulation = new JButton("Start Simulation");
 		simulation.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		getOptions().add(simulation);
-		simulationButton(database, login, simulation);
+		simulationButton(application, login, simulation);
 		
 	
 	} 
@@ -106,15 +109,15 @@ public class CompanyMain extends TopMain{
 //		});
 //	}
 	
-	public void clientButton(final Database database, JFrame login, JButton clients) {
-		c = new ClientSectionPanels(database, this);
+	public void clientButton(final Application application, JFrame login, JButton clients) {
+		c = new ClientSectionPanels(application, this);
 		getCards().add(c.getClientSearch(), "clientSearch");
 		getCards().add(c.getViewClients(), "viewClients");
 		clients.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				removeListeners();
-				database.addObserver(c);
+				application.addObserver(c);
 				getCl().show(getCards(), "clientSearch");
 			}
 		});
@@ -157,7 +160,7 @@ public class CompanyMain extends TopMain{
 //			
 //	}
 	
-	public void simulationButton(final Database database, JFrame login, JButton simulation) {	
+	public void simulationButton(final Application application, JFrame login, JButton simulation) {	
 		// simulation section
 		
 		JPanel sim = new JPanel();
@@ -174,7 +177,7 @@ public class CompanyMain extends TopMain{
 
 			public void actionPerformed(ActionEvent e) {
 				Simulator simulation = new Simulator();
-				simulation.simulation(database, Integer.parseInt(days.getText()));
+				simulation.simulation(application, Integer.parseInt(days.getText()));
 
 			}
 		});
@@ -207,10 +210,10 @@ public class CompanyMain extends TopMain{
 	
 	@Override
 	public void removeListeners() {
-		database.removeObserver(getM());
-		database.removeObserver(getJ());
-		database.removeObserver(getCont());
-		database.removeObserver(c);
+		application.removeObserver(getM());
+		application.removeObserver(getJ());
+		application.removeObserver(getCont());
+		application.removeObserver(c);
 	}
 	
 	

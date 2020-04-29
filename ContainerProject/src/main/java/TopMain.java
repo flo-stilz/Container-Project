@@ -19,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
+import model.Application;
+
 public class TopMain {
 	
 	private String userText;
@@ -50,7 +52,7 @@ public class TopMain {
 	private JourneySectionPanels j;
 	private ContainerSelectionPanels cont;
 	private MenuSectionPanels m;
-	private Database database;
+	private Application application;
 
 //	public JourneySectionPanels getJ() {
 //		return j;
@@ -99,16 +101,16 @@ public class TopMain {
 		this.userText = userText;
 	}
 
-	public TopMain(String userText, final Database database, final JFrame login) {
+	public TopMain(String userText, final Application application, final JFrame login) {
 		
-		this.database = database;
+		this.application = application;
 		this.userText = userText;
 		main1 = new JFrame("Company Overview");
 
 		// CardLayout
 		cards = new JPanel(new CardLayout());
 		
-		options(database, login);
+		options(application, login);
 		
 		cl = (CardLayout)(cards.getLayout());
 		
@@ -122,38 +124,38 @@ public class TopMain {
 	}
 	
 	
-	public void options(Database database, JFrame login) {
+	public void options(Application application, JFrame login) {
 		options = new JPanel();
 		options.setLayout(new BoxLayout(options, BoxLayout.Y_AXIS));
 		
 		JButton menu = new JButton("Menu");
 		menu.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		options.add(menu);
-		menuButton(database, login, menu);
+		menuButton(application, login, menu);
 		
 		JButton journeys = new JButton("View Journeys");
 		journeys.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		options.add(journeys);
-		journeyButton(database, login, journeys);
+		journeyButton(application, login, journeys);
 		
 		
 		JButton containers = new JButton("View Containers");
 		containers.setMaximumSize(new Dimension(Short.MAX_VALUE, Short.MAX_VALUE));
 		options.add(containers);
-		containerButton(database, login, containers);
+		containerButton(application, login, containers);
 			
 	} 
 	
-	public void menuButton(final Database database, JFrame login, JButton menu) {
-		final MenuSectionPanels m = new MenuSectionPanels(database, this, login);
-		database.addObserver(m);
+	public void menuButton(final Application application, JFrame login, JButton menu) {
+		final MenuSectionPanels m = new MenuSectionPanels(application, this, login);
+		application.addObserver(m);
 		getCards().add(m.getMenupanel(), "menu");
 		
 		menu.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				removeListeners();
-				database.addObserver(m);
+				application.addObserver(m);
 				getCl().show(getCards(), "menu");
 			}
 		});
@@ -161,10 +163,10 @@ public class TopMain {
 	
 
 	
-	public void journeyButton(final Database database, JFrame login, JButton journeys) {
+	public void journeyButton(final Application application, JFrame login, JButton journeys) {
 		// journey section
 		
-		j = new JourneySectionPanels(database, this);
+		j = new JourneySectionPanels(application, this);
 		cards.add(j.getJourneySearch(), "journeySearch");
 		cards.add(j.getViewJourneys(), "viewJourneys");
 		
@@ -172,7 +174,7 @@ public class TopMain {
 
 			public void actionPerformed(ActionEvent e) {
 				removeListeners();
-				database.addObserver(j);
+				application.addObserver(j);
 				cl.show(cards,  "journeySearch");
 			}
 		});
@@ -181,10 +183,10 @@ public class TopMain {
 		
 	}
 
-	public void containerButton(final Database database, JFrame login, JButton containers) {
+	public void containerButton(final Application application, JFrame login, JButton containers) {
 	// container section
 	
-		cont = new ContainerSelectionPanels(database, this);
+		cont = new ContainerSelectionPanels(application, this);
 		cards.add(cont.getContainerSearch(), "containerSearch");
 		cards.add(cont.getViewContainers(), "viewContainers");
 		cards.add(cont.getPlotPanel(), "plotPanel");
@@ -192,7 +194,7 @@ public class TopMain {
 		containers.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				removeListeners();
-				database.addObserver(cont);
+				application.addObserver(cont);
 				cl.show(cards,  "containerSearch");
 				}
 		});
@@ -245,9 +247,9 @@ public class TopMain {
 //	}
 	
 	public void removeListeners() {
-		database.removeObserver(m);
-		database.removeObserver(j);
-		database.removeObserver(cont);
+		application.removeObserver(m);
+		application.removeObserver(j);
+		application.removeObserver(cont);
 	}
 	
 }

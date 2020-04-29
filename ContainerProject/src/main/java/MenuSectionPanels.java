@@ -21,6 +21,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
+import model.Application;
+
 public class MenuSectionPanels implements PropertyChangeListener{
 	
 	private TopMain topmain;
@@ -42,7 +44,7 @@ public class MenuSectionPanels implements PropertyChangeListener{
 //		menuPanel(database, login, menupanel);
 //	}
 
-	public MenuSectionPanels(final Database database, final TopMain topmain, JFrame login) {
+	public MenuSectionPanels(final Application application, final TopMain topmain, JFrame login) {
 
 		this.topmain = topmain;
 		this.login = login;
@@ -51,12 +53,12 @@ public class MenuSectionPanels implements PropertyChangeListener{
 		menupanel.setPreferredSize(new Dimension(800, 600));
 		menupanel.setBackground(Color.RED);
 	
-		menuPanel(database);
+		menuPanel(application);
 	}
 	
 
 	
-	public void menuPanel(Database database) {
+	public void menuPanel(Application application) {
 		menupanel.removeAll();
 		if (topmain instanceof ClientMain) {
 
@@ -84,10 +86,10 @@ public class MenuSectionPanels implements PropertyChangeListener{
 			
 		}
 		
-		logOutButton(database, login, menupanel);
+		logOutButton(application, login, menupanel);
 	}
 	
-	public void logOutButton(final Database database, final JFrame login, final JPanel menupanel) {
+	public void logOutButton(final Application application, final JFrame login, final JPanel menupanel) {
 		// Logout as company user
 		
 		final JButton profile = new JButton("Profile");
@@ -110,7 +112,7 @@ public class MenuSectionPanels implements PropertyChangeListener{
 			setDetails.addActionListener(new ActionListener() {
 				
 				public void actionPerformed(ActionEvent e) {
-					updateClientDetails(database);
+					updateClientDetails(application);
 				}		
 			});
 		}
@@ -142,7 +144,7 @@ public class MenuSectionPanels implements PropertyChangeListener{
 	}
 
 
-	public void updateClientDetails(final Database database) {
+	public void updateClientDetails(final Application application) {
 		final JFrame updateDetails = new JFrame("Update details");
 		updateDetails.setPreferredSize(new Dimension(300, 200));
 		
@@ -193,10 +195,10 @@ public class MenuSectionPanels implements PropertyChangeListener{
 				String address = addressText.getText();
 				String password = new String(passwordText.getPassword());
 					
-				database.updateClientName(((ClientMain) topmain).getCurrentClient(), name);
-				database.updateClientMail(((ClientMain) topmain).getCurrentClient(),mail);
-				database.updateClientAddress(((ClientMain) topmain).getCurrentClient(),address);
-				database.updateClientPassword(((ClientMain) topmain).getCurrentClient(), password);
+				application.updateClientName(((ClientMain) topmain).getCurrentClient(), name);
+				application.updateClientMail(((ClientMain) topmain).getCurrentClient(),mail);
+				application.updateClientAddress(((ClientMain) topmain).getCurrentClient(),address);
+				application.updateClientPassword(((ClientMain) topmain).getCurrentClient(), password);
 					
 				updateDetails.dispose();
 				
@@ -211,7 +213,7 @@ public class MenuSectionPanels implements PropertyChangeListener{
 	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
-		Database dat = ((Database)evt.getSource());;
+		Application dat = ((Application)evt.getSource());;
 		System.out.println("bangbang");
 		menuPanel(dat);
 		topmain.getMain1().revalidate();
