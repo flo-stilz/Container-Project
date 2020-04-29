@@ -52,7 +52,7 @@ public class Simulator {
 	private String mail;
 	private String address;
 	private String password;
-	private client client;
+	private Client client;
 	
 	
 	public void setSeed(int seed) {
@@ -112,9 +112,9 @@ public class Simulator {
 //		return client;
 //	}	
 	
-	public client clientSelection(Application application) {
+	public Client clientSelection(Application application) {
 		int value = r.nextInt(application.getClientDat().getClients().size()-1);
-		client client = application.getClientDat().getClients().get(value);
+		Client client = application.getClientDat().getClients().get(value);
 		return client;
 	}
 	

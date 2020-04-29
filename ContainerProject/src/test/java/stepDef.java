@@ -14,19 +14,19 @@ import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import model.Container;
 import model.Application;
+import model.Client;
 import model.Journey;
 import model.Simulator;
-import model.client;
 
 public class stepDef {
 	
 	Application application = new Application();
 	
 	//Imports for Client Management
-	Map<String, client> clients = new HashMap<String, client>(); 
-	ArrayList<client> results = new ArrayList<client>();
-	client client1;
-	client client2;
+	Map<String, Client> clients = new HashMap<String, Client>(); 
+	ArrayList<Client> results = new ArrayList<Client>();
+	Client client1;
+	Client client2;
 	String companyName;
 	String name;
 	String mail;
@@ -35,7 +35,7 @@ public class stepDef {
 	String name2;
 	String mail2;
 	String address2;
-	client client; 
+	Client client; 
 	String password;
 	String password2;
 	

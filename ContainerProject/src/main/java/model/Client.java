@@ -1,8 +1,8 @@
 package model;
 
-////////7
-/////////7
-public class client {
+
+
+public class Client {
 	private String company;
 	private String address;
 	private String email;
@@ -11,7 +11,7 @@ public class client {
 	private int id;
 	private static int count = 69420;
 	
-	public client(String company, String address, String email, String name, String password) {
+	public Client(String company, String address, String email, String name, String password) {
 		count = count +1;
 		this.company = company;
 		this.address = address;
@@ -22,7 +22,7 @@ public class client {
 	}
 	
 	//for persistency layer
-	public client() {
+	public Client() {
 	}
 	
 		
@@ -51,7 +51,7 @@ public class client {
 	}
 
 	public static void setCount(int count) {
-		client.count = count;
+		Client.count = count;
 	}
 
 	public String toString() {

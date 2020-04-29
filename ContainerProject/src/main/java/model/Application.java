@@ -17,7 +17,16 @@ public class Application {
 	
 	private ClientDatabase clientDat = new ClientDatabase();
 	private JourneyContainerDatabase journeyContainerDat = new JourneyContainerDatabase();
+	private Admin admin = new Admin();
+	private Client currentUser;
 
+
+	public Client getCurrentUser() {
+		return currentUser;
+	}
+	public Application() {
+		loadData();
+	}
 	public ClientDatabase getClientDat() {
 		return clientDat;
 	}
@@ -50,8 +59,8 @@ public class Application {
 	
 
 	
-	public client createClient( String company, String address, String email, String name, String password) {
-		client c = new client(company, address, email, name, password);
+	public Client createClient( String company, String address, String email, String name, String password) {
+		Client c = new Client(company, address, email, name, password);
 		clientDat.getClients().add(c);
 		clientDat.storeClients(); 
 		support.firePropertyChange("clients",null,null);
@@ -73,9 +82,9 @@ public class Application {
 			
 		}
 	
-	public ArrayList<client> search (String keyword){
-		ArrayList<client> results = new ArrayList<client>();
-		for (client cl: clientDat.getClients()) {
+	public ArrayList<Client> search (String keyword){
+		ArrayList<Client> results = new ArrayList<Client>();
+		for (Client cl: clientDat.getClients()) {
 
 			if ((cl.getAddress().equalsIgnoreCase(keyword)||cl.getCompany().contentEquals(keyword)||cl.getEmail().equalsIgnoreCase(keyword)||cl.getName().equalsIgnoreCase(keyword))) {
 				results.add(cl);
@@ -266,16 +275,56 @@ public class Application {
 //		}
 //	}
 	
-	public Set<Journey> findClientJourneys(String client, ArrayList<Journey> journeyList){
+	public Set<Journey> findClientJourneys(ArrayList<Journey> journeyList){
 		Set<Journey> result = new HashSet<Journey>();
 		for ( Journey j : journeyList) {
 			for (Container c : j.getContainerList()) {
-				if (client.contentEquals(c.getCompany())) {
+				if (currentUser.getCompany().contentEquals(c.getCompany())) {
 					result.add(j);
 				}
 			}
 		}
 		return result;
+	}
+	
+	public void loadData(){
+		clientDat.readClientFile();
+		journeyContainerDat.readActiveJourneyFile();
+		journeyContainerDat.readEndedJourneyFile();
+		journeyContainerDat.readContainerWarehouseFile();
+	}
+	
+	public boolean registrationValidation(String company, String name, String mail, String address, String password) {
+		if ((search(company).size() == 0)
+						&& (password.length()>4)) {
+			createClient(company, address, mail, name, password);
+			return true;
+		}
+		else {
+			return false;
+		}
+	}
+	public String loginValidation(String username, String password) {
+		if (admin.getUsername().contentEquals(username) && admin.getPassword().contentEquals(password)) {
+			return "admin";
+//			company.dispose();
+		}
+		else if ((search(username).size())!= 0) {
+	
+			Client client = search(username).get(0);
+			
+			if (client.getPassword().contentEquals(password)) {
+				currentUser = client;
+				return "client";
+//				LoginFrame.dispose();
+			}
+			else {
+				return "N/A";
+			}
+		}
+		else {
+			return "N/A";
+		}
 	}
 	
 //	public ArrayList<Container> findClientContainers(String client, ArrayList<Container> containerList){
@@ -296,20 +345,20 @@ public class Application {
 		support.firePropertyChange("journey",null,null);
 	}
 	
-	public void updateClientName(client c, String refname) {
+	public void updateClientName(Client c, String refname) {
 		c.setName(refname);
 		support.firePropertyChange("clients",null,null);
 	}
 	
-	public void updateClientMail(client c, String mail) {
+	public void updateClientMail(Client c, String mail) {
 		c.setEmail(mail);
 		support.firePropertyChange("clients",null,null);
 	}
-	public void updateClientAddress(client c, String address) {
+	public void updateClientAddress(Client c, String address) {
 		c.setAddress(address);
 		support.firePropertyChange("clients",null,null);
 	}
-	public void updateClientPassword(client c, String password) {
+	public void updateClientPassword(Client c, String password) {
 		c.setPassword(password);
 	}
 	

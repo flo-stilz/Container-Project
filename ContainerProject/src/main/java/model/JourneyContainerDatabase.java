@@ -52,7 +52,7 @@ public class JourneyContainerDatabase {
 		} 
 	}
 	 
-	public ArrayList<Journey> readActiveJourneyFile() {
+	public void readActiveJourneyFile() {
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(new File("./ActiveJourneys.xml"));
@@ -62,7 +62,7 @@ public class JourneyContainerDatabase {
 		XMLDecoder decoder = new XMLDecoder(fis);
 		activeJourneys = (ArrayList<Journey>)decoder.readObject();
 		decoder.close();
-		return activeJourneys;
+
 		}
 	
 	
@@ -82,7 +82,7 @@ public class JourneyContainerDatabase {
 		}
 	}
 
-	public ArrayList<Journey> readEndedJourneyFile() {
+	public void readEndedJourneyFile() {
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(new File("./EndedJourneys.xml"));
@@ -92,7 +92,7 @@ public class JourneyContainerDatabase {
 		XMLDecoder decoder = new XMLDecoder(fis);
 		activeJourneys = (ArrayList<Journey>)decoder.readObject();
 		decoder.close();
-		return activeJourneys;
+
 	}
 	
 	public void storeContainerWarehouse() {
@@ -111,7 +111,7 @@ public class JourneyContainerDatabase {
 		}
 	}
 
-	public ArrayList<Container> readContainerWarehouseFile() {
+	public void readContainerWarehouseFile() {
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(new File("./ContainerWarehouse.xml"));
@@ -121,7 +121,7 @@ public class JourneyContainerDatabase {
 		XMLDecoder decoder = new XMLDecoder(fis);
 		containerWarehouse = (ArrayList<Container>)decoder.readObject();
 		decoder.close();
-		return containerWarehouse;
+
 	}
 	
 	public ArrayList<Journey> getActiveJourneys() {

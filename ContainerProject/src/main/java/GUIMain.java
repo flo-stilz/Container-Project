@@ -14,15 +14,14 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 
 import model.Application;
-import model.client;
+
 
 public class GUIMain {
 
 	static Application application = new Application(); 
 	static private JFrame failedLogin;
 	static private JFrame failedReg;
-	static private String name = "Mads M�ller";
-	static private String pass = "1";
+
 	
 	/*
 	 * This method is used for registering a new client.
@@ -79,10 +78,8 @@ public class GUIMain {
 				 * or if the password is shorter than 5 characters long.
 				 * If the inputs fails one of these requirements it will open a frame indicating a failed registration.
 				 */
-				if ((application.search(user.getText()).size() == 0)
-						&& (passTextReg.length()>4)) {
-					
-					application.createClient(user.getText(), address.getText(), mail.getText(), ref.getText(), passTextReg);
+				boolean validation = application.registrationValidation(user.getText(), ref.getText(), mail.getText(), address.getText(), passTextReg); 
+				if (validation == true) {
 					registration.dispose();
 					// possibly add another frame to confirm registration
 				}
@@ -173,28 +170,21 @@ public class GUIMain {
 		confirm.addActionListener(new ActionListener() {
 	
 			public void actionPerformed(ActionEvent e) {
-				String passtext = new String(password.getPassword());
+				String passText = new String(password.getPassword());
 				String userText = username.getText();
 				
-				if (userText.equals(name) && passtext.equals(pass)) {
-					new CompanyMain(username.getText(), application, LoginFrame);
+				if (application.loginValidation(userText, passText).equals("admin")) {
+					new CompanyMain(application, LoginFrame);
 //					company.dispose();
 				}
-				else if ((application.search(userText).size())!= 0) {
-						
-					client client = application.search(userText).get(0);
-						
-					if (client.getPassword().contentEquals(passtext)) {
-						new ClientMain(userText, application, LoginFrame);
+				
+				else if (application.loginValidation(userText, passText).equals("client")) {
+						new ClientMain(application, LoginFrame);
 //						LoginFrame.dispose();
-					}
-					else {
-						fail();
-					}
 				}
+				
 				else {		
-					fail();
-						
+					fail();		
 				}
 					
 			
@@ -224,4 +214,5 @@ public class GUIMain {
 		LoginFrame.setVisible(true);
 	
 		}
+	
 }

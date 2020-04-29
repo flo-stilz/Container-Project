@@ -7,25 +7,6 @@
      <string>empty</string>
     </void>
     <void property="containerId">
-     <string>C0</string>
-    </void>
-    <void property="content">
-     <string>empty</string>
-    </void>
-    <void property="currentLocation">
-     <string>container warehouse</string>
-    </void>
-    <void property="id">
-     <string>TRIMAL0</string>
-    </void>
-   </object>
-  </void>
-  <void method="add">
-   <object class="model.Container">
-    <void property="company">
-     <string>empty</string>
-    </void>
-    <void property="containerId">
      <string>C1</string>
     </void>
     <void property="content">
@@ -35,7 +16,7 @@
      <string>container warehouse</string>
     </void>
     <void property="id">
-     <string>TRIMAL0</string>
+     <string>AARLON1</string>
     </void>
    </object>
   </void>

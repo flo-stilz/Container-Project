@@ -70,7 +70,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	
 	public ArrayList<Journey> filterActiveJourneysForClient(final Application application, final TopMain topmain) {
 		if (topmain instanceof ClientMain) {
-			Set<Journey> clientJourneys = application.findClientJourneys(topmain.getUserText(),application.getJourneyContainerDat().getActiveJourneys());
+			Set<Journey> clientJourneys = application.findClientJourneys(application.getJourneyContainerDat().getActiveJourneys());
 			ArrayList<Journey> result = new ArrayList<Journey>();
 			result.addAll(clientJourneys);
 			return result;
@@ -121,7 +121,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 
 	public ArrayList<Journey> filterPastJourneysForClient(Application application, TopMain topmain) {
 		if (topmain instanceof ClientMain) {
-			Set<Journey> clientJourneys = application.findClientJourneys(topmain.getUserText(),application.getJourneyContainerDat().getPastJourneys());
+			Set<Journey> clientJourneys = application.findClientJourneys(application.getJourneyContainerDat().getPastJourneys());
 			ArrayList<Journey> result = new ArrayList<Journey>();
 			result.addAll(clientJourneys);
 			return result;
@@ -253,7 +253,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				String newContent = content.getText();
 				String newOrigin = origin.getText();
 				String newDestination = destination.getText();
-				application.createJourney(newOrigin, newDestination, newContent, topmain.getUserText());
+				application.createJourney(newOrigin, newDestination, newContent, application.getCurrentUser().getCompany());
 			}
 		});
 		signUp.add(confirm, BorderLayout.SOUTH);
@@ -312,7 +312,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		
 		else if ( topmain instanceof ClientMain) {
 			for (Container c : j.getContainerList()) {
-				if (c.getCompany().contentEquals(topmain.getUserText())) {
+				if (c.getCompany().contentEquals(application.getCurrentUser().getCompany())) {
 				containerids.add(c.getContainerId());
 				}
 			}

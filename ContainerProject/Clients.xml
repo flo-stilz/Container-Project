@@ -2,24 +2,116 @@
 <java version="13.0.1" class="java.beans.XMLDecoder">
  <object class="java.util.ArrayList">
   <void method="add">
-   <object class="model.client">
+   <object class="model.Client">
     <void property="address">
-     <string>madisonsquaregarden</string>
+     <string>Bjergbygade 1, 4200 Slagelse</string>
     </void>
     <void property="company">
-     <string>Nike</string>
+     <string>KMD</string>
     </void>
     <void property="email">
-     <string>nike@administration.com</string>
+     <string>Hubert.Beck@KMD.com</string>
     </void>
     <void property="id">
-     <int>69451</int>
+     <int>69421</int>
     </void>
     <void property="name">
-     <string>Mads Mikkelsen</string>
+     <string>Hubert Beck</string>
     </void>
-    <void property="password">
-     <string>peter</string>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Edvard Falcks Gade 5, 1569 Koebenhavn</string>
+    </void>
+    <void property="company">
+     <string>Tesla</string>
+    </void>
+    <void property="email">
+     <string>Frederik.Garcia@Tesla.com</string>
+    </void>
+    <void property="id">
+     <int>69422</int>
+    </void>
+    <void property="name">
+     <string>Frederik Garcia</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Hededammen 6, 2730 Herlev</string>
+    </void>
+    <void property="company">
+     <string>PostNord</string>
+    </void>
+    <void property="email">
+     <string>Martin.Sorensen@PostNord.com</string>
+    </void>
+    <void property="id">
+     <int>69423</int>
+    </void>
+    <void property="name">
+     <string>Martin Sorensen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>El Camino Drive 22</string>
+    </void>
+    <void property="company">
+     <string>Coloplast</string>
+    </void>
+    <void property="email">
+     <string>Sven.Jensen@Coloplast.com</string>
+    </void>
+    <void property="id">
+     <int>69421</int>
+    </void>
+    <void property="name">
+     <string>Sven Jensen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Vestervang 8, 8000 Aarhus</string>
+    </void>
+    <void property="company">
+     <string>TDCGroup</string>
+    </void>
+    <void property="email">
+     <string>Louise.Clausen@TDCGroup.com</string>
+    </void>
+    <void property="id">
+     <int>69422</int>
+    </void>
+    <void property="name">
+     <string>Louise Clausen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Hollywood Blvd. 123</string>
+    </void>
+    <void property="company">
+     <string>COOPDanmark</string>
+    </void>
+    <void property="email">
+     <string>Jorgen.Poulsen@COOPDanmark.com</string>
+    </void>
+    <void property="id">
+     <int>69423</int>
+    </void>
+    <void property="name">
+     <string>Jorgen Poulsen</string>
     </void>
    </object>
   </void>

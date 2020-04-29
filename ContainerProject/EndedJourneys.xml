@@ -7,83 +7,804 @@
      <void method="add">
       <object class="model.Container" id="Container0">
        <void property="company">
-        <string>gls</string>
-       </void>
-       <void property="containerId">
-        <string>C0</string>
-       </void>
-       <void property="content">
-        <string>phones</string>
-       </void>
-       <void property="currentLocation">
-        <string>MAL</string>
-       </void>
-       <void property="humList">
-        <void method="add">
-         <int>56</int>
-        </void>
-       </void>
-       <void property="id">
-        <string>TRIMAL0</string>
-       </void>
-       <void property="pressureList">
-        <void method="add">
-         <int>980</int>
-        </void>
-       </void>
-       <void property="tempList">
-        <void method="add">
-         <int>17</int>
-        </void>
-       </void>
-      </object>
-     </void>
-     <void method="add">
-      <object class="model.Container" id="Container1">
-       <void property="company">
-        <string>gls</string>
+        <string>Tesla</string>
        </void>
        <void property="containerId">
         <string>C1</string>
        </void>
        <void property="content">
-        <string>phones</string>
+        <string>computers</string>
        </void>
        <void property="currentLocation">
-        <string>MAL</string>
+        <string>CPH</string>
        </void>
        <void property="humList">
         <void method="add">
-         <int>56</int>
+         <int>30</int>
+        </void>
+        <void method="add">
+         <int>27</int>
+        </void>
+        <void method="add">
+         <int>26</int>
+        </void>
+        <void method="add">
+         <int>27</int>
+        </void>
+        <void method="add">
+         <int>22</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>25</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>20</int>
+        </void>
+        <void method="add">
+         <int>19</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>24</int>
+        </void>
+        <void method="add">
+         <int>28</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>24</int>
+        </void>
+        <void method="add">
+         <int>25</int>
+        </void>
+        <void method="add">
+         <int>24</int>
+        </void>
+        <void method="add">
+         <int>20</int>
+        </void>
+        <void method="add">
+         <int>19</int>
+        </void>
+        <void method="add">
+         <int>16</int>
+        </void>
+        <void method="add">
+         <int>11</int>
+        </void>
+        <void method="add">
+         <int>8</int>
+        </void>
+        <void method="add">
+         <int>5</int>
+        </void>
+        <void method="add">
+         <int>3</int>
+        </void>
+        <void method="add">
+         <int>3</int>
+        </void>
+        <void method="add">
+         <int>3</int>
+        </void>
+        <void method="add">
+         <int>2</int>
+        </void>
+        <void method="add">
+         <int>-2</int>
+        </void>
+        <void method="add">
+         <int>-5</int>
+        </void>
+        <void method="add">
+         <int>-7</int>
+        </void>
+        <void method="add">
+         <int>-10</int>
+        </void>
+        <void method="add">
+         <int>-11</int>
+        </void>
+        <void method="add">
+         <int>-8</int>
+        </void>
+        <void method="add">
+         <int>-10</int>
+        </void>
+        <void method="add">
+         <int>-10</int>
+        </void>
+        <void method="add">
+         <int>-6</int>
+        </void>
+        <void method="add">
+         <int>-5</int>
+        </void>
+        <void method="add">
+         <int>-8</int>
+        </void>
+        <void method="add">
+         <int>-4</int>
         </void>
        </void>
        <void property="id">
-        <string>TRIMAL0</string>
+        <string>AALCPH1</string>
        </void>
        <void property="pressureList">
         <void method="add">
-         <int>980</int>
+         <int>1013</int>
+        </void>
+        <void method="add">
+         <int>1034</int>
+        </void>
+        <void method="add">
+         <int>999</int>
+        </void>
+        <void method="add">
+         <int>984</int>
+        </void>
+        <void method="add">
+         <int>1029</int>
+        </void>
+        <void method="add">
+         <int>1078</int>
+        </void>
+        <void method="add">
+         <int>1108</int>
+        </void>
+        <void method="add">
+         <int>1110</int>
+        </void>
+        <void method="add">
+         <int>1143</int>
+        </void>
+        <void method="add">
+         <int>1145</int>
+        </void>
+        <void method="add">
+         <int>1162</int>
+        </void>
+        <void method="add">
+         <int>1125</int>
+        </void>
+        <void method="add">
+         <int>1110</int>
+        </void>
+        <void method="add">
+         <int>1070</int>
+        </void>
+        <void method="add">
+         <int>1106</int>
+        </void>
+        <void method="add">
+         <int>1080</int>
+        </void>
+        <void method="add">
+         <int>1074</int>
+        </void>
+        <void method="add">
+         <int>1101</int>
+        </void>
+        <void method="add">
+         <int>1068</int>
+        </void>
+        <void method="add">
+         <int>1110</int>
+        </void>
+        <void method="add">
+         <int>1078</int>
+        </void>
+        <void method="add">
+         <int>1104</int>
+        </void>
+        <void method="add">
+         <int>1088</int>
+        </void>
+        <void method="add">
+         <int>1113</int>
+        </void>
+        <void method="add">
+         <int>1161</int>
+        </void>
+        <void method="add">
+         <int>1195</int>
+        </void>
+        <void method="add">
+         <int>1184</int>
+        </void>
+        <void method="add">
+         <int>1211</int>
+        </void>
+        <void method="add">
+         <int>1195</int>
+        </void>
+        <void method="add">
+         <int>1231</int>
+        </void>
+        <void method="add">
+         <int>1239</int>
+        </void>
+        <void method="add">
+         <int>1246</int>
+        </void>
+        <void method="add">
+         <int>1270</int>
+        </void>
+        <void method="add">
+         <int>1235</int>
+        </void>
+        <void method="add">
+         <int>1247</int>
+        </void>
+        <void method="add">
+         <int>1211</int>
+        </void>
+        <void method="add">
+         <int>1164</int>
+        </void>
+        <void method="add">
+         <int>1174</int>
+        </void>
+        <void method="add">
+         <int>1217</int>
+        </void>
+        <void method="add">
+         <int>1168</int>
         </void>
        </void>
        <void property="tempList">
         <void method="add">
+         <int>34</int>
+        </void>
+        <void method="add">
+         <int>30</int>
+        </void>
+        <void method="add">
+         <int>29</int>
+        </void>
+        <void method="add">
+         <int>25</int>
+        </void>
+        <void method="add">
+         <int>21</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>19</int>
+        </void>
+        <void method="add">
+         <int>21</int>
+        </void>
+        <void method="add">
+         <int>24</int>
+        </void>
+        <void method="add">
+         <int>25</int>
+        </void>
+        <void method="add">
+         <int>25</int>
+        </void>
+        <void method="add">
+         <int>26</int>
+        </void>
+        <void method="add">
+         <int>22</int>
+        </void>
+        <void method="add">
+         <int>24</int>
+        </void>
+        <void method="add">
+         <int>19</int>
+        </void>
+        <void method="add">
+         <int>14</int>
+        </void>
+        <void method="add">
+         <int>15</int>
+        </void>
+        <void method="add">
          <int>17</int>
+        </void>
+        <void method="add">
+         <int>21</int>
+        </void>
+        <void method="add">
+         <int>24</int>
+        </void>
+        <void method="add">
+         <int>19</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>22</int>
+        </void>
+        <void method="add">
+         <int>21</int>
+        </void>
+        <void method="add">
+         <int>19</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>20</int>
+        </void>
+        <void method="add">
+         <int>24</int>
+        </void>
+        <void method="add">
+         <int>21</int>
+        </void>
+        <void method="add">
+         <int>20</int>
+        </void>
+        <void method="add">
+         <int>16</int>
+        </void>
+        <void method="add">
+         <int>19</int>
+        </void>
+        <void method="add">
+         <int>22</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>27</int>
+        </void>
+        <void method="add">
+         <int>28</int>
+        </void>
+        <void method="add">
+         <int>26</int>
+        </void>
+        <void method="add">
+         <int>27</int>
+        </void>
+        <void method="add">
+         <int>27</int>
+        </void>
+        <void method="add">
+         <int>29</int>
         </void>
        </void>
       </object>
      </void>
     </void>
     <void property="currentLocation">
-     <string>MAL</string>
+     <string>CPH</string>
     </void>
     <void property="destination">
-     <string>MAL</string>
+     <string>CPH</string>
     </void>
     <void property="id">
-     <string>TRIMAL0</string>
+     <string>AALCPH1</string>
     </void>
     <void property="origin">
-     <string>TRI</string>
+     <string>AAL</string>
+    </void>
+    <void id="Integer0" property="distance"/>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Journey" id="Journey1">
+    <void property="containerList">
+     <void method="add">
+      <object class="model.Container" id="Container1">
+       <void property="company">
+        <string>Tesla</string>
+       </void>
+       <void property="containerId">
+        <string>C1</string>
+       </void>
+       <void property="content">
+        <string>bananas</string>
+       </void>
+       <void property="currentLocation">
+        <string>LON</string>
+       </void>
+       <void property="humList">
+        <void method="add">
+         <int>46</int>
+        </void>
+        <void method="add">
+         <int>42</int>
+        </void>
+        <void method="add">
+         <int>37</int>
+        </void>
+        <void method="add">
+         <int>33</int>
+        </void>
+        <void method="add">
+         <int>35</int>
+        </void>
+        <void method="add">
+         <int>38</int>
+        </void>
+        <void method="add">
+         <int>35</int>
+        </void>
+        <void method="add">
+         <int>38</int>
+        </void>
+        <void method="add">
+         <int>41</int>
+        </void>
+        <void method="add">
+         <int>39</int>
+        </void>
+        <void method="add">
+         <int>42</int>
+        </void>
+        <void method="add">
+         <int>37</int>
+        </void>
+        <void method="add">
+         <int>32</int>
+        </void>
+        <void method="add">
+         <int>28</int>
+        </void>
+        <void method="add">
+         <int>27</int>
+        </void>
+        <void method="add">
+         <int>27</int>
+        </void>
+        <void method="add">
+         <int>25</int>
+        </void>
+        <void method="add">
+         <int>28</int>
+        </void>
+        <void method="add">
+         <int>31</int>
+        </void>
+        <void method="add">
+         <int>27</int>
+        </void>
+        <void method="add">
+         <int>31</int>
+        </void>
+        <void method="add">
+         <int>30</int>
+        </void>
+        <void method="add">
+         <int>25</int>
+        </void>
+        <void method="add">
+         <int>20</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>21</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>19</int>
+        </void>
+        <void method="add">
+         <int>23</int>
+        </void>
+        <void method="add">
+         <int>22</int>
+        </void>
+        <void method="add">
+         <int>20</int>
+        </void>
+        <void method="add">
+         <int>24</int>
+        </void>
+        <void method="add">
+         <int>19</int>
+        </void>
+        <void method="add">
+         <int>16</int>
+        </void>
+        <void method="add">
+         <int>15</int>
+        </void>
+        <void method="add">
+         <int>15</int>
+        </void>
+        <void method="add">
+         <int>10</int>
+        </void>
+        <void method="add">
+         <int>14</int>
+        </void>
+        <void method="add">
+         <int>17</int>
+        </void>
+        <void method="add">
+         <int>15</int>
+        </void>
+       </void>
+       <void property="id">
+        <string>AARLON1</string>
+       </void>
+       <void property="pressureList">
+        <void method="add">
+         <int>990</int>
+        </void>
+        <void method="add">
+         <int>1016</int>
+        </void>
+        <void method="add">
+         <int>1009</int>
+        </void>
+        <void method="add">
+         <int>1016</int>
+        </void>
+        <void method="add">
+         <int>1047</int>
+        </void>
+        <void method="add">
+         <int>999</int>
+        </void>
+        <void method="add">
+         <int>988</int>
+        </void>
+        <void method="add">
+         <int>1003</int>
+        </void>
+        <void method="add">
+         <int>1011</int>
+        </void>
+        <void method="add">
+         <int>1019</int>
+        </void>
+        <void method="add">
+         <int>1067</int>
+        </void>
+        <void method="add">
+         <int>1057</int>
+        </void>
+        <void method="add">
+         <int>1094</int>
+        </void>
+        <void method="add">
+         <int>1097</int>
+        </void>
+        <void method="add">
+         <int>1099</int>
+        </void>
+        <void method="add">
+         <int>1056</int>
+        </void>
+        <void method="add">
+         <int>1010</int>
+        </void>
+        <void method="add">
+         <int>964</int>
+        </void>
+        <void method="add">
+         <int>944</int>
+        </void>
+        <void method="add">
+         <int>989</int>
+        </void>
+        <void method="add">
+         <int>965</int>
+        </void>
+        <void method="add">
+         <int>1003</int>
+        </void>
+        <void method="add">
+         <int>1045</int>
+        </void>
+        <void method="add">
+         <int>1092</int>
+        </void>
+        <void method="add">
+         <int>1079</int>
+        </void>
+        <void method="add">
+         <int>1034</int>
+        </void>
+        <void method="add">
+         <int>995</int>
+        </void>
+        <void method="add">
+         <int>1024</int>
+        </void>
+        <void method="add">
+         <int>992</int>
+        </void>
+        <void method="add">
+         <int>978</int>
+        </void>
+        <void method="add">
+         <int>974</int>
+        </void>
+        <void method="add">
+         <int>933</int>
+        </void>
+        <void method="add">
+         <int>939</int>
+        </void>
+        <void method="add">
+         <int>903</int>
+        </void>
+        <void method="add">
+         <int>904</int>
+        </void>
+        <void method="add">
+         <int>950</int>
+        </void>
+        <void method="add">
+         <int>903</int>
+        </void>
+        <void method="add">
+         <int>929</int>
+        </void>
+        <void method="add">
+         <int>886</int>
+        </void>
+        <void method="add">
+         <int>881</int>
+        </void>
+       </void>
+       <void property="tempList">
+        <void method="add">
+         <int>3</int>
+        </void>
+        <void method="add">
+         <int>5</int>
+        </void>
+        <void method="add">
+         <int>1</int>
+        </void>
+        <void method="add">
+         <int>3</int>
+        </void>
+        <void method="add">
+         <int>2</int>
+        </void>
+        <void method="add">
+         <int>4</int>
+        </void>
+        <void method="add">
+         <int>4</int>
+        </void>
+        <void method="add">
+         <int>3</int>
+        </void>
+        <void method="add">
+         <object idref="Integer0"/>
+        </void>
+        <void method="add">
+         <int>-5</int>
+        </void>
+        <void method="add">
+         <int>-6</int>
+        </void>
+        <void method="add">
+         <int>-10</int>
+        </void>
+        <void method="add">
+         <int>-6</int>
+        </void>
+        <void method="add">
+         <int>-11</int>
+        </void>
+        <void method="add">
+         <int>-8</int>
+        </void>
+        <void method="add">
+         <int>-10</int>
+        </void>
+        <void method="add">
+         <int>-15</int>
+        </void>
+        <void method="add">
+         <int>-18</int>
+        </void>
+        <void method="add">
+         <int>-23</int>
+        </void>
+        <void method="add">
+         <int>-19</int>
+        </void>
+        <void method="add">
+         <int>-17</int>
+        </void>
+        <void method="add">
+         <int>-14</int>
+        </void>
+        <void method="add">
+         <int>-15</int>
+        </void>
+        <void method="add">
+         <int>-17</int>
+        </void>
+        <void method="add">
+         <int>-18</int>
+        </void>
+        <void method="add">
+         <int>-22</int>
+        </void>
+        <void method="add">
+         <int>-25</int>
+        </void>
+        <void method="add">
+         <int>-22</int>
+        </void>
+        <void method="add">
+         <int>-23</int>
+        </void>
+        <void method="add">
+         <int>-22</int>
+        </void>
+        <void method="add">
+         <int>-22</int>
+        </void>
+        <void method="add">
+         <int>-21</int>
+        </void>
+        <void method="add">
+         <int>-24</int>
+        </void>
+        <void method="add">
+         <int>-26</int>
+        </void>
+        <void method="add">
+         <int>-22</int>
+        </void>
+        <void method="add">
+         <int>-22</int>
+        </void>
+        <void method="add">
+         <int>-23</int>
+        </void>
+        <void method="add">
+         <int>-23</int>
+        </void>
+        <void method="add">
+         <int>-24</int>
+        </void>
+        <void method="add">
+         <int>-26</int>
+        </void>
+       </void>
+      </object>
+     </void>
+    </void>
+    <void property="currentLocation">
+     <string>LON</string>
+    </void>
+    <void property="destination">
+     <string>LON</string>
+    </void>
+    <void property="id">
+     <string>AARLON1</string>
+    </void>
+    <void property="origin">
+     <string>AAR</string>
     </void>
    </object>
   </void>

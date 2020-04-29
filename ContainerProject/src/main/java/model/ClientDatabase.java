@@ -10,13 +10,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class ClientDatabase {
-	private ArrayList<client> clients = new ArrayList<client>();
+	private ArrayList<Client> clients = new ArrayList<Client>();
 	
 	public void storeClients() {
 		storeClients(clients);
 	}
 	
-	public void storeClients(ArrayList<client> clients) {
+	public void storeClients(ArrayList<Client> clients) {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./Clients.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
@@ -28,7 +28,7 @@ public class ClientDatabase {
 		}
 	} 
 	
-	public ArrayList<client> readClientFile() {
+	public void readClientFile() {
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(new File("./Clients.xml"));
@@ -36,16 +36,19 @@ public class ClientDatabase {
 				throw new Error(e);
 				}
 		XMLDecoder decoder = new XMLDecoder(fis);
-		clients = (ArrayList<client>)decoder.readObject(); 
+		clients = (ArrayList<Client>)decoder.readObject(); 
 		decoder.close();
-		return clients;
+
+
+
 	}
 	
-	public ArrayList<client> getClients() {
+	public ArrayList<Client> getClients() {
 		return clients;
+		
 	}
 
-	public void setClients(ArrayList<client> clients) {
-		this.clients = clients;
-	}
+//	public void setClients(ArrayList<client> clients) {
+//		this.clients = clients;
+//	}
 }

@@ -32,8 +32,8 @@ public class CompanyMain extends TopMain{
 //		return cl;
 //	}
 
-	public CompanyMain(String userText, final Application application, final JFrame login) {
-		super(userText, application, login);
+	public CompanyMain(final Application application, final JFrame login) {
+		super(application, login);
 		
 		this.application = application;
 //		final JFrame company = new JFrame("Company Overview");

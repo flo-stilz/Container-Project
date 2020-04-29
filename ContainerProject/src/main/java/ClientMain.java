@@ -22,11 +22,12 @@ import javax.swing.JPopupMenu;
 import javax.swing.JTextField;
 
 import model.Application;
-import model.client;
+import model.Client;
+
 
 public class ClientMain extends TopMain{
 	
-	private client currentClient;
+	private Client currentClient;
 //	private JourneySectionPanels j;
 //	private ContainerSelectionPanels cont;
 
@@ -50,12 +51,12 @@ public class ClientMain extends TopMain{
 //		return cl;
 //	}
 
-	public client getCurrentClient() {
+	public Client getCurrentClient() {
 		return currentClient;
 	}
 
-	public ClientMain(String userText, final Application application, final JFrame login) {
-		super(userText, application, login);
+	public ClientMain(final Application application, final JFrame login) {
+		super(application, login);
 
 //		final JFrame client = new JFrame("Client Overview");
 //
@@ -77,7 +78,7 @@ public class ClientMain extends TopMain{
 	
 	@Override
 	public void options(Application application, JFrame login) {
-		currentClient = application.search(getUserText()).get(0);
+		currentClient = application.getCurrentUser();
 		setOptions(new JPanel());
 		getOptions().setLayout(new BoxLayout(getOptions(), BoxLayout.Y_AXIS));
 		

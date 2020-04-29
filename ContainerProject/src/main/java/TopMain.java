@@ -23,7 +23,7 @@ import model.Application;
 
 public class TopMain {
 	
-	private String userText;
+
 	private JFrame main1;
 	private JPanel options;
 	private JPanel cards;
@@ -93,18 +93,10 @@ public class TopMain {
 //		this.cl = cl;
 //	}
 	
-	public String getUserText() {
-		return userText;
-	}
-	
-	public void setUserText(String userText) {
-		this.userText = userText;
-	}
 
-	public TopMain(String userText, final Application application, final JFrame login) {
+	public TopMain(final Application application, final JFrame login) {
 		
 		this.application = application;
-		this.userText = userText;
 		main1 = new JFrame("Company Overview");
 
 		// CardLayout

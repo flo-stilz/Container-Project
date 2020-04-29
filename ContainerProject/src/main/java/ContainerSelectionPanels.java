@@ -178,7 +178,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 	public ArrayList<Journey> filterJourneysForClients(final Application application, final TopMain topmain, ArrayList<Journey> unfiltered) {
 		if (topmain instanceof ClientMain) {
 			ArrayList<Journey> result = new ArrayList<Journey>();
-			result.addAll(application.findClientJourneys(topmain.getUserText(), unfiltered));
+			result.addAll(application.findClientJourneys(unfiltered));
 			return result;
 		}
 		else {
@@ -548,7 +548,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		}
 		else {
 			ArrayList<Journey> result = new ArrayList<Journey>();
-			result.addAll(application.findClientJourneys(topmain.getUserText(), jList));
+			result.addAll(application.findClientJourneys(jList));
 			wContainers = dat.findContainer(keyword,result);
 		}
 	}
