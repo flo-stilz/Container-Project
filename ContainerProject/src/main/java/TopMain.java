@@ -139,7 +139,7 @@ public class TopMain {
 	} 
 	
 	public void menuButton(final Application application, JFrame login, JButton menu) {
-		final MenuSectionPanels m = new MenuSectionPanels(application, this, login);
+		m = new MenuSectionPanels(application, this, login);
 		application.addObserver(m);
 		getCards().add(m.getMenupanel(), "menu");
 		

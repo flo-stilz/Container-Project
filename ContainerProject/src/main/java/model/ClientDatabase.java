@@ -9,14 +9,14 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class ClientDatabase {
+public class ClientDatabase implements ClientPersistency {
 	private ArrayList<Client> clients = new ArrayList<Client>();
 	
-	public void storeClients() {
-		storeClients(clients);
-	}
+//	public void storeClients() {
+//		storeClients(clients);
+//	}
 	
-	public void storeClients(ArrayList<Client> clients) {
+	public void storeClients() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./Clients.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);

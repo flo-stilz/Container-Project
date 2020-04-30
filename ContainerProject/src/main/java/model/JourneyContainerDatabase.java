@@ -9,7 +9,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class JourneyContainerDatabase {
+public class JourneyContainerDatabase implements JourneyContainerPersistency {
+	
 	private ArrayList<Journey> activeJourneys = new ArrayList<Journey>();
 	private ArrayList<Container> containerWarehouse = new ArrayList<Container>();
 	private ArrayList<Journey> pastJourneys = new ArrayList<Journey>();
@@ -36,15 +37,15 @@ public class JourneyContainerDatabase {
 		return Containers;
 	}
 	
-	public void storeActiveJourneys() {
-		storeActiveJourneys(activeJourneys);
-	}
+//	public void storeActiveJourneys() {
+//		storeActiveJourneys(activeJourneys);
+//	}
 	
-	public void storeActiveJourneys(ArrayList<Journey> journey) {
+	public void storeActiveJourneys() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./ActiveJourneys.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
-			encoder.writeObject(journey);
+			encoder.writeObject(activeJourneys);
 			encoder.close();
 			fos.close();
 		} catch (IOException ex) {
@@ -66,11 +67,11 @@ public class JourneyContainerDatabase {
 		}
 	
 	
-	public void storeEndedJourneys() {
-		storeEndedJourneys(pastJourneys);
-	}
+//	public void storeEndedJourneys() {
+//		storeEndedJourneys(pastJourneys);
+//	}
 	
-	public void storeEndedJourneys(ArrayList<Journey> pastJourneys) {
+	public void storeEndedJourneys() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./EndedJourneys.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
@@ -95,15 +96,15 @@ public class JourneyContainerDatabase {
 
 	}
 	
-	public void storeContainerWarehouse() {
-		storeContainerWarehouse(containerWarehouse);
-	}
+//	public void storeContainerWarehouse() {
+//		storeContainerWarehouse(containerWarehouse);
+//	}
 	
-	public void storeContainerWarehouse(ArrayList<Container> ContainerWarehouse) {
+	public void storeContainerWarehouse() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./ContainerWarehouse.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
-			encoder.writeObject(ContainerWarehouse);
+			encoder.writeObject(containerWarehouse);
 			encoder.close();
 			fos.close();
 		} catch (IOException ex) {

@@ -214,7 +214,6 @@ public class MenuSectionPanels implements PropertyChangeListener{
 
 	public void propertyChange(PropertyChangeEvent evt) {
 		Application dat = ((Application)evt.getSource());;
-		System.out.println("bangbang");
 		menuPanel(dat);
 		topmain.getMain1().revalidate();
 		

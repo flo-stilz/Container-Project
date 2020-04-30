@@ -17,7 +17,7 @@ import org.jfree.ui.TextAnchor;
 
 import model.observer;
 
-public class barPlots extends plot implements observer {
+public class barPlots extends plot {
 	
 	private ChartPanel chartPanel;
 	
