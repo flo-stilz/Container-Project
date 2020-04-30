@@ -40,7 +40,7 @@ import model.Journey;
 // propertyChange
 
 
-public class ContainerSelectionPanels implements PropertyChangeListener{
+public class ContainerSelectionPanels implements PropertyChangeListener, ShowAll{
 
 	private JPanel containerSearch;
 	private JPanel viewContainers;
@@ -105,7 +105,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		
 		// Show all Containers at the current status
 		
-		showAllActiveContainers(application, topmain);
+		showAll(application, topmain, application.getJourneyContainerDat().getActiveJourneys(), false);
 		
 		// Filter among past Containers
 		
@@ -113,24 +113,24 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		
 		// Show all past Containers at their final status
 		
-		showAllPastContainers(application, topmain);
+		showAll(application, topmain, application.getJourneyContainerDat().getPastJourneys(), true);
 		
 	}
 
-	public void showAllActiveContainers(final Application application, final TopMain topmain) {
+	public void showAll(final Application application, final TopMain topmain, final ArrayList<Journey> journeys, final boolean b) {
 		JButton showAll = new JButton("Show All");
 		containerSearch.add(showAll);
 		showAll.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
 				showAllCommand = true;
-				isPast = false;
-				ArrayList<Journey> result = filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getActiveJourneys());
+				isPast = b;
+				ArrayList<Journey> result = filterJourneysForClients(application, topmain, journeys);
 				if (topmain instanceof ClientMain) {
 					wContainers = application.getJourneyContainerDat().getAllContainers(true, result);
 				}
 				else {
-					wContainers = application.getJourneyContainerDat().getAllContainers(false, result);
+					wContainers = application.getJourneyContainerDat().getAllContainers(isPast, result);
 				}
 				checksSearchEntryC(application, topmain);
 			}

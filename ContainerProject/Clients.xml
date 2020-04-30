@@ -685,5 +685,404 @@
     </void>
    </object>
   </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Chapel Street 796</string>
+    </void>
+    <void property="company">
+     <string>Carlsberg</string>
+    </void>
+    <void property="email">
+     <string>.Maria.Garcia@Carlsberg.com</string>
+    </void>
+    <void property="id">
+     <int>69421</int>
+    </void>
+    <void property="name">
+     <string> Maria Garcia</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>El Camino Drive 22</string>
+    </void>
+    <void property="company">
+     <string>PostNord</string>
+    </void>
+    <void property="email">
+     <string>Emilie.Petersen@PostNord.com</string>
+    </void>
+    <void property="id">
+     <int>69422</int>
+    </void>
+    <void property="name">
+     <string>Emilie Petersen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Holmbladsgade 44, 2300 Koebenhavn</string>
+    </void>
+    <void property="company">
+     <string>Netto</string>
+    </void>
+    <void property="email">
+     <string>Rasmus.Als@Netto.com</string>
+    </void>
+    <void property="id">
+     <int>69423</int>
+    </void>
+    <void property="name">
+     <string>Rasmus Als</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Frimestervej 32, 2400 Koebenhavn</string>
+    </void>
+    <void property="company">
+     <string>Lego</string>
+    </void>
+    <void property="email">
+     <string>Marie.Smith@Lego.com</string>
+    </void>
+    <void property="id">
+     <int>69424</int>
+    </void>
+    <void property="name">
+     <string>Marie Smith</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Stemannsgade 15, 8900 Randers</string>
+    </void>
+    <void property="company">
+     <string>ASUS</string>
+    </void>
+    <void property="email">
+     <string>Marie.Koldborg@ASUS.com</string>
+    </void>
+    <void property="id">
+     <int>69425</int>
+    </void>
+    <void property="name">
+     <string>Marie Koldborg</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Bill Clinton Street 390</string>
+    </void>
+    <void property="company">
+     <string>Dell</string>
+    </void>
+    <void property="email">
+     <string>.Maria.Poulsen@Dell.com</string>
+    </void>
+    <void property="id">
+     <int>69426</int>
+    </void>
+    <void property="name">
+     <string> Maria Poulsen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Fasanvej 7, 8370 Hadsten</string>
+    </void>
+    <void property="company">
+     <string>Nestle</string>
+    </void>
+    <void property="email">
+     <string>Micheal.Andersen@Nestle.com</string>
+    </void>
+    <void property="id">
+     <int>69427</int>
+    </void>
+    <void property="name">
+     <string>Micheal Andersen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Kongebakken 40, 4000 Roskilde</string>
+    </void>
+    <void property="company">
+     <string>DanishCrown</string>
+    </void>
+    <void property="email">
+     <string>Ellinor.Petersen@DanishCrown.com</string>
+    </void>
+    <void property="id">
+     <int>69428</int>
+    </void>
+    <void property="name">
+     <string>Ellinor Petersen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Nyvangsvej 3, 4400 Kalundborg</string>
+    </void>
+    <void property="company">
+     <string>DeutcheTelekom</string>
+    </void>
+    <void property="email">
+     <string>Erik.Saito@DeutcheTelekom.com</string>
+    </void>
+    <void property="id">
+     <int>69429</int>
+    </void>
+    <void property="name">
+     <string>Erik Saito</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Alexanderstrasse 19</string>
+    </void>
+    <void property="company">
+     <string>Pandora</string>
+    </void>
+    <void property="email">
+     <string>Louise.Christensen@Pandora.com</string>
+    </void>
+    <void property="id">
+     <int>69430</int>
+    </void>
+    <void property="name">
+     <string>Louise Christensen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Rue Du Moulin</string>
+    </void>
+    <void property="company">
+     <string>Netto</string>
+    </void>
+    <void property="email">
+     <string>Micheal.Rossi@Netto.com</string>
+    </void>
+    <void property="id">
+     <int>69431</int>
+    </void>
+    <void property="name">
+     <string>Micheal Rossi</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Vestervang 8, 8000 Aarhus</string>
+    </void>
+    <void property="company">
+     <string>KMD</string>
+    </void>
+    <void property="email">
+     <string>John.Clemensen@KMD.com</string>
+    </void>
+    <void property="id">
+     <int>69432</int>
+    </void>
+    <void property="name">
+     <string>John Clemensen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Queens Street 102</string>
+    </void>
+    <void property="company">
+     <string>COOPDanmark</string>
+    </void>
+    <void property="email">
+     <string>Mikkel.Rossi@COOPDanmark.com</string>
+    </void>
+    <void property="id">
+     <int>69433</int>
+    </void>
+    <void property="name">
+     <string>Mikkel Rossi</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Via Appia 12</string>
+    </void>
+    <void property="company">
+     <string>IntelCorporation</string>
+    </void>
+    <void property="email">
+     <string>Micheal.Wang@IntelCorporation.com</string>
+    </void>
+    <void property="id">
+     <int>69434</int>
+    </void>
+    <void property="name">
+     <string>Micheal Wang</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Hededammen 6, 2730 Herlev</string>
+    </void>
+    <void property="company">
+     <string>Dell</string>
+    </void>
+    <void property="email">
+     <string>Brunhilde.Garcia@Dell.com</string>
+    </void>
+    <void property="id">
+     <int>69435</int>
+    </void>
+    <void property="name">
+     <string>Brunhilde Garcia</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Frederiksundsvej 48</string>
+    </void>
+    <void property="company">
+     <string>JPMorganChase</string>
+    </void>
+    <void property="email">
+     <string>Asta.Nielsen@JPMorganChase.com</string>
+    </void>
+    <void property="id">
+     <int>69436</int>
+    </void>
+    <void property="name">
+     <string>Asta Nielsen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Frimestervej 32, 2400 Koebenhavn</string>
+    </void>
+    <void property="company">
+     <string>DeutcheTelekom</string>
+    </void>
+    <void property="email">
+     <string>Florian.Moller@DeutcheTelekom.com</string>
+    </void>
+    <void property="id">
+     <int>69437</int>
+    </void>
+    <void property="name">
+     <string>Florian Moller</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Priorgade 14, 9000 Aalborg</string>
+    </void>
+    <void property="company">
+     <string>Lidl</string>
+    </void>
+    <void property="email">
+     <string>Alexander.Rasmussen@Lidl.com</string>
+    </void>
+    <void property="id">
+     <int>69438</int>
+    </void>
+    <void property="name">
+     <string>Alexander Rasmussen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Chapel Street 796</string>
+    </void>
+    <void property="company">
+     <string>Smirnoff</string>
+    </void>
+    <void property="email">
+     <string>Emilie.Poulsen@Smirnoff.com</string>
+    </void>
+    <void property="id">
+     <int>69439</int>
+    </void>
+    <void property="name">
+     <string>Emilie Poulsen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Edvard Falcks Gade 5, 1569 Koebenhavn</string>
+    </void>
+    <void property="company">
+     <string>MicrosoftCorp</string>
+    </void>
+    <void property="email">
+     <string>Mette.Dahl@MicrosoftCorp.com</string>
+    </void>
+    <void property="id">
+     <int>69440</int>
+    </void>
+    <void property="name">
+     <string>Mette Dahl</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Gydevej 6, 3520 Farum</string>
+    </void>
+    <void property="company">
+     <string>Volkswagen</string>
+    </void>
+    <void property="email">
+     <string>.Maria.Breum@Volkswagen.com</string>
+    </void>
+    <void property="id">
+     <int>69441</int>
+    </void>
+    <void property="name">
+     <string> Maria Breum</string>
+    </void>
+   </object>
+  </void>
  </object>
 </java>
