@@ -215,6 +215,7 @@ public class CompanyMain extends TopMain{
 		application.removeObserver(getJ());
 		application.removeObserver(getCont());
 		application.removeObserver(c);
+		getCont().getContainerPlot().getObs().clear();
 	}
 	
 	

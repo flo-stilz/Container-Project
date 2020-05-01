@@ -154,14 +154,14 @@ public class GUIMain {
 	
 		JPanel usernamePanel = new JPanel();
 		JLabel userLbl = new JLabel("Username: ");			
-		final JTextField username = new JTextField("Mads M�ller");
+		final JTextField username = new JTextField("admin");
 		username.setPreferredSize(new Dimension(100, 25));
 		usernamePanel.add(userLbl, BorderLayout.LINE_START);
 		usernamePanel.add(username, BorderLayout.LINE_END);
 			
 		JPanel passwordPanel = new JPanel();
 		JLabel passLbl = new JLabel("Password: ");
-		final JPasswordField password = new JPasswordField("1");
+		final JPasswordField password = new JPasswordField("12345");
 		password.setPreferredSize(new Dimension(100, 25));
 		passwordPanel.add(passLbl, BorderLayout.LINE_START);
 		passwordPanel.add(password, BorderLayout.LINE_END);		

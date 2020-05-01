@@ -71,7 +71,7 @@ public class Container {
 
 	private void notifyObservers( Container c) {
 		for (observer o: obs) {
-			o.update(c.getTempList(),c.getPressureList(),c.getHumList());
+			o.update(c);
 		}
 	}
 	
@@ -161,6 +161,10 @@ public class Container {
 	}
 	public void setCurrentLocation(String currentLocation) {
 		this.currentLocation = currentLocation;
+	}
+
+	public ArrayList<observer> getObs() {
+		return obs;
 	}
 
 

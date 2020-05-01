@@ -6,6 +6,6 @@ import java.util.List;
 
 public interface observer {
 
-	void update(ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h);
+	void update(Container c);
 	
 }

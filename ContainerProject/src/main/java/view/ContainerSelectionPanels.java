@@ -23,6 +23,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
+import org.jfree.chart.ChartPanel;
+
 import model.Container;
 import model.Application;
 import model.Journey;
@@ -49,20 +51,17 @@ public class ContainerSelectionPanels implements PropertyChangeListener, ShowAll
 	private JPanel extraOptions;
 	private JPanel plotPanel;
 	private ContainerSelectionPanels csp;
-	private barPlots bPlot;
-	private comparisonlinePlots cPlot;
 	private JCheckBox checkBoxTemp;
 	private JCheckBox checkBoxPres;
 	private JCheckBox checkBoxHum;
 	private JCheckBox checkBoxAllinOne;
 	private JCheckBox checkBoxBarPlot;
-	private plot tempPlot;
-	private plot presPlot;
-	private plot humPlot;
 	private Application application;
 	private TopMain topmain;
 	private boolean showAllCommand;
 	private boolean isPast;
+	private JPanel checkOptions;
+	private Container containerPlot = new Container();
 	
 	public ArrayList<Container> getwContainers() {
 		return wContainers;
@@ -79,7 +78,10 @@ public class ContainerSelectionPanels implements PropertyChangeListener, ShowAll
 	public JPanel getViewContainers() {
 		return viewContainers;
 	}
-	private JFrame main1;
+	
+	public Container getContainerPlot() {
+		return containerPlot;
+	}
 
 	public ContainerSelectionPanels(final Application application, final TopMain topmain) {
 		
@@ -187,20 +189,20 @@ public class ContainerSelectionPanels implements PropertyChangeListener, ShowAll
 		}
 	}
 	
-	public void showAllPastContainers(final Application application, final TopMain topmain) {
-		JButton showAllPast = new JButton("Show All");
-		containerSearch.add(showAllPast);
-		showAllPast.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				showAllCommand = true;
-				isPast = true;
-				ArrayList<Journey> result = filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getPastJourneys());
-				wContainers = application.getJourneyContainerDat().getAllContainers(true, result);
-				checksSearchEntryC(application, topmain);
-			}
-		});
-	}
+//	public void showAllPastContainers(final Application application, final TopMain topmain) {
+//		JButton showAllPast = new JButton("Show All");
+//		containerSearch.add(showAllPast);
+//		showAllPast.addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent e) {
+//				showAllCommand = true;
+//				isPast = true;
+//				ArrayList<Journey> result = filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getPastJourneys());
+//				wContainers = application.getJourneyContainerDat().getAllContainers(true, result);
+//				checksSearchEntryC(application, topmain);
+//			}
+//		});
+//	}
 	
 	public void searchForPastContainers(final Application application, final TopMain topmain) {
 		JLabel containeritempast = new JLabel("History of Containers");
@@ -225,12 +227,19 @@ public class ContainerSelectionPanels implements PropertyChangeListener, ShowAll
 		});
 	}
 	
-	public void additionalInformation(Application application, TopMain topmain) {
+	public void additionalInformation(final Application application, TopMain topmain) {
 		
 		extraOptions = new JPanel(new BorderLayout());
 		viewContainers.add(extraOptions, BorderLayout.CENTER);
 		
 		final JComboBox<String> id = chooseContainerOptions(application);
+		containerPlot = chooseContainerForPlot(application, id.getSelectedItem().toString());
+		id.addActionListener(new ActionListener() {
+
+			public void actionPerformed(ActionEvent e) {
+				containerPlot = chooseContainerForPlot(application, id.getSelectedItem().toString());
+			}
+		});
 		extraOptions.add(id, BorderLayout.NORTH);
 		if (topmain instanceof CompanyMain && (isPast == false)) {
 			updateData(application, id);
@@ -269,6 +278,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener, ShowAll
 		options = filter.toArray(new String[]{});
 		
 		final JComboBox<String> id = new JComboBox<String>(options);
+
 		return id;
 	}
 	
@@ -320,13 +330,31 @@ public class ContainerSelectionPanels implements PropertyChangeListener, ShowAll
 		JPanel choosePlots = new JPanel(new BorderLayout());
 		extraOptions.add(choosePlots, BorderLayout.EAST);
 		
-		checkBoxTemp = new JCheckBox("Temperature Plot");
-		checkBoxPres = new JCheckBox("Pressure Plot");
-		checkBoxHum = new JCheckBox("Humidity Plot");
-		checkBoxAllinOne = new JCheckBox("All in One");
-		checkBoxBarPlot = new JCheckBox("Bar Plot");
+		Container c = chooseContainerForPlot(application, id.getSelectedItem().toString());
 		
-		JPanel checkOptions = new JPanel(new GridLayout(0,2));
+		checkOptions = new JPanel(new GridLayout(0,2));
+		plotPanel.removeAll();
+		
+		checkBoxTemp = new JCheckBox("Temperature Plot");
+		LinePlot temp = new LinePlot("Temperature", csp, new TemperaturePlot());
+		generatePlot(temp, checkBoxTemp);
+		
+		checkBoxPres = new JCheckBox("Pressure Plot");
+		LinePlot pres = new LinePlot("Pressure", csp, new PressurePlot());
+		generatePlot(pres, checkBoxPres);
+		
+		checkBoxHum = new JCheckBox("Humidity Plot");
+		LinePlot hum = new LinePlot("Humidity", csp, new HumidityPlot());
+		generatePlot(hum, checkBoxHum);
+		
+		checkBoxAllinOne = new JCheckBox("All in One");
+		comparisonlinePlots comp = new comparisonlinePlots("All in One", csp);
+		generatePlot(comp, checkBoxAllinOne);
+		
+		checkBoxBarPlot = new JCheckBox("Bar Plot");
+		barPlots bar = new barPlots("BarPlot", csp);
+		generatePlot(bar, checkBoxBarPlot);
+		
 		checkOptions.add(checkBoxTemp);
 		checkOptions.add(checkBoxPres);
 		checkOptions.add(checkBoxHum);
@@ -341,26 +369,36 @@ public class ContainerSelectionPanels implements PropertyChangeListener, ShowAll
 
 			public void actionPerformed(ActionEvent e) {
 				
-				// stop the containerselectionpanels from listening to the application layer
+				// stop the ContainerSelectionPanels from listening to the application layer
 				application.removeObserver(csp);
-				// get Container
-				Container c = chooseContainerForPlot(application, id.getSelectedItem().toString());
-				
-				 createPlots(application, topmain, c);
-				
-				 topmain.getCl().show(topmain.getCards(), "plotPanel");
+
+				topmain.getCl().show(topmain.getCards(), "plotPanel");
 			}
 
 		});
 		
 	}
+
+	public void generatePlot(final Graph g, JCheckBox checkb) {
+		
+		checkOptions.add(checkb); 
+		checkb.addActionListener(new ActionListener() {
+	
+			public void actionPerformed(ActionEvent e) {
+				ChartPanel chartPanel = g.plotCreation(containerPlot);
+				updatePlot(chartPanel, chartPanel);
+				}
+		});
+	}
+	public void updatePlot(ChartPanel newChartPanel, ChartPanel oldChartPanel) {
+		plotPanel.remove(oldChartPanel);
+		plotPanel.add(newChartPanel);
+		topmain.getMain1().revalidate();
+	}
 	
 	public Container chooseContainerForPlot(Application application, String id) {
 		if (isPast) {
-			ArrayList<Container> result = application.findContainer(id, application.getJourneyContainerDat().getPastJourneys());
-			Container c = result.get(0);
-			Container con = new Container(c);
-			GetAllContainerMeasurements(application, con, id);
+			Container con = application.containerInternalStatusHistory(id, application.getJourneyContainerDat().getPastJourneys());
 			return con;
 		}
 		else {
@@ -369,119 +407,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener, ShowAll
 			return c;
 		}
 	}
-	
-	public void createPlots(final Application application, final TopMain topmain, Container c) {
-		if (checkBoxTemp.isSelected()) {
-			
-			ArrayList<Integer> data = c.getTempList();
-			 
-			 tempPlot = new plot("Temperature", csp, topmain);
-			 tempPlot.linePlot(data);;
-			 c.addObserver(tempPlot);
-//			 JPanel tempPanel = tempPlot.getChartPanel();
-//			 plotPanel.add(tempPanel);
-			 
-			 // plot.plot(data);
-			 // where plot.plot is the function that will displays the data
-			 // data is the corresponding arraylist for the plot
-		 }
-		 if (checkBoxPres.isSelected()) {
-			 
-			ArrayList<Integer> data = c.getPressureList();
-			 
-			 presPlot = new plot("Pressure", csp, topmain);
-			 presPlot.linePlot(data);;
-			 c.addObserver(presPlot);
-			 
-		 }
-		 if (checkBoxHum.isSelected()) {
-			 
-			 ArrayList<Integer> data = c.getHumList();
-			 
-			 humPlot = new plot("Humidity", csp, topmain);
-			 humPlot.linePlot(data);;
-			 c.addObserver(humPlot);
-//			 JPanel humPanel = humPlot.getChartPanel();
-//			 plotPanel.add(humPanel);
-			 
-		 }
-		 if (checkBoxAllinOne.isSelected()) {
-			 ArrayList<Integer> temp = c.getTempList();
-			 ArrayList<Integer> pres = c.getPressureList();
-			 ArrayList<Integer> hum = c.getHumList();
-			 
-			 cPlot = new comparisonlinePlots("Comparison line plot", temp, pres, hum, csp, topmain);
-//			 updateComparisonPlot(cPlot);
-			 c.addObserver(cPlot);
-			 
-		 }
-		 if (checkBoxBarPlot.isSelected()) {
-			 ArrayList<Integer> temp = c.getTempList();
-			 ArrayList<Integer> pres = c.getPressureList();
-			 ArrayList<Integer> hum = c.getHumList();
-			 
-			 bPlot = new barPlots("Bar plot", temp, pres, hum, csp, topmain);
-			 c.addObserver(bPlot);
-//			 updateBarPlot(bPlot);
-		 }
-		 updateAllPlots(topmain);
-	}
 
-	// possibly keyword instead of id ?
-	public void GetAllContainerMeasurements(final Application application, Container c, String id) {
-		ArrayList<Integer> result = new ArrayList<Integer>();
-		ArrayList<Integer> result2 = new ArrayList<Integer>();
-		ArrayList<Integer> result3 = new ArrayList<Integer>();
-		ArrayList<ArrayList<Integer>> totalresult = new ArrayList<ArrayList<Integer>>();
-		for (ArrayList<ArrayList<Integer>> measurement: application.containerInternalStatusHistory(id, application.getJourneyContainerDat().getPastJourneys())) {
-			result.addAll(measurement.get(0));
-			result2.addAll(measurement.get(1));
-			result3.addAll(measurement.get(2));
-		}
-		c.setTempList(result);
-		c.setPressureList(result2);
-		c.setHumList(result3);
-	}
-
-	public void updateLinePlots(plot linePlot) {
-		JPanel linePanel = linePlot.getChartPanel();
-		plotPanel.add(linePanel);
-	}
-
-	public void updateAllPlots(TopMain topmain) {
-		
-		plotPanel.removeAll();
-		if (checkBoxTemp.isSelected()) {
-			// updateTempPlot
-			updateLinePlots(tempPlot);
-		}
-		if (checkBoxPres.isSelected()) {
-			// updatePresPlot
-			updateLinePlots(presPlot);
-		}
-		if (checkBoxHum.isSelected()) {
-			// updateHumPlot
-			updateLinePlots(humPlot);
-		}
-		if (checkBoxAllinOne.isSelected()) {
-			updateComparisonPlot(cPlot);
-		}
-		if (checkBoxBarPlot.isSelected()) {
-			updateBarPlot(bPlot);
-		}
-		topmain.getMain1().revalidate();
-	}
-	
-	public void updateComparisonPlot(comparisonlinePlots cPlot) {
-		JPanel comparisonplot = cPlot.getChartPanel();
-		 plotPanel.add(comparisonplot);
-	}
-	
-	public void updateBarPlot(barPlots bPlot) {
-		JPanel barplot = bPlot.getChartPanel();
-		plotPanel.add(barplot);
-	}
-	
 	public void displayContainers() {
 		
 		viewContainers.removeAll();
@@ -524,7 +450,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener, ShowAll
 		}
 	}
 	 
-
 	public void propertyChange(PropertyChangeEvent evt) {
 
 		Application dat = ((Application)evt.getSource());;
@@ -553,6 +478,4 @@ public class ContainerSelectionPanels implements PropertyChangeListener, ShowAll
 			wContainers = dat.findContainer(keyword,result);
 		}
 	}
-
-
 }

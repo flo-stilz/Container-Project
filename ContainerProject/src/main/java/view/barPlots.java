@@ -1,9 +1,8 @@
 package view;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-
-import javax.swing.JPanel;
 
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -14,20 +13,21 @@ import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.ui.ApplicationFrame;
 import org.jfree.ui.TextAnchor;
 
+import model.Container;
 import model.observer;
 
-public class barPlots extends plot {
+public class barPlots extends ApplicationFrame implements observer, Graph {
 	
-	private ChartPanel chartPanel;
-	
-	public ChartPanel getChartPanel() {
-		return chartPanel;
-	}
+	private ContainerSelectionPanels csp;
+	private ChartPanel oldChartPanel;
 
-	public barPlots(String plottitle, ContainerSelectionPanels csp, TopMain topmain) {
-		super(plottitle, csp, topmain);
+	public barPlots(String plottitle, ContainerSelectionPanels csp) {
+		super(plottitle);
+		this.csp = csp;
+		
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
 		dataset.setValue(0, "", "Temperature");
@@ -44,44 +44,39 @@ public class barPlots extends plot {
 
 	
 		chart.setBackgroundPaint(Color.WHITE);
-//		setbackground(chart);
-		//display();
+
+	}
+	
+	int range(List<Integer> t) {
+	int r = Collections.max(t) - Collections.min(t);
+	return r;
+
+}
+	
+	public ChartPanel plotCreation(Container c) {
+		c.addObserver(this);
+		return makeChart(c);
 	}
 
-	public barPlots(String plottitle, ArrayList<Integer> temp, ArrayList<Integer> pres, ArrayList<Integer> hum, ContainerSelectionPanels csp, TopMain topmain) {
-		super(plottitle, csp, topmain);
-		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
-		dataset.setValue(range(temp), "hum", "Temperature");
-		dataset.setValue(range(pres), "hum", "Pressure");
-		dataset.setValue(range(hum), "hum", "Volume");
-
-		JFreeChart chart = ChartFactory.createBarChart(" Maximum change in Conditions", "Internal Status",
-				"change in values overtime", dataset, PlotOrientation.VERTICAL, false, false, false);
-
-		CategoryItemRenderer renderer = ((CategoryPlot) chart.getPlot()).getRenderer();
-
-		ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER);
-		renderer.setBasePositiveItemLabelPosition(position);
-
-		 chartPanel = new ChartPanel( chart );        
-	     chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
-	     setContentPane( chartPanel ); 
-
-		chart.setBackgroundPaint(Color.WHITE);
+	public void update(Container c) {
+		 
+		ChartPanel chartPanel = makeChart(c);
+		csp.updatePlot(chartPanel, oldChartPanel);
+		oldChartPanel = chartPanel;
+	}
+	
+	public ChartPanel makeChart(Container c) {
 		
-//		setbackground(chart);
-//		display();
-	}
-
-	public void update(ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
-
+		
+		ArrayList<Integer> t = c.getTempList();
+		ArrayList<Integer> p = c.getPressureList();
+		ArrayList<Integer> h = c.getHumList();
 		dataset.setValue(range(t), "hum", "Temperature");
 		dataset.setValue(range(p), "hum", "Pressure");
 		dataset.setValue(range(h), "hum", "Volume");
 
-		JFreeChart chart = ChartFactory.createBarChart(" Maximum change in Conditions", "Internal Status",
+		JFreeChart chart = ChartFactory.createBarChart(" Maximum change in Conditions for Container "+c.getContainerId(), "Internal Status",
 				"change in values overtime", dataset, PlotOrientation.VERTICAL, false, false, false);
 
 		CategoryItemRenderer renderer = ((CategoryPlot) chart.getPlot()).getRenderer();
@@ -89,16 +84,18 @@ public class barPlots extends plot {
 		ItemLabelPosition position = new ItemLabelPosition(ItemLabelAnchor.OUTSIDE12, TextAnchor.TOP_CENTER);
 		renderer.setBasePositiveItemLabelPosition(position);
 
-		 chartPanel = new ChartPanel( chart );        
-	     chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
-	     setContentPane( chartPanel ); 
-	     
-	     getCsp().updateAllPlots(getTopmain());
-
+		ChartPanel chartPanel = new ChartPanel( chart );        
+	    chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
+	    setContentPane( chartPanel ); 
 		chart.setBackgroundPaint(Color.WHITE);
-//		setbackground(chart);
-//		display();
 		
+		if (oldChartPanel == null) {
+			oldChartPanel = chartPanel;
+		}
+		
+		return chartPanel;
 	}
+
+
 
 }

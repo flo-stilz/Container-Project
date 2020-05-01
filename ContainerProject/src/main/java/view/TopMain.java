@@ -243,6 +243,7 @@ public class TopMain {
 		application.removeObserver(m);
 		application.removeObserver(j);
 		application.removeObserver(cont);
+		cont.getContainerPlot().getObs().clear();
 	}
 	
 }

@@ -25,7 +25,7 @@ public class Application {
 		return currentUser;
 	}
 	public Application() {
-		loadData();
+//		loadData();
 	}
 	public ClientDatabase getClientDat() {
 		return clientDat;
@@ -228,20 +228,18 @@ public class Application {
 	
 	
 	//Needs to loose a arraylist from the output. 
-	public ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
-		ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
+	public Container containerInternalStatusHistory(String search, ArrayList<Journey> history) {
+		Container containerHis = new Container(findContainer(search, history).get(0));
 		for(Journey j : history) {
 			for(Container c : j.getContainerList()) {
-				ArrayList<ArrayList<Integer>> measurement = new ArrayList<ArrayList<Integer>>();
 				if (c.getContainerId().contentEquals(search)) {
-					measurement.add(c.getTempList());
-					measurement.add(c.getPressureList());
-					measurement.add(c.getHumList());
-					containerInternalStatusHistoryList.add(measurement);
+					containerHis.getTempList().addAll(c.getTempList());
+					containerHis.getPressureList().addAll(c.getPressureList());
+					containerHis.getHumList().addAll(c.getHumList());
 				}
 			}	
 		}
-		return containerInternalStatusHistoryList;
+		return containerHis;
 	}
 	
 	
