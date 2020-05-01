@@ -15,12 +15,66 @@ public class JourneyContainerDatabase implements JourneyContainerPersistency {
 	private ArrayList<Container> containerWarehouse = new ArrayList<Container>();
 	private ArrayList<Journey> pastJourneys = new ArrayList<Journey>();
 	
+	
+	public void storeJourneyCounters() {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./JourneyCounter.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(Journey.getCounter());
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	} 
+	
+	public void readJourneyCounterFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./JourneyCounter.xml"));
+			} catch (FileNotFoundException e) {
+				throw new Error(e);
+				}
+		XMLDecoder decoder = new XMLDecoder(fis);
+		Journey.setCounter(0);
+		Journey.setCounter((Integer)decoder.readObject()); 
+		decoder.close();
+	}
+	
+	
+	public void storeContainerCounters() {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./ContainerCounter.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(Container.getcCounter());
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	} 
+	
+	public void readContainerCounterFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./ContainerCounter.xml"));
+			} catch (FileNotFoundException e) {
+				throw new Error(e);
+				}
+		XMLDecoder decoder = new XMLDecoder(fis);
+		Container.setcCounter(2);
+		Container.setcCounter((Integer)decoder.readObject()); 
+		decoder.close();
+	}
+	
+	
+	
 	//needs testing
 	public ArrayList<Container> getfilteredContainers( ArrayList<Journey> jList) {
 
 		ArrayList<Container> Containers = new ArrayList<Container>();
 		for (Journey j : jList) {
-			for (Container c : j.getContainerList()) {
+			for (Container c : j.getContainers()) {
 				Containers.add(c);
 			}
 		}

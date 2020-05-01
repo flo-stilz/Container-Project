@@ -11,7 +11,7 @@ public class Journey {
 	private int pressure;
 	private int humidity;
 	private static int counter = 0;
-	private ArrayList<Container> containerList = new ArrayList<Container>();
+	private ArrayList<Container> containers = new ArrayList<Container>();
 	
 	//for persistency layer
 	public Journey() {
@@ -32,12 +32,12 @@ public class Journey {
 		Journey.counter = counter;
 	}
 	
-	public ArrayList<Container> getContainerList() {
-		return containerList;
+	public ArrayList<Container> getContainers() {
+		return containers;
 	}
 
-	public void setContainerList(ArrayList<Container> containerList) {
-		this.containerList = containerList;
+	public void setContainers(ArrayList<Container> containers) {
+		this.containers = containers;
 	}
 
 	public String getId() {
@@ -57,8 +57,8 @@ public class Journey {
 	}
 
 //	public void updateCurrentLocation(String newcurrentLocation) {
-//		for (int i=0; i < containerList.size(); i++){
-//			containerList.get(i).setCurrentLocation(newcurrentLocation);
+//		for (int i=0; i < containers.size(); i++){
+//			containers.get(i).setCurrentLocation(newcurrentLocation);
 //		}
 //		this.currentLocation = newcurrentLocation.toUpperCase();
 //	}
@@ -66,6 +66,11 @@ public class Journey {
 	public void setCurrentLocation(String currentLocation) {
 		this.currentLocation = currentLocation;
 	}
+
+	public static int getCounter() {
+		return counter;
+	}
+
 
 	public int getDistance() {
 		return distance;
@@ -115,7 +120,7 @@ public class Journey {
 	public ArrayList<Container> findContainers(String keyword) {
 		
 		ArrayList<Container> containers = new ArrayList<Container>();
-		for (Container c : containerList) {
+		for (Container c : containers) {
 			
 			if ((c.getContainerId().equalsIgnoreCase(keyword)) 
 					|| (c.getContent().equalsIgnoreCase(keyword))

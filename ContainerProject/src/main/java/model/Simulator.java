@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
 public class Simulator {
 	
 	private ArrayList<String> companies = new ArrayList<String>(Arrays.asList("Lego", "COOPDanmark", "EnergiDanmark", "Pandora", "DanishCrown", "Lundbeck", "Bestseller", "Velux", "JPMorganChase", "AppleInc", "MicrosoftCorp", "NovoNordisk", "Netto", "Lidl", "SallingGroup", "VestasWindSystems", "TDCGroup", "Carlsberg", "Amazon", "Novozymes", "Ford", "Mercedes-Benz", "SamsungElectronics", "IntelCorporation", "DeutcheTelekom", "Coloplast", "DVSPanalpina", "KMD", "ArlaFoods", "Maersk", "Topsoe", "Novozymes", "Nestle", "Volkswagen", "Alibaba", "Google", "Tesla", "Porsche", "UPS", "PostNord", "ASUS", "Dell", "Smirnoff", "JBL", "RedBull")); 
-	private ArrayList<String> firstnames = new ArrayList<String>(Arrays.asList("Mads", "Florian", "Martin", "Lucien", "Anna", "John", "Peter", "Sven", "Jorgen", "Brunhilde", "Heath", "Bill", "Phil", "Andrea", "Hubert", "Emilie", " Maria", "Louise", "Mette", "Micheal", "Thomas", "Jesper", "Rasmus", "Christian", "Tina", "Alexander", "Mikkel", "Adam", "Sebastian", "Erik", "Phillip", "Samuel", "Conrad", "Agnes", "Victoria", "Ellen", "Marie", "Asta", "Silja", "Frederik", "Klara", "Ellinor", "Rebecca"));
+	private ArrayList<String> firstnames = new ArrayList<String>(Arrays.asList("Mads", "Florian", "Martin", "Lucien", "Anna", "John", "Peter", "Sven", "Jorgen", "Brunhilde", "Heath", "Bill", "Phil", "Andrea", "Hubert", "Emilie", "Maria", "Louise", "Mette", "Micheal", "Thomas", "Jesper", "Rasmus", "Christian", "Tina", "Alexander", "Mikkel", "Adam", "Sebastian", "Erik", "Phillip", "Samuel", "Conrad", "Agnes", "Victoria", "Ellen", "Marie", "Asta", "Silja", "Frederik", "Klara", "Ellinor", "Rebecca"));
 	private ArrayList<String> surnames = new ArrayList<String>(Arrays.asList("Nielsen", "Jensen", "Hansen", "Petersen", "Andersen", "Christensen", "Sorensen", "Moller", "Poulsen", "Ivanova", "Wang", "Kim", "Saito", "Gruber", "Mueller", "Peeters", "Smith", "Schmit", "Martin", "Garcia", "Silva", "Rossi", "Olsen", "Rasmussen", "Poulsen", "Madsen", "Als", "Beck", "Breum", "Brevig", "Brun-Andersen", "Clausen", "Clemensen", "Dahl", "Jacobsen", "Kampman", "Koldborg", "Lund", "Strandberg"));
 	private ArrayList<String> addresses = new ArrayList<String>(Arrays.asList("Anker Engelundsvej 101", "Bill Clinton Street 390", "Kings Street 100", "Queens Street 102", "Strandvej 2", "Hovedgade 1000", "Frederiksundsvej 48", "Alexanderstrasse 19", "Via Appia 12", "Rue Du Moulin", "Hollywood Blvd. 123", "Lombard Street 4", "Chapel Street 796", "First Street 1", "Via De Ventura 12", "El Camino Drive 22", "Enighedsvej 2, 2800 Kongens Lyngby", "Kongebakken 40, 4000 Roskilde", "Eriksenvej 17, Roskilde 4000", 
 			"Gydevej 6, 3520 Farum", "Fasanvej 7, 8370 Hadsten", "Stemannsgade 15, 8900 Randers", "Vestervang 8, 8000 Aarhus", "Priorgade 14, 9000 Aalborg", "Vodroffsvej 15, 1900 Frederiksberg", "Fiskedamsgade 28, 2100 Koebenhavn", "Wilder Pl. 13, 1403 Koebenhavn", "Edvard Falcks Gade 5, 1569 Koebenhavn", "Bjergbygade 1, 4200 Slagelse", "Nyvangsvej 3, 4400 Kalundborg", "Odinsvej 19, 5800 Nyborg",
@@ -246,7 +246,7 @@ public class Simulator {
 	
 	public void simulateData(Application application) {
 		for (Journey j : application.getJourneyContainerDat().getActiveJourneys()) {
-			for (Container c : j.getContainerList()) {
+			for (Container c : j.getContainers()) {
 				if (c.isEmpty()) {
 					int temp = temperatureInitialization();
 					int pressure = pressureInitialization();
@@ -265,7 +265,7 @@ public class Simulator {
 	
 //	public void simulateData(Application application, int seed) {
 //		for (Journey j : application.getJourney()) {
-//			for (Container c : j.getContainerList()) {
+//			for (Container c : j.getContainers()) {
 //				if (c.isEmpty()) {
 //					int temp = temperatureInitialization(seed);
 //					int pressure = pressureInitialization(seed);

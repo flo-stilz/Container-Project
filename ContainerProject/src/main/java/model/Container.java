@@ -16,13 +16,7 @@ public class Container {
     
     private String containerID;
     private String journeyID;
-//    private String uniqueID = containerID + "," + journeyID;   
-//    private String holdID1;
-//    private String holdID2;
-//    private String holdID3;
-//    private ArrayList <String> outPressure = new ArrayList<String>(); 
-//    private ArrayList <String> outHum = new ArrayList<String>(); 
-//    private ArrayList <String> outTemp = new ArrayList<String>();
+    
     private static int cCounter = 0;
     private ArrayList<observer> obs = new ArrayList<observer>();
     

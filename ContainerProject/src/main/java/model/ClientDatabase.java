@@ -1,5 +1,4 @@
 package model;
-
 import java.beans.XMLDecoder;
 import java.beans.XMLEncoder;
 import java.io.File;
@@ -12,10 +11,33 @@ import java.util.ArrayList;
 public class ClientDatabase implements ClientPersistency {
 	private ArrayList<Client> clients = new ArrayList<Client>();
 	
-//	public void storeClients() {
-//		storeClients(clients);
-//	}
 	
+	public void storeClientCounters() {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./ClientCounter.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(Client.getCount());
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	} 
+	
+	public void readClientCounterFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./ClientCounter.xml"));
+			} catch (FileNotFoundException e) {
+				throw new Error(e);
+				}
+		XMLDecoder decoder = new XMLDecoder(fis);
+		Client.setCount(0);
+		Client.setCount((Integer)decoder.readObject()); 
+		decoder.close();
+	}
+	
+
 	public void storeClients() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./Clients.xml"));
@@ -38,9 +60,6 @@ public class ClientDatabase implements ClientPersistency {
 		XMLDecoder decoder = new XMLDecoder(fis);
 		clients = (ArrayList<Client>)decoder.readObject(); 
 		decoder.close();
-
-
-
 	}
 	
 	public ArrayList<Client> getClients() {

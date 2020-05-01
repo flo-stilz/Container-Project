@@ -11,6 +11,10 @@ public class Client {
 	private int id;
 	private static int count = 69420;
 	
+	public static int getCount() {
+		return count;
+	}
+
 	public Client(String company, String address, String email, String name, String password) {
 		count = count +1;
 		this.company = company;
