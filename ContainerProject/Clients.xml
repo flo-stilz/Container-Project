@@ -4,76 +4,22 @@
   <void method="add">
    <object class="model.Client">
     <void property="address">
-     <string>Enighedsvej 2, 2800 Kongens Lyngby</string>
+     <string>madisonsquaregarden</string>
     </void>
     <void property="company">
-     <string>JBL</string>
+     <string>Nike</string>
     </void>
     <void property="email">
-     <string>Marie.Saito@JBL.com</string>
+     <string>nike@administration.com</string>
     </void>
     <void property="id">
-     <int>69445</int>
+     <int>69451</int>
     </void>
     <void property="name">
-     <string>Marie Saito</string>
+     <string>Mads Mikkelsen</string>
     </void>
-   </object>
-  </void>
-  <void method="add">
-   <object class="model.Client">
-    <void property="address">
-     <string>Frederiksundsvej 48</string>
-    </void>
-    <void property="company">
-     <string>Netto</string>
-    </void>
-    <void property="email">
-     <string>Bill.Saito@Netto.com</string>
-    </void>
-    <void property="id">
-     <int>69446</int>
-    </void>
-    <void property="name">
-     <string>Bill Saito</string>
-    </void>
-   </object>
-  </void>
-  <void method="add">
-   <object class="model.Client">
-    <void property="address">
-     <string>Hollywood Blvd. 123</string>
-    </void>
-    <void property="company">
-     <string>Velux</string>
-    </void>
-    <void property="email">
-     <string>Adam.Peeters@Velux.com</string>
-    </void>
-    <void property="id">
-     <int>69447</int>
-    </void>
-    <void property="name">
-     <string>Adam Peeters</string>
-    </void>
-   </object>
-  </void>
-  <void method="add">
-   <object class="model.Client">
-    <void property="address">
-     <string>Gydevej 6, 3520 Farum</string>
-    </void>
-    <void property="company">
-     <string>AppleInc</string>
-    </void>
-    <void property="email">
-     <string>John.Schmit@AppleInc.com</string>
-    </void>
-    <void property="id">
-     <int>69448</int>
-    </void>
-    <void property="name">
-     <string>John Schmit</string>
+    <void property="password">
+     <string>peter</string>
     </void>
    </object>
   </void>

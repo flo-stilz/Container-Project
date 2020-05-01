@@ -49,6 +49,7 @@ public class stepDef {
 	String search;
 	String newloc;
 	String loc;
+	String keyword;
 	
 	//Imports for Container Status Tracking
 	private Integer temp;
@@ -61,51 +62,36 @@ public class stepDef {
 	private Integer pressure2;
 	private Integer hum2;
 	
+	//Imports for Keep Track of the Evolution
+	ArrayList<Container> containerJourneyHistoryList = new ArrayList<Container>();
+	ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
+	ArrayList<Container> filteredcontainer = new ArrayList<Container>();
+	ArrayList<Container> allcontainers = new ArrayList<Container>();
+	Journey journey;
+	Client client;
+	
+	
+	//Imports for Persistency Layer
+	private ClientDatabase cb = new ClientDatabase();
+	private JourneyContainerDatabase jb = new JourneyContainerDatabase();
+	ArrayList<Client> clientsCopy;
+	ArrayList<Journey> activeJourneysCopy;
+	ArrayList<Journey> pastJourneysCopy;
+	ArrayList<Container> containersCopy;
+	int clientCounterCopy;
+	int journeyCounterCopy;
+	int containerCounterCopy;
+	
+	
 	
 	//Imports for the Simulator
 	private Simulator sim = new Simulator();
 	private Integer seed;
 	private Integer seed2;
 	private int days;
-	
-	
-	
-	
-	//Imports for Journey Simulator
-	Client client; 
-	
-	
-	
 	Container c1;
-	Container c2;
-
-
-
-	
-	
-	String keyword;
-	Journey journey;
-	
-	
-	//Imports for Keep Track of the Evolution
-	ArrayList<Container> containerJourneyHistoryList = new ArrayList<Container>();
-	ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
-	
 	
 
-	
-	ArrayList<Container> filteredcontainer = new ArrayList<Container>();
-	ArrayList<Container> allcontainers = new ArrayList<Container>();
-	
-	private ClientDatabase cb = new ClientDatabase();
-	private JourneyContainerDatabase jb = new JourneyContainerDatabase();
-	ArrayList<Client> deepcopy;
-	ArrayList<Journey> deepcopy2;
-	ArrayList<Container> deepcopy3;
-	int deepcopy4;
-	int deepcopy5;
-	int deepcopy6;
-	
 
 	
 	
@@ -510,7 +496,7 @@ public class stepDef {
     
 	//Keep Track Of The Evolution
     
-	//SCENARIO 1: Track Journey-History of a container
+	//SCENARIO 1: Track the Journey-History of a container
 	@Given("the journey and container counter is set to zero which describes the name of the corresponding ids")
 	public void the_journey_and_container_counter_is_set_to_zero_which_describes_the_name_of_the_corresponding_ids() {
 		Journey.setCounter(0);
@@ -533,34 +519,34 @@ public class stepDef {
     	assertEquals(containerJourneyHistoryList.get(0).getId(), "BUAMIA0"); 	
     }
     
-    //SCENARIO 2:
+    //SCENARIO 2: Track the Journey-History of a reused container
     @Given("a container with id {string} used in journey {string} and journey {string}")
     public void a_container_with_id_used_in_journey_and_journey(String search, String jid1, String jid2) {
         this.search = search; 
     }
     
-    @Then("the journey history of the resued container {string} should be returned")
-    public void the_journey_history_of_the_resued_container_should_be_returned(String search) {
+    @Then("the journey history of the resued container {string} is returned")
+    public void the_journey_history_of_the_resued_container_is_returned(String search) {
     	assertEquals(containerJourneyHistoryList.get(0).getId(), "BUAMIA0");
     	assertEquals(containerJourneyHistoryList.get(1).getId(), "BUAMIA1");
     	assertEquals(containerJourneyHistoryList.size(),2); 
     }
     
     
-    //SCENARIO 3
+    //SCENARIO 3: Track the Journey-History of an unused container
     @Given("an unsused container with id {string}")
     public void an_unsused_container_with_id(String search) {
         this.search = search;
     }
     
-    @Then("the empty journey history of the unsued container {string} should be returned")
-    public void the_empty_journey_history_of_the_unsued_container_should_be_returned(String jid) {
+    @Then("the empty journey history of the unsued container {string} is returned")
+    public void the_empty_journey_history_of_the_unsued_container_is_returned(String jid) {
     	assertEquals(containerJourneyHistoryList.size(),0);
     }
     
     
-    //SCENARIO 4
-    @When("internal-status measurements for the containers corresponding to journey {string} are being simulated")
+    //SCENARIO 4: Track the internal-status-history of a container
+    @Given("internal-status measurements for the containers corresponding to journey {string} are being simulated")
     public void internal_status_measurements_for_the_journey_containers_are_being_simulated(String jid) {
     	sim.setSeed(123);
     	temp = sim.temperatureInitialization();
@@ -568,25 +554,25 @@ public class stepDef {
     	hum = sim.humidityInitialization(); 
     }
     
-    @When("the simulated internal-status measurements are being added to all containers in the journey {string}")
+    @Given("the simulated internal-status measurements are being added to all containers in the journey {string}")
     public void the_simulated_internal_status_measurements_are_being_added_to_all_containers_in_the_journey(String jid) {
     	application.updateData(journeys.get(jid), journeys.get(jid).getContainers().get(0), temp, pressure, hum);
     }
     
-    @When("the container id is searched for in the journey history to find the internal-status of all journeys the container has been used for")
-    public void the_container_id_is_searched_for_in_the_journey_history_to_find_the_internal_status_of_all_journeys_the_container_has_been_used_for() {
+    @When("the container id is searched for in the internal-status history")
+    public void the_container_id_is_searched_for_in_the_internal_status_history() {
     	containerInternalStatusHistoryList = application.containerInternalStatusHistory(search, application.getJourneyContainerDat().getPastJourneys());		
     }
     
-    @Then("the internal-status history of container {string} should be returned")
-    public void the_internal_status_history_of_container_should_be_returned(String search){
+    @Then("the internal-status history of container {string} is returned")
+    public void the_internal_status_history_of_container_is_returned(String search){
     	assertEquals(containerInternalStatusHistoryList.size(), 1);
     }
  
     
-    // SCENARIO 5
+    // SCENARIO 5: Track the internal-status-history of a reused container
     
-    @When("a new set of internal-status measurements for the containers corresponding to journey {string} are being simulated")
+    @Given("a new set of internal-status measurements for the containers corresponding to journey {string} are being simulated")
     public void a_new_set_of_internal_status_measurements_for_the_containers_corresponding_to_journey_are_being_simulated(String string) {
     	sim.setSeed(321);
     	temp1 = sim.temperatureInitialization();
@@ -594,31 +580,30 @@ public class stepDef {
     	hum1 = sim.humidityInitialization(); 
     }
     
-    @When("the new set of simulated internal-status measurements are being added to all containers in the journey {string}")
+    @Given("the new set of simulated internal-status measurements are being added to all containers in the journey {string}")
     public void the_new_set_of_simulated_internal_status_measurements_are_being_added_to_all_containers_in_the_journey(String jid) {
     	application.updateData(journeys.get(jid), journeys.get(jid).getContainers().get(0), temp1, pressure1, hum1);
     }
     
-    
-    @Then("the internal-status history of the reused container {string} should be returned")
-    public void the_internal_status_history_of_the_reused_container_should_be_returned(String search) {
+    @Then("the internal-status history of the reused container {string} is returned")
+    public void the_internal_status_history_of_the_reused_container_is_returned(String search) {
     	assertEquals(containerInternalStatusHistoryList.size(),2);
     }
     
     
-    //SCENARIO 6
+    //SCENARIO 6: Track the internal-status-history of an unused container
     @When("a container with id {string} not used in the journey {string}")
     public void a_container_with_id_not_used_in_the_journey(String search, String jid) {
     	this.search = search; 
     }
     
-    @Then("the empty internal-status history of the unused container {string} should be returned")
-    public void the_empty_internal_status_history_of_the_unused_container_should_be_returned(String search) {
+    @Then("the empty internal-status history of the unused container {string} is returned")
+    public void the_empty_internal_status_history_of_the_unused_container_is_returned(String search) {
         assertEquals(containerInternalStatusHistoryList.size(),0);
     }
     
     
-	//SCENARIO 15: Filtering for all active containers
+	//SCENARIO 7: Filtering for all active containers
 	@When("filtering for all the active containers")
 	public void filtering_for_all_the_active_containers() {
 		filteredcontainer = application.getJourneyContainerDat().getfilteredContainers(application.getJourneyContainerDat().getActiveJourneys());
@@ -631,7 +616,7 @@ public class stepDef {
 	}
 	
 	
-	//SCENARIO 16: Filtered for all containers in the containerwarehouse
+	//SCENARIO 8: Filtered for all containers in the containerwarehouse
 	@When("filtering for all the containers in the containerwarehouse")
 	public void filtering_for_all_containers_in_the_containerwarehouse() {
 		filteredcontainer = application.getJourneyContainerDat().getfilteredContainers(application.getJourneyContainerDat().getActiveJourneys());
@@ -644,7 +629,7 @@ public class stepDef {
 	}
 	
 	
-	//SCENARIO 17: Retrieving all containers
+	//SCENARIO 9: Retrieving all containers
 	@When("all containers have been retrieved")
 	public void all_containers_have_been_retrieved(){
 		allcontainers = application.getJourneyContainerDat().getAllContainers(false, application.getJourneyContainerDat().getActiveJourneys());
@@ -947,56 +932,53 @@ public class stepDef {
 
     
 
-    //PERSISTENCY LAYER
-    
-    //SCENARIO 1: Storing two clients
-    @When("a deep copy of the clients are made")
-    public void a_deep_copy_of_the_clients_are_made() {
-    	deepcopy = new ArrayList<Client>(application.getClientDat().getClients()); 
+    //Persistency Layer
+	
+    //SCENARIO 1: Store two clients
+    @Given("copying the current list of clients")
+    public void copying_the_current_list_of_clients() {
+    	clientsCopy = new ArrayList<Client>(application.getClientDat().getClients()); 
     }
+    
+    @When("storing the current list of clients")
+    public void storing_the_current_list_of_clients() {
+    	application.getClientDat().storeClients();
+    }
+    
  
-    @When("reading the generated ClientFile")
-    public void reading_the_generated_ClientFile() {
+    @When("reading the generated client file")
+    public void reading_the_generated_client_file() {
     	cb.readClientFile();
     }
 
-    @Then("the size of the client file is the same as the deep copy")
-    public void the_size_of_the_client_file_is_the_same_as_the_deep_copy() {
-    	assertEquals(application.getClientDat().getClients().size(), deepcopy.size());
+    @Then("the client file matches the copied list of clients")
+    public void the_client_file_matches_the_copied_list_of_clients() {
+    	assertEquals(application.getClientDat().getClients().size(), clientsCopy.size());
+    	assertEquals(application.getClientDat().getClients().get(0).getEmail(), clientsCopy.get(0).getEmail());
     }
     
     
-	//SCENARIO 2: Restoring a client when client information is updated
+	//SCENARIO 2: Restore a client when client information is updated
 	@When("update and store the client {string} name to {string}")
 	public void update_the_client_name_to(String cid, String name) {
 		clients.get(cid).updateName(name);
 		application.getClientDat().storeClients();
 	}
-	
-	@When("a deep copy of the updated list of clients")
-	public void a_deep_copy_of_the_updated_list_of_clients() {
-    	deepcopy = new ArrayList<Client>(application.getClientDat().getClients());
-	}
-    
-	@When("read the generated ClientFile")
-	public void read_the_generated_ClientFile() {
-		cb.readClientFile();
-	}
-    
-    @Then("test2") 
-    public void test2() {
-    	assertEquals(application.getClientDat().getClients().get(0).getName(), deepcopy.get(0).getName());
-    	assertEquals(application.getClientDat().getClients().size(), deepcopy.size());
+
+    @Then("the client file is the same as the copied list of clients") 
+    public void the_client_file_is_the_same_as_the_copied_list_of_clients() {
+    	assertEquals(application.getClientDat().getClients().get(0).getName(), clientsCopy.get(0).getName());
+    	assertEquals(application.getClientDat().getClients().size(), clientsCopy.size());
     }
     
 
-    //SCENARIO 3: Storing active journey 	
+    //SCENARIO 3: Store active journey 	
 	@Given("a second seed {int} pointing to a particular instance in the simulator")
-	public void a_second_seed_pointing_to_a_particular_instance_in_the_simulator(Integer int2) {
-		this.seed2 = int2;
+	public void a_second_seed_pointing_to_a_particular_instance_in_the_simulator(Integer seed) {
+		this.seed2 = seed;
 	}
     
-	@When("the second set of internal-status measurements are generated for the containers in the journey {string}")
+	@Given("the second set of internal-status measurements are generated for the containers in the journey {string}")
 	public void the_second_set_of_internal_status_measurements_are_generated_for_the_containers_in_the_journey(String jid) {
 		sim.setSeed(seed2);
 		hum2 = sim.humidityInitialization(); 
@@ -1004,25 +986,30 @@ public class stepDef {
 		temp2 = sim.temperatureInitialization(); 
 	}
 	
-	@When("the second set of data is added to the containers in the journey {string}")
+	@Given("the second set of data is added to the containers in the journey {string}")
 	public void the_second_set_of_data_is_added_to_the_containers_in_the_journey(String jid) {
 		c1 = application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0);
 	    application.updateData(application.getJourneyContainerDat().getActiveJourneys().get(0), c1, temp2, pressure2, hum2);
 	}
 	
-	@When("copying the most recent list of journeys")
-	public void a_deep_copy_of_the_list_of_journeys() {
-    	deepcopy2 = new ArrayList<Journey>(application.getJourneyContainerDat().getActiveJourneys());
+	@Given("copying the current list of active journeys")
+	public void copying_the_current_list_of_active_journeys() {
+    	activeJourneysCopy = new ArrayList<Journey>(application.getJourneyContainerDat().getActiveJourneys());
+	}
+	
+	@When("storing the current list of active journeys")
+	public void storing_the_current_list_of_active_journeys() {
+		application.getJourneyContainerDat().readActiveJourneyFile();
 	}
     
-	@When("reading the generated ActiveJourney file")
-	public void read_the_generated_JourneyFile() {
+	@When("reading the generated activejourney file")
+	public void reading_the_generated_activejourneyFile() {
 		jb.readActiveJourneyFile();
 	}
 
-	@Then("the size and content of the journey file is the same")
-	public void the_size_and_content_of_the_journey_file_is_the_same() {
-		assertEquals(application.getJourneyContainerDat().getActiveJourneys().size(), deepcopy2.size());
+	@Then("the activejourney file matches the copied list of active journeys")
+	public void the_activejourney_file_matches_the_copied_list_of_active_journeys() {
+		assertEquals(application.getJourneyContainerDat().getActiveJourneys().size(), activeJourneysCopy.size());
 		assertEquals(hum, c1.getHumList().get(0));
 		assertEquals(pressure, c1.getPressureList().get(0));
 		assertEquals(temp, c1.getTempList().get(0));
@@ -1039,109 +1026,118 @@ public class stepDef {
 	}
 	
     
-    //SCENARIO 4: Storing Journey history and ContainerWarehouse
-	@When("a deep copy of the list of past journeys")
-	public void a_deep_copy_of_the_list_of_past_journeys() {
-		deepcopy2 = new ArrayList<Journey>(application.getJourneyContainerDat().getPastJourneys());
-		deepcopy3 = new ArrayList<Container>(application.getJourneyContainerDat().getContainerWarehouse());
+    //SCENARIO 4: Store a past journey and store the changes in the container warehouse
+	@Given("copying the current list of past journeys and the containers in the container warehouse")
+	public void copying_the_current_list_of_past_journeys_and_the_containers_in_the_container_warehouse() {
+		pastJourneysCopy = new ArrayList<Journey>(application.getJourneyContainerDat().getPastJourneys());
+		containersCopy = new ArrayList<Container>(application.getJourneyContainerDat().getContainerWarehouse());
+	}
+	
+	@When("storing the current list of past journey and the containers in the container warehouse")
+	public void storing_the_current_list_of_past_journey_and_the_containers_in_the_container_warehouse() {
+		application.getJourneyContainerDat().storeEndedJourneys();
+		application.getJourneyContainerDat().storeContainerWarehouse();
 	}
 
-	@When("read the generated pastjourneyfile and the containwarehousefile")
-	public void read_the_generated_pastjourneyfile_and_the_containwarehousefile() {
+	@When("reading the generated pastjourney file and the containwarehouse file")
+	public void reading_the_generated_pastjourney_file_and_the_containwarehouse_file() {
 		jb.readEndedJourneyFile();
 		jb.readContainerWarehouseFile();
 	}
 
-	@Then("the size and content of the two files are the right")
-	public void the_size_and_content_of_the_two_files_are_the_right() {
-    	assertEquals(application.getJourneyContainerDat().getPastJourneys().size(), deepcopy2.size());
-    	assertEquals(application.getJourneyContainerDat().getPastJourneys().get(0).getId(), deepcopy2.get(0).getId());
-    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().size(), deepcopy3.size()); 
-    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().get(0).getId(), deepcopy3.get(0).getId());
+	@Then("the pastjourney file matches the copied list of past journeys")
+	public void the_pastjourney_file_matches_the_copied_list_of_past_journeys() {
+    	assertEquals(application.getJourneyContainerDat().getPastJourneys().size(), pastJourneysCopy.size());
+    	assertEquals(application.getJourneyContainerDat().getPastJourneys().get(0).getId(), pastJourneysCopy.get(0).getId());
 	}
-    
 	
-	//SCENARIO 5: Storing Journey history and ContainerWarehouse for journey with multiple containers
-	@When("a deep copy of the list of past journeys2")
-	public void a_deep_copy_of_the_list_of_past_journeys2() {
-		deepcopy2 = new ArrayList<Journey>(application.getJourneyContainerDat().getPastJourneys());
-		deepcopy3 = new ArrayList<Container>(application.getJourneyContainerDat().getContainerWarehouse());
+	@Then("the containerwarehouse file matches the copied list of containers in the container warehouse")
+	public void the_containerwarehouse_file_matches_the_copied_list_of_containers_in_the_container_warehouse() {
+    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().size(), containersCopy.size());
+    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().get(0).getId(), containersCopy.get(0).getId());
+	}
+	
+	//SCENARIO 5: Store a past journey that had multiple containers and store the changes in the container warehouse
+	@Then("the pastjourney file is the same as the copied list of past journeys")
+	public void the_pastjourney_file_is_the_same_as_the_copied_list_of_past_journeys() {
+    	assertEquals(application.getJourneyContainerDat().getPastJourneys().size(), pastJourneysCopy.size());
+    	assertEquals(application.getJourneyContainerDat().getPastJourneys().get(0).getId(), pastJourneysCopy.get(0).getId());
+	}
+	
+	@Then("the containerwarehouse file is the same as the copied list of containers in the container warehouse")
+	public void the_containerwarehouse_file_is_the_same_as_the_copied_list_of_containers_in_the_container_warehouse() {
+    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().size(), containersCopy.size()); 
+    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().get(0).getId(), containersCopy.get(0).getId());
 	}
 
-	@When("read the generated pastjourneyfile and the containwarehousefile2")
-	public void read_the_generated_pastjourneyfile_and_the_containwarehousefile2() {
-		jb.readEndedJourneyFile();
-		jb.readContainerWarehouseFile();
-	}
-
-	@Then("the size and content of the two files are the right2")
-	public void the_size_and_content_of_the_two_files_are_the_right2() {
-    	assertEquals(application.getJourneyContainerDat().getPastJourneys().size(), deepcopy2.size());
-    	assertEquals(application.getJourneyContainerDat().getPastJourneys().get(0).getId(), deepcopy2.get(0).getId());
-    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().size(), deepcopy3.size()); 
-    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().get(0).getId(), deepcopy3.get(0).getId());
-	}
 	
-	
-	
-	
-	
-	//SCENARIO 6: Something
-	@When("copying the most recent client counter")
+	//SCENARIO 6: Store the most recent client counter
+	@Given("copying the most recent client counter")
 	public void copying_the_most_recent_client_counter() {
-		deepcopy4 = Client.getCount();
+		clientCounterCopy = Client.getCount();
+	}
+	
+	@When("storing the most recent client counter")
+	public void storing_the_most_recent_client_counter(){
+		application.getClientDat().storeClientCounter();
 	}
 	
 	@When("reading the generated client counter file")
 	public void reading_the_enerated_client_counter_file() {
 		Client.setCount(0);
-		cb.readClientCounterFile();
+		application.getClientDat().readClientCounterFile();
 	}
 
 	@Then("the most recent client counter is")
 	public void the_most_recent_client_counter_is() {
-		//Week test: think of something better tomorrow
-		System.out.println(Client.getCount());
-		assertEquals(Client.getCount(),deepcopy4);
+		assertEquals(Client.getCount(), clientCounterCopy);
 	}
 	
 	
-	//SCENARIO 7: Something2
+	//SCENARIO 7: Store the most recent journey counter
 	
 	@Given("copying the most recent journey counter")
 	public void copying_the_most_recent_journey_counter() {
-		deepcopy5 = Journey.getCounter();
+		journeyCounterCopy = Journey.getCounter();
 	}
 	
-	@Given("reading the generated journey counter file")
+	@When("storing the most recent journey counter")
+	public void storing_the_most_recent_journey_counter(){
+		application.getJourneyContainerDat().storeJourneyCounter();
+	}
+	
+	@When("reading the generated journey counter file")
 	public void reading_the_generated_journey_counter_file() {
-		jb.storeJourneyCounters();
 		Journey.setCounter(0);
-		jb.readJourneyCounterFile();
+		application.getJourneyContainerDat().readJourneyCounterFile();
 	}
 
 	@Then("the most recent journey counter is")
 	public void the_most_recent_journey_counter_is() {
-		assertEquals(Journey.getCounter(), deepcopy5);
+		assertEquals(Journey.getCounter(), journeyCounterCopy);
 	}
 	
 	
-	//SCENARIO 8: Something3
+	//SCENARIO 8: Store the most recent container counter
 	@Given("copying the most recent container counter")
 	public void copying_the_most_recent_container_counter() {
-		deepcopy6 = Container.getcCounter();
+		containerCounterCopy = Container.getcCounter();
 	}
-
-	@Given("reading the generated container counter file")
+	
+	@When("storing the most recent container counter")
+	public void storing_the_most_recent_container_counter(){
+		application.getJourneyContainerDat().storeContainerCounter();
+	}
+	
+	@When("reading the generated container counter file")
 	public void reading_the_generated_container_counter_file() {
-		jb.storeContainerCounters();
 		Container.setcCounter(0);
-		jb.readContainerCounterFile();
+		application.getJourneyContainerDat().readContainerCounterFile();
 	}
 
 	@Then("the most recent container counter is")
 	public void the_most_recent_container_counter_is() {
-		assertEquals(Container.getcCounter(),deepcopy6);
+		assertEquals(Container.getcCounter(), containerCounterCopy);
 	}
 }
 

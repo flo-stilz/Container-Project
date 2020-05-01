@@ -7,7 +7,7 @@
      <string>empty</string>
     </void>
     <void property="containerId">
-     <string>C5</string>
+     <string>C9</string>
     </void>
     <void property="content">
      <string>empty</string>
@@ -16,7 +16,26 @@
      <string>container warehouse</string>
     </void>
     <void property="id">
-     <string>BDPTOR5</string>
+     <string>TRIMAL9</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Container">
+    <void property="company">
+     <string>empty</string>
+    </void>
+    <void property="containerId">
+     <string>C10</string>
+    </void>
+    <void property="content">
+     <string>empty</string>
+    </void>
+    <void property="currentLocation">
+     <string>container warehouse</string>
+    </void>
+    <void property="id">
+     <string>TRIMAL9</string>
     </void>
    </object>
   </void>

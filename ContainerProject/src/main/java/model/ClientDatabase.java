@@ -12,7 +12,7 @@ public class ClientDatabase implements ClientPersistency {
 	private ArrayList<Client> clients = new ArrayList<Client>();
 	
 	
-	public void storeClientCounters() {
+	public void storeClientCounter() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./ClientCounter.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);

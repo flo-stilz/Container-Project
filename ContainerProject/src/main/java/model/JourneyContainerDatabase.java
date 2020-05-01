@@ -16,7 +16,7 @@ public class JourneyContainerDatabase implements JourneyContainerPersistency {
 	private ArrayList<Journey> pastJourneys = new ArrayList<Journey>();
 	
 	
-	public void storeJourneyCounters() {
+	public void storeJourneyCounter() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./JourneyCounter.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
@@ -42,7 +42,7 @@ public class JourneyContainerDatabase implements JourneyContainerPersistency {
 	}
 	
 	
-	public void storeContainerCounters() {
+	public void storeContainerCounter() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./ContainerCounter.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);

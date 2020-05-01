@@ -63,7 +63,7 @@ public class Application {
 		Client c = new Client(company, address, email, name, password);
 		clientDat.getClients().add(c);
 		clientDat.storeClients(); 
-		clientDat.storeClientCounters();
+		clientDat.storeClientCounter();
 		support.firePropertyChange("clients",null,null);
 		return c;
 	}
@@ -130,10 +130,10 @@ public class Application {
 		if (findJourney( origin, destination).size() == 0) {
 			 Journey j = new Journey(origin, destination, content, company);
 			 journeyContainerDat.getActiveJourneys().add(j);
-			 journeyContainerDat.storeJourneyCounters();
+			 journeyContainerDat.storeJourneyCounter();
 			 Container container = assignContainer(content, company, j.getId());
 			 j.getContainers().add(container);
-			 journeyContainerDat.storeContainerCounters();
+			 journeyContainerDat.storeContainerCounter();
 			 updateCurrentLocation(j, origin);
 			 support.firePropertyChange("journey",null,null);
 			 journeyContainerDat.storeActiveJourneys();
