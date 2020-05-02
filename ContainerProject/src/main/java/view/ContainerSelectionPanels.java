@@ -25,6 +25,7 @@ import javax.swing.table.DefaultTableModel;
 
 import org.jfree.chart.ChartPanel;
 
+import controller.ShowAllListener;
 import model.Container;
 import model.Application;
 import model.Journey;
@@ -44,6 +45,7 @@ import model.Journey;
 
 public class ContainerSelectionPanels implements PropertyChangeListener{
 
+	
 	private JPanel containerSearch;
 	private JPanel viewContainers;
 	private ArrayList<Container> wContainers = new ArrayList<Container>();
@@ -61,9 +63,38 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 	private boolean showAllCommand;
 	private boolean isPast;
 	private JPanel checkOptions;
-	private String label;
 	private Container containerPlot = new Container();
+	private JButton showAll;
 	
+	
+	public String getKeyword() {
+		return keyword;
+	}
+
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
+	}
+
+	public boolean isShowAllCommand() {
+		return showAllCommand;
+	}
+
+	public void setShowAllCommand(boolean showAllCommand) {
+		this.showAllCommand = showAllCommand;
+	}
+
+	public boolean isPast() {
+		return isPast;
+	}
+
+	public void setPast(boolean isPast) {
+		this.isPast = isPast;
+	}
+
+	public void setwContainers(ArrayList<Container> wContainers) {
+		this.wContainers = wContainers;
+	}
+
 	public ArrayList<Container> getwContainers() {
 		return wContainers;
 	}
@@ -119,12 +150,12 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		showAll(application, topmain, true);
 		
 	}
-
+	
+	
 	public void showAll(final Application application, final TopMain topmain, final boolean b) {
-		JButton showAll = new JButton("Show All");
+		showAll = new JButton("Show All");
 		containerSearch.add(showAll);
 		showAll.addActionListener(new ActionListener() {
-
 			public void actionPerformed(ActionEvent e) {
 				ArrayList<Journey> journeys = new ArrayList<Journey>();
 				if (b) {
@@ -146,6 +177,20 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			}
 		});
 	}
+//	public void addShowAllListener(JButton showAll, ShowAllListener listenForShowAll) {
+//		
+//		showAll.addActionListener(listenForShowAll);
+//	}
+
+
+
+	public JButton getShowAll() {
+		return showAll;
+	}
+
+	public void setShowAll(JButton showAll) {
+		this.showAll = showAll;
+	}
 
 	public void searchActiveContainers(final Application application, final TopMain topmain) {
 		JLabel activecontainer = new JLabel("Active Container");
@@ -162,7 +207,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 				showAllCommand = false;
 				isPast = false;
 				keyword = searchActiveContainer.getText();
-				label = "Active containers related to " + keyword;
 				ArrayList<Journey> result = filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getActiveJourneys());
 				
 				wContainers = application.findContainer(keyword, result);
