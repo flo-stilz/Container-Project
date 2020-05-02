@@ -115,20 +115,5 @@ public class Journey {
 		this.id = id;
 	}
 
-	// finds containers within a journey depending on a keyword
-	
-	public ArrayList<Container> findContainers(String keyword) {
-		
-		ArrayList<Container> containers = new ArrayList<Container>();
-		for (Container c : containers) {
-			
-			if ((c.getContainerId().equalsIgnoreCase(keyword)) 
-					|| (c.getContent().equalsIgnoreCase(keyword))
-					|| (c.getCompany().equalsIgnoreCase(keyword))) {
-				containers.add(c);
-			}
-		}
-		return containers;
-	}
 
 }

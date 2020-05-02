@@ -198,21 +198,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		}
 	}
 	
-//	public void showAllPastContainers(final Application application, final TopMain topmain) {
-//		JButton showAllPast = new JButton("Show All");
-//		containerSearch.add(showAllPast);
-//		showAllPast.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				showAllCommand = true;
-//				isPast = true;
-//				ArrayList<Journey> result = filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getPastJourneys());
-//				wContainers = application.getJourneyContainerDat().getAllContainers(true, result);
-//				checksSearchEntryC(application, topmain);
-//			}
-//		});
-//	}
-	
 	public void searchForPastContainers(final Application application, final TopMain topmain) {
 		JLabel containeritempast = new JLabel("History of Containers");
 		containerSearch.add(containeritempast);
@@ -339,30 +324,35 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		JPanel choosePlots = new JPanel(new BorderLayout());
 		extraOptions.add(choosePlots, BorderLayout.EAST);
 		
-		Container c = chooseContainerForPlot(application, id.getSelectedItem().toString());
-		
 		checkOptions = new JPanel(new GridLayout(0,2));
 		plotPanel.removeAll();
+		final ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
+		final ArrayList<Graph> graphs = new ArrayList<Graph>();
 		
 		checkBoxTemp = new JCheckBox("Temperature Plot");
 		LinePlot temp = new LinePlot("Temperature", csp, new TemperaturePlot());
-		generatePlot(temp, checkBoxTemp);
+		checkBoxes.add(checkBoxTemp);
+		graphs.add(temp);
 		
 		checkBoxPres = new JCheckBox("Pressure Plot");
 		LinePlot pres = new LinePlot("Pressure", csp, new PressurePlot());
-		generatePlot(pres, checkBoxPres);
+		checkBoxes.add(checkBoxPres);
+		graphs.add(pres);
 		
 		checkBoxHum = new JCheckBox("Humidity Plot");
 		LinePlot hum = new LinePlot("Humidity", csp, new HumidityPlot());
-		generatePlot(hum, checkBoxHum);
+		checkBoxes.add(checkBoxHum);
+		graphs.add(hum);
 		
 		checkBoxAllinOne = new JCheckBox("All in One");
 		comparisonlinePlots comp = new comparisonlinePlots("All in One", csp);
-		generatePlot(comp, checkBoxAllinOne);
+		checkBoxes.add(checkBoxAllinOne);
+		graphs.add(comp);
 		
 		checkBoxBarPlot = new JCheckBox("Bar Plot");
 		barPlots bar = new barPlots("BarPlot", csp);
-		generatePlot(bar, checkBoxBarPlot);
+		checkBoxes.add(checkBoxBarPlot);
+		graphs.add(bar);
 		
 		checkOptions.add(checkBoxTemp);
 		checkOptions.add(checkBoxPres);
@@ -380,24 +370,25 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 				
 				// stop the ContainerSelectionPanels from listening to the application layer
 				application.removeObserver(csp);
+				
+				for (int i = 0; i<checkBoxes.size(); i++) {
+					JCheckBox checkb = checkBoxes.get(i);
+					Graph graph = graphs.get(i);
+					if (checkb.isSelected()) {
+						generatePlot(graph);
+					}
+				}
 
 				topmain.getCl().show(topmain.getCards(), "plotPanel");
 			}
-
 		});
-		
 	}
 
-	public void generatePlot(final Graph g, JCheckBox checkb) {
+	public void generatePlot(final Graph g) {
 		
-		checkOptions.add(checkb); 
-		checkb.addActionListener(new ActionListener() {
-	
-			public void actionPerformed(ActionEvent e) {
-				ChartPanel chartPanel = g.plotCreation(containerPlot);
-				updatePlot(chartPanel, chartPanel);
-				}
-		});
+		ChartPanel chartPanel = g.plotCreation(containerPlot);
+		updatePlot(chartPanel, chartPanel);
+
 	}
 	public void updatePlot(ChartPanel newChartPanel, ChartPanel oldChartPanel) {
 		plotPanel.remove(oldChartPanel);
