@@ -306,13 +306,13 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	public ArrayList<String> filterClientContainers(Application application, TopMain topmain, Journey j){
 		ArrayList<String> containerids = new ArrayList<String>();
 		if ( topmain instanceof CompanyMain) {
-			for (Container c : j.getContainerList()) {
+			for (Container c : j.getContainers()) {
 				containerids.add(c.getContainerId());
 			}
 		}
 		
 		else if ( topmain instanceof ClientMain) {
-			for (Container c : j.getContainerList()) {
+			for (Container c : j.getContainers()) {
 				if (c.getCompany().contentEquals(application.getCurrentUser().getCompany())) {
 				containerids.add(c.getContainerId());
 				}

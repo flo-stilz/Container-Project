@@ -1,22 +1,20 @@
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertTrue;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Set;
-
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 import model.Container;
 import model.Application;
 import model.Client;
+import model.ClientDatabase;
 import model.Journey;
+import model.JourneyContainerDatabase;
 import model.Simulator;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.HashMap;
 
 public class stepDef {
 	
@@ -24,77 +22,79 @@ public class stepDef {
 	
 	//Imports for Client Management
 	Map<String, Client> clients = new HashMap<String, Client>(); 
-	ArrayList<Client> results = new ArrayList<Client>();
-	Client client1;
-	Client client2;
+	ArrayList<Client> clientMatches = new ArrayList<Client>();
 	String companyName;
-	String name;
-	String mail;
-	String address;
 	String companyName2;
-	String name2;
-	String mail2;
+	String address;
 	String address2;
-	Client client; 
+	String mail;
+	String mail2;
+	String name;
+	String name2;
 	String password;
 	String password2;
 	
 	
 	//Imports for Journey management
 	Map<String, Journey> journeys = new HashMap<String, Journey>(); 
-	ArrayList<Journey> matches = new ArrayList<Journey>();
+	ArrayList<Journey> journeyMatches = new ArrayList<Journey>();
+	ArrayList<Container> containerMatches = new ArrayList<Container>();
+	String origin;
+	String origin2;
+	String destination;
+	String destination2;
+	String content;
+	String content2;
+	String company;
+	String company2;
 	String search;
 	String newloc;
 	String loc;
-	String destination;
-	String content;
-	String company;
-	String origin;
-	String destination2;
-	String content2;
-	String company2;
-	String origin2;
+	String keyword;
 	
-	
-	
-	Container c1;
-	Container c2;
-	private Integer temp1;
-	private Integer pressure1;
-	private Integer hum1;
+	//Imports for Container Status Tracking
 	private Integer temp;
 	private Integer pressure;
 	private Integer hum;
-
-
-	
-	//Simulator variables
-	private Simulator sim = new Simulator();
-	private int seed;
-	private int days;
-	
-	String keyword;
-	
-	
-	
-	//Imports for Container Status Tracking
-	ArrayList<Container> containerJourneyHistoryList = new ArrayList<Container>();
-	ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
-	
-	Journey journey;
-	private Integer seed2;
-	
-	
+	private Integer temp1;
+	private Integer pressure1;
+	private Integer hum1;
 	private Integer temp2;
 	private Integer pressure2;
 	private Integer hum2;
 	
-	
-	ArrayList<Container> res = new ArrayList<Container>();
+	//Imports for Keep Track of the Evolution
+	ArrayList<Container> containerJourneyHistoryList = new ArrayList<Container>();
+	ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
 	ArrayList<Container> filteredcontainer = new ArrayList<Container>();
 	ArrayList<Container> allcontainers = new ArrayList<Container>();
+	Container containerStatusHistory;
+	Journey journey;
+	Client client;
 	
 	
+	//Imports for Persistency Layer
+	private ClientDatabase cb = new ClientDatabase();
+	private JourneyContainerDatabase jb = new JourneyContainerDatabase();
+	ArrayList<Client> clientsCopy;
+	ArrayList<Journey> activeJourneysCopy;
+	ArrayList<Journey> pastJourneysCopy;
+	ArrayList<Container> containersCopy;
+	int clientCounterCopy;
+	int journeyCounterCopy;
+	int containerCounterCopy;
+	
+	
+	
+	//Imports for the Simulator
+	private Simulator sim = new Simulator();
+	private Integer seed;
+	private Integer seed2;
+	private int days;
+	Container c1;
+	
+
+
 	
 	
 	
@@ -119,34 +119,34 @@ public class stepDef {
 	    this.password2 = password;
 	}
 	
-	@When("the client {string} is registered in the client database")
-	public void the_client_is_registered_in_the_client_database(String cid) {
+	@When("the client {string} is registered in the database")
+	public void the_client_is_registered_in_the_database(String cid) {
 		clients.put(cid, application.createClient(companyName, address, mail, name, password));
 	}
 	
-	@When("the second client {string} is registered in the client database")
-	public void the_second_client_is_registered_in_the_client_database(String cid) {
+	@When("the second client {string} is registered in the database")
+	public void the_second_client_is_registered_in_the_database(String cid) {
 		clients.put(cid, application.createClient(companyName2, address2, mail2, name2, password2));
 	}
 	
-	@Then("the clients are present in the client database")
-	public void the_clients_are_present_in_the_client_database() {
+	@Then("the two clients are present in the database")
+	public void the_two_clients_are_present_in_the_database() {
 		assertEquals(application.getClientDat().getClients().size(),2); 
 		assertEquals(application.getClientDat().getClients().get(0).getCompany(), companyName);
 		assertEquals(application.getClientDat().getClients().get(1).getCompany(), companyName2);
 	}
 	
 	
-	//SCENARIO 2: Checking generated clientid
-	@Then("The generated clientids are unique")
-	public void the_generated_clientids_are_unique() {
+	//SCENARIO 2: Check generated clientids are unique
+	@Then("the clients generated clientids are unique")
+	public void the_clients_generated_clientids_are_unique() {
 		assertNotEquals(application.getClientDat().getClients().get(0).getId(), application.getClientDat().getClients().get(1).getId());
 	}
 	
 
 	//SCENARIO 3: Register the same client twice
-	@Then("only one client is present in the client database")
-	public void the_client_only_is_present_in_the_client_database() {
+	@Then("only one client is present in the database")
+	public void the_client_only_is_present_in_the_database() {
 		assertEquals(clients.size(),1);
 		assertEquals(application.getClientDat().getClients().get(0).getName(), "Robert Stork");
 	}
@@ -176,29 +176,40 @@ public class stepDef {
 	}
 	     
 	
-	//SCENARIO 5: Search for a client with a specific email email
-	@When("searching for client in client database using email {string}")
-	public void searching_for_client_in_client_database_using_email(String mail) {
-		results = application.search(mail);
+	//SCENARIO 5: Search for a client in a database using a specific email
+	@Given("an email {string} to search for")
+	public void an_email_to_search_for(String mail) {
+		this.mail = mail;
 	}
 	
-	@Then("the corresponding client is returned")
-	public void the_corresponding_client_is_returned() {
-		assertEquals(results.size(),1);
+	@When("searching for a client in the database using the email")
+	public void searching_for_a_client_in_the_database_using_the_email() {
+		clientMatches = application.search(mail);
+	}
+	
+	@Then("a list of one client matching the specific email {string} is returned")
+	public void a_list_of_one_client_matching_the_specific_email_is_returned(String email) {
+		assertEquals(clientMatches.size(),1);
+		assertEquals(clientMatches.get(0).getEmail(), email);
 	}
 	
 	
-	//SCENARIO 6: Search for a client that is not present in the clientlist using a specific address
-	@When("searching for client in client database using address {string}")
-	public void searching_for_client_in_client_database_using_address(String address) {
-	    results = application.search(address);
+	//SCENARIO 6: Search for a client in a database using a specific address that is no client is listed under
+	@Given("an address {string} to search for")
+	public void an_address_to_search_for(String address) {
+		this.address = address;
+	}
+	
+	@When("searching for client in the database using the address")
+	public void searching_for_client_in_the_database_using_the_address() {
+	    clientMatches = application.search(address);
 	}
 
-	@Then("an empty list of clients in the client database matching the keyword is returned")
-	public void an_empty_list_clients_in_the_client_database_matching_the_keyword_is_returned() {
-	    assertEquals(results.size(),0); 
+	@Then("an empty list of clients matching the keyword is returned")
+	public void an_empty_list_of_clients_matching_the_keyword_is_returned() {
+	    assertEquals(clientMatches.size(),0); 
 	}
-
+	
 	
 	
 	
@@ -213,14 +224,14 @@ public class stepDef {
 		this.company = company;
 	}
 	
-	@When("the journey {string} is registered")
-	public void the_journey_is_registered(String jid) {
+	@When("the journey {string} is registered in the database")
+	public void the_journey_is_registered_in_the_database(String jid) {
 		journeys.put(jid, application.createJourney(origin, destination, content, company));
 	}
 
 	@Then("a unique journey id is created")
 	public void a_unique_journey_id_is_created() {
-		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getId(), "CPHRIO26");
+		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getId(), "CPHRIO19");
 	}
 	
 	@Then("the origin and destination for the journey is correct")
@@ -231,17 +242,17 @@ public class stepDef {
 	
 	@Then("the content and company for the journey is correct")
 	public void the_content_and_company_for_the_journey_is_correct() {
-		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainerList().get(0).getContent(), "bananas");
-		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainerList().get(0).getCompany(),"gls");
+		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getContent(), "bananas");
+		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getCompany(),"My Protein");
 	}
 	
-	@Then("the journey is in the database")
-	public void the_journey_is_in_the_database() {
+	@Then("the journey exists in the database")
+	public void the_journey_exists_in_the_database() {
 		assertEquals(application.getJourneyContainerDat().getActiveJourneys().size(), 1);
 	}
 	
 
-	//SCENARIO 2: Creating multiple journeys
+	//SCENARIO 2: Create multiple journeys
 	@Given("a second origin {string} destination {string} content {string} and company {string}")
 	public void a_second_origin_destination_content_and_company(String origin, String destination, String content, String company) {
 		this.origin2 = origin;
@@ -250,83 +261,83 @@ public class stepDef {
 		this.company2 = company;
 	}
 	
-	@When("the second journey {string} is registered")
-	public void the_second_journey_is_registered(String jid) {
+	@When("the second journey {string} is registered in the database")
+	public void the_second_journey_is_registered_in_the_database(String jid) {
 		journeys.put(jid, application.createJourney(origin2, destination2, content2, company2));
 	}
 	
 
-	@Then("journeys exist on database")
-	public void journeys_exist_on_database() {
+	@Then("the two journeys exists in the database")
+	public void the_two_journeys_exists_in_the_database() {
 	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().size(), 2);
 	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getOrigin(), origin.toUpperCase());
 	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(1).getOrigin(), origin2.toUpperCase());
 	}
 	
 	
-	//SCENARIO 3: Creating multiple similair journeys
-	@Then("only one journey is created")
+	//SCENARIO 3: Create multiple similair journeys
+	@Then("only a single journey is created")
 	public void only_one_journey_is_created() {
 	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().size(), 1);
 	}
 
-	@Then("the journey has two containers")
-	public void the_journey_has_two_containers() {
-	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainerList().size(), 2);
+	@Then("the journey has two containers that exists in the database")
+	public void the_journey_has_two_containers_that_exists_in_the_database() {
+	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().size(), 2);
 	}
 
 	
-	//SCENARIO 4: Search for a journey that is not present in the journeylist using a specific address
+	//SCENARIO 4: Search for a journey in a database using a specific content that no journey is listed under
 	@Given("a journey {string} with origin {string} destination {string} content {string} and company {string}")
 	public void a_journey_with_origin_destination_content_and_company(String jid, String origin, String destination, String content, String company) {
 		journeys.put(jid, application.createJourney(origin, destination, content, company));
 	}
 	
-	@Given("a keyword {string}")
-	public void a_keyword(String keyword) {
+	@Given("a keyword {string} describing a journey")
+	public void a_keyword_describing_a_journey(String keyword) {
 	    this.search = keyword;   
 	}
 	
-	@When("searching through the journey database using the keyword")
-	public void searching_through_the_journey_database_using_the_keyword() {
-	    matches = application.findUsingLoop(search, application.getJourneyContainerDat().getActiveJourneys());
+	@When("searching through the journeys in the database using the keyword")
+	public void searching_through_the_journeys_in_the_database_using_the_keyword() {
+	    journeyMatches = application.findUsingLoop(search, application.getJourneyContainerDat().getActiveJourneys());
 	}
 
-	@Then("an empty list of journeys in the journey database matching the keyword is returned")
-	public void an_empty_list_of_journeys_in_the_journey_database_matching_the_keyword_is_returned() {
-		assertEquals(matches.size(), 0);
+	@Then("an empty list of journeys in the database matching the keyword is returned")
+	public void an_empty_list_of_journeys_in_the_database_matching_the_keyword_is_returned() {
+		assertEquals(journeyMatches.size(), 0);
+	}
+	
+	
+	//SCENARIO 5: Search for a journey in a database using a specific origin
+	@Then("a list of one journey matching the specific origin {string} is returned")
+	public void a_list_of_one_journey_matching_the_specific_origin_is_returned(String origin) {
+		assertEquals(journeyMatches.get(0).getOrigin(), origin.toUpperCase());
+		assertEquals(journeyMatches.size(), 1);
 	}
 
 	
-	//SCENARIO 5: Search for a journey in the journeylist using a specific origin
-	@Then("the corresponding journey matching the origin-keyword is returned")
-	public void the_corresponding_journey_matching_the_origin_keyword_is_returned() {
-		assertEquals(matches.get(0).getOrigin(), "MUM");
-		assertEquals(matches.size(), 1);
+	//SCENARIO 6: Search for a journey in a database using a specific destination
+	@Then("a list of one journey matching the specific destination {string} is returned")
+	public void a_list_of_one_journey_matching_the_specific_destination_is_returned(String destination) {
+		assertEquals(journeyMatches.get(0).getDestination(), destination.toUpperCase());
+		assertEquals(journeyMatches.size(), 1);
 	}
-
 	
-	//SCENARIO 6: Search for a journey in the journeylist using a specific destination
-	@Then("the corresponding journey matching the destination-keyword is returned")
-	public void the_corresponding_journey_matching_the_destination_keyword_is_returned() {
-		assertEquals(matches.get(0).getDestination(), "TOU");
-		assertEquals(matches.size(), 1);
-	}
 
-
-	//SCENARIO 7: Update a journeys current location
+	//SCENARIO 7: Find a journeys current location
 	@When("the journeys current location is found")
 	public void the_journeys_current_location_is_found() {
 		loc = application.getJourneyContainerDat().getActiveJourneys().get(0).getCurrentLocation();
 	}
 
-	@Then("the current location of the journey is returned to the custumor")
-	public void the_current_location_of_the_journey_is_returned_to_the_custumor() {
-		assertEquals(loc, "MUM");
+	@Then("the current location of the journey {string} is returned")
+	public void the_current_location_of_the_journey_is_returned(String currentlocation) {
+		assertEquals(loc, currentlocation.toUpperCase());
 	}
 	
 	
-	// SCENARIO 8: Update current location of a journey
+	// SCENARIO 8: Update a journeys current location
 	@Given("a new location {string}")
 	public void a_new_location(String newlocation) {
 		newloc = newlocation;
@@ -337,13 +348,13 @@ public class stepDef {
 		application.updateCurrentLocation(application.getJourneyContainerDat().getActiveJourneys().get(0), newloc);
 	}
 
-	@Then("the journeys current location is updated in the journey database")
-	public void the_journeys_current_location_is_updated_in_the_journey_database() {
-		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getCurrentLocation(), "PHE");
+	@Then("the journeys new location is {string}")
+	public void the_journeys_new_location_is(String newlocation) {
+		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getCurrentLocation(), newlocation.toUpperCase());
 	}
 
 	
-	//SCENARIO 9: Ending a journey
+	//SCENARIO 9: End a journey
     @Given("the journey {string} is completed")
     public void the_journey_is_completed(String jid) {
     	application.updateCurrentLocation(journeys.get(jid), journeys.get(jid).getDestination());
@@ -361,73 +372,242 @@ public class stepDef {
 		assertEquals(application.getJourneyContainerDat().getPastJourneys().get(0).getDestination(), "PHE");
 	}
 
-	@Then("the containers corresponding to the journey are stored in the warehouse")
-	public void the_containers_corresponding_to_the_journey_are_stored_in_the_warehouse() {
+	@Then("the journeys assigned containers are stored in the container warehouse")
+	public void the_journeys_assigned_containers_are_stored_in_the_container_warehouse() {
 		assertEquals(application.getJourneyContainerDat().getContainerWarehouse().size(),1);
 		assertEquals(application.getJourneyContainerDat().getContainerWarehouse().get(0).getCurrentLocation(), "container warehouse");
 	}
 	
 
-	//SCENARIO 10: Assigning container from containerwarehouse
-	@Then("the container should be taken from containerwarehouse")
-	public void the_container_should_be_taken_from_containerwarehouse() {
+	//SCENARIO 10: Assign container from container warehouse
+	@When("a new journey {string} with origin {string} destination {string} content {string} and company {string}")
+	public void a_new_journey_with_origin_destination_content_and_company(String jid, String origin, String destination, String content, String company) {
+		journeys.put(jid, application.createJourney(origin, destination, content, company));
+	}
+	
+	@Then("the journeys assigned container should be taken from the container warehouse")
+	public void the_journeys_assigned_container_should_be_taken_from_the_container_warehouse() {
 		assertEquals(application.getJourneyContainerDat().getContainerWarehouse().size(), 0);
 	}
 	
-	@Then("the container for the old journey is reused for the new journey")
-	public void the_container_for_the_old_journey_is_reused_for_the_new_journey() {
-		assertEquals(application.getJourneyContainerDat().getPastJourneys().get(0).getContainerList().get(0).getContainerId(), "C0");
-		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainerList().get(0).getContainerId(), "C0");
+	@Then("the same container is used for both journeys")
+	public void the_same_container_is_used_for_both_journeys() {
+		assertEquals(application.getJourneyContainerDat().getPastJourneys().get(0).getContainers().get(0).getContainerId(), application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getContainerId());
 	}
 	
 	
-	//SCENARIO 11: Searching for container using a keyword of type content
-	@When("searching for the container containing the content {string}")
-	public void searching_for_the_container_containing_the_content(String keyword) {
-		this.keyword = keyword;
-		res = application.findContainer(keyword, application.getJourneyContainerDat().getActiveJourneys());	
+	//SCENARIO 11: Search for a container in a database using a specific content	
+	@Given("a keyword {string} describing a container")
+	public void a_keyword_describing_a_container(String keyword) {
+		this.keyword = keyword;	
+	}	
+	
+	@When("searching for the container using the keyword")
+	public void searching_for_the_container_using_the_keyword() {
+		containerMatches = application.findContainer(keyword, application.getJourneyContainerDat().getActiveJourneys());	
 	}
 
-	@Then("a list of containers possessing this content is returned")
-	public void a_list_of_containers_possessing_this_keyword_is_returned() {
-		assertEquals(res.size(), 1);
-		assertEquals(res.get(0).getContent(), keyword);
+	@Then("a list of containers matching the specific content is returned")
+	public void a_list_of_containers_macthing_the_specifc_content_is_returned() {
+		assertEquals(containerMatches.size(), 1);
+		assertEquals(containerMatches.get(0).getContent(), keyword);
 	}
 
-	//SCENARIO 12: Searching for container using a keyword of type company
-	@When("searching for the container containing the company {string}")
-	public void searching_for_the_container_containing_the_company(String keyword) {
-		this.keyword = keyword;
-		res = application.findContainer(keyword, application.getJourneyContainerDat().getActiveJourneys());	
+	
+	//SCENARIO 12: Search for a container in a database using a specific company
+	@Then("a list of containers matching the specific company is returned")
+	public void a_list_of_containers_matching_the_specific_company_is_returned() {
+		assertEquals(containerMatches.size(), 1);
+		assertEquals(containerMatches.get(0).getCompany(), keyword);
 	}
+	
+	
+	//SCENARIO 13: Search for a container in a database using a specific location
+	@Then("a list of containers matching the specfic location is returned")
+	public void a_list_of_containers_matching_the_specfic_location_is_returned() {
+		assertEquals(containerMatches.size(), 1);
+		assertEquals(containerMatches.get(0).getCurrentLocation(), keyword); 	
+	}
+	
+	
+	//SCENARIO 14: Search for container in a database using a keyword that no containers contain
+	@Then("an empty list of containers matching the keyword is returned")
+	public void an_empty_list_of_containers_matching_the_keyword_is_returned() {
+		assertEquals(containerMatches.size(),0); 
+	}
+	
+	
+	
+	
+	//Container Status Tracking
+	
+	//SCENARIO 1: Add internal-status measurements to a journeys container
+	@When("adding temp {int} hum {int} and pressure {int} to the assigned containers of the journey {string}")
+	public void adding_temp_hum_and_pressure_to_an_assigned_container_of_the_journey(int temp, int pressure, int humidity, String jid) {
+		application.updateData(journeys.get(jid), journeys.get(jid).getContainers().get(0), temp, pressure, humidity);	
+	}
+	
+	@Then("the internal-status measurements are present for the assigned containers of the journey {string}")
+	public void the_internal_status_measurements_are_present_for_an_ssigned_container_of_the_journey(String jid) {
+		assertEquals(journeys.get(jid).getContainers().get(0).getTempList().size(), 1);
+		assertEquals(journeys.get(jid).getContainers().get(0).getPressureList().size(), 1);
+		assertEquals(journeys.get(jid).getContainers().get(0).getHumList().size(), 1);
+	}
+	
+	@Then("the internal-status measurements for the journeys container matches the values temp {int} hum {int} pressure {int}")
+	public void the_internal_status_measurements_for_the_journeys_container_matches_the_values_temp_hum_pressure(int temp, int pressure, int hum) {
+	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getTempList(), Arrays.asList(temp));
+	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getPressureList(), Arrays.asList(pressure));
+	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getHumList(), Arrays.asList(hum)); 
+	}
+	
+	
+	//SCENARIO 2: Add internal-status measurements to a journeys containers
+	@Then("both containers contain the measurements temp {int} hum {int} and pressure {int}")
+	public void both_container_contain_the_meansurements_temp_hum_pressure(int temp, int pressure, int hum) {
+		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getTempList(),application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(1).getTempList());
+		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getPressureList(),application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(1).getPressureList());
+		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getHumList(),application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(1).getHumList());
+	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getTempList(), Arrays.asList(temp));
+	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getPressureList(), Arrays.asList(pressure));
+	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getHumList(), Arrays.asList(hum));
+	}
+	
+	
+	
+	//SCENARIO 3: Add multiple internal-status measurements to a journeys container
+	@When("readding temp {int} hum {int} and pressure {int} to the assigned containers of the journey {string}")
+	public void readding_temp_hum_and_pressure_to_the_assigned_containers_of_the_journey(int temp, int pressure, int humidity, String jid) {
+		application.updateData(journeys.get(jid), journeys.get(jid).getContainers().get(0), temp, pressure, humidity);
+	}
+	
+	@Then("both sets of internal-status measurements are present for the assigned containers of the journey {string}")
+	public void both_sets_of_internal_status_measurements_are_present_for_an_assigned_containers_of_the_journey(String jid) {
+		assertEquals(journeys.get(jid).getContainers().get(0).getTempList().size(), 2);
+		assertEquals(journeys.get(jid).getContainers().get(0).getPressureList().size(), 2);
+		assertEquals(journeys.get(jid).getContainers().get(0).getHumList().size(), 2);
+	} 
+	
+	@Then("both sets of internal-status measurements for the journeys containers matches the values temp {int} {int} hum {int} {int} pressure {int} {int}")
+	public void both_sets_of_internal_status_measurements_for_the_journeys_containers_matches_the_values_temp_hum_pressure(int temp1, int temp2, int pressure1, int pressure2, int hum1, int hum2) {
+	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getTempList(), Arrays.asList(temp1, temp2));
+	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getPressureList(), Arrays.asList(pressure1, pressure2));
+	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getHumList(), Arrays.asList(hum1, hum2));
+	}
+	
+    
+	//Keep Track Of The Evolution
+    
+	//SCENARIO 1: Track the Journey-History of a container
+	@Given("the journey and container counter is set to zero which describes the name of the corresponding ids")
+	public void the_journey_and_container_counter_is_set_to_zero_which_describes_the_name_of_the_corresponding_ids() {
+		Journey.setCounter(0);
+		Container.setcCounter(0);
+	}
+	
+    @Given("a container with id {string} used in the journey {string}")
+    public void a_container_with_id_used_in_the_journey(String search, String jid) {
+    	this.search = search; 
+    }
 
-	@Then("a list of containers possessing this company is returned")
-	public void a_list_of_containers_possessing_this_company_is_returned() {
-		assertEquals(res.size(), 1);
-		assertEquals(res.get(0).getCompany(), keyword);
-	}
-	
-	//SCENARIO 13: Searching for container using a keyword of type currentlocation
-	@When("searching for the container containing the currentlocation {string}")
-	public void searching_for_the_container_containing_the_currentlocation(String keyword) {
-		this.keyword = keyword;
-		res = application.findContainer(keyword, application.getJourneyContainerDat().getActiveJourneys());	
-	}
+    @When("the container id is searched for in the journey history")
+    public void the_container_id_is_searched_for_in_the_journey_history() {
+    	containerJourneyHistoryList = application.findContainer(search, application.getJourneyContainerDat().getPastJourneys());
+    }
 
-	@Then("a list of containers possessing this currentlocation is returned")
-	public void a_list_of_containers_possessing_this_currentlocation_is_returned() {
-		assertEquals(res.size(), 1);
-		assertEquals(res.get(0).getCurrentLocation(), keyword);
-	}
-	
-	//SCENARIO 14: Searching for container using a keyword that no containers contain
-	@Then("an empty list of containers will be returned")
-	public void an_empty_list_of_containers_will_be_returned() {
-		assertEquals(res.size(),0); 
-	}
-	
-	
-	//SCENARIO 15: Filtering for all active containers
+    @Then("the container history of the container {string} is returned")
+    public void the_container_history_of_the_container_is_returned(String containerid) {
+    	assertEquals(containerJourneyHistoryList.size(), 1);
+    	assertEquals(containerJourneyHistoryList.get(0).getId(), "BUAMIA0"); 	
+    }
+    
+    //SCENARIO 2: Track the Journey-History of a reused container
+    @Given("a container with id {string} used in journey {string} and journey {string}")
+    public void a_container_with_id_used_in_journey_and_journey(String search, String jid1, String jid2) {
+        this.search = search; 
+    }
+    
+    @Then("the journey history of the resued container {string} is returned")
+    public void the_journey_history_of_the_resued_container_is_returned(String search) {
+    	assertEquals(containerJourneyHistoryList.get(0).getId(), "BUAMIA0");
+    	assertEquals(containerJourneyHistoryList.get(1).getId(), "BUAMIA1");
+    	assertEquals(containerJourneyHistoryList.size(),2); 
+    }
+    
+    
+    //SCENARIO 3: Track the Journey-History of an unused container
+    @Given("an unsused container with id {string}")
+    public void an_unsused_container_with_id(String search) {
+        this.search = search;
+    }
+    
+    @Then("the empty journey history of the unsued container {string} is returned")
+    public void the_empty_journey_history_of_the_unsued_container_is_returned(String jid) {
+    	assertEquals(containerJourneyHistoryList.size(),0);
+    }
+    
+    
+    //SCENARIO 4: Track the internal-status-history of a container
+    @Given("internal-status measurements for the containers corresponding to journey {string} are being simulated")
+    public void internal_status_measurements_for_the_journey_containers_are_being_simulated(String jid) {
+    	sim.setSeed(123);
+    	temp = sim.temperatureInitialization();
+    	pressure = sim.pressureInitialization();
+    	hum = sim.humidityInitialization(); 
+    }
+    
+    @Given("the simulated internal-status measurements are being added to all containers in the journey {string}")
+    public void the_simulated_internal_status_measurements_are_being_added_to_all_containers_in_the_journey(String jid) {
+    	application.updateData(journeys.get(jid), journeys.get(jid).getContainers().get(0), temp, pressure, hum);
+    }
+    
+    @When("the container id is searched for in the internal-status history")
+    public void the_container_id_is_searched_for_in_the_internal_status_history() {
+    	containerStatusHistory = application.containerInternalStatusHistory(search, application.getJourneyContainerDat().getPastJourneys());
+    	}
+    
+    @Then("the internal-status history of container {string} is returned")
+    public void the_internal_status_history_of_container_is_returned(String search){
+    	assertEquals(containerStatusHistory.getTempList().size(), 2);
+    	assertEquals(containerStatusHistory.getPressureList().size(), 2);
+    	assertEquals(containerStatusHistory.getHumList().size(), 2);
+    }
+ 
+    
+    // SCENARIO 5: Track the internal-status-history of a reused container
+    
+    @Given("a new set of internal-status measurements for the containers corresponding to journey {string} are being simulated")
+    public void a_new_set_of_internal_status_measurements_for_the_containers_corresponding_to_journey_are_being_simulated(String string) {
+    	sim.setSeed(321);
+    	temp1 = sim.temperatureInitialization();
+    	pressure1 = sim.pressureInitialization();
+    	hum1 = sim.humidityInitialization(); 
+    }
+    
+    @Given("the new set of simulated internal-status measurements are being added to all containers in the journey {string}")
+    public void the_new_set_of_simulated_internal_status_measurements_are_being_added_to_all_containers_in_the_journey(String jid) {
+    	application.updateData(journeys.get(jid), journeys.get(jid).getContainers().get(0), temp1, pressure1, hum1);
+    }
+    
+    @Then("the internal-status history of the reused container {string} is returned")
+    public void the_internal_status_history_of_the_reused_container_is_returned(String search) {
+    	assertEquals(containerInternalStatusHistoryList.size(),2);
+    }
+    
+    
+    //SCENARIO 6: Track the internal-status-history of an unused container
+    @When("a container with id {string} not used in the journey {string}")
+    public void a_container_with_id_not_used_in_the_journey(String search, String jid) {
+    	this.search = search; 
+    }
+    
+    @Then("the empty internal-status history of the unused container {string} is returned")
+    public void the_empty_internal_status_history_of_the_unused_container_is_returned(String search) {
+        assertEquals(containerInternalStatusHistoryList.size(),0);
+    }
+    
+    
+	//SCENARIO 7: Filtering for all active containers
 	@When("filtering for all the active containers")
 	public void filtering_for_all_the_active_containers() {
 		filteredcontainer = application.getJourneyContainerDat().getfilteredContainers(application.getJourneyContainerDat().getActiveJourneys());
@@ -436,11 +616,11 @@ public class stepDef {
 	@Then("a list of all the active containers is returned")
 	public void a_list_of_all_the_active_containers_is_returned() {
 		assertEquals(filteredcontainer.size(),2);
-		assertEquals(filteredcontainer.get(0).getContainerId(), application.getJourneyContainerDat().getActiveJourneys().get(0).getContainerList().get(0).getContainerId());
+		assertEquals(filteredcontainer.get(0).getContainerId(), application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getContainerId());
 	}
 	
 	
-	//SCENARIO 16: Filtered for all containers in the containerwarehouse
+	//SCENARIO 8: Filtered for all containers in the containerwarehouse
 	@When("filtering for all the containers in the containerwarehouse")
 	public void filtering_for_all_containers_in_the_containerwarehouse() {
 		filteredcontainer = application.getJourneyContainerDat().getfilteredContainers(application.getJourneyContainerDat().getActiveJourneys());
@@ -453,7 +633,7 @@ public class stepDef {
 	}
 	
 	
-	//SCENARIO 17: Retrieving all containers
+	//SCENARIO 9: Retrieving all containers
 	@When("all containers have been retrieved")
 	public void all_containers_have_been_retrieved(){
 		allcontainers = application.getJourneyContainerDat().getAllContainers(false, application.getJourneyContainerDat().getActiveJourneys());
@@ -464,59 +644,14 @@ public class stepDef {
 		assertEquals(allcontainers.size(),2);
 		assertEquals(allcontainers.get(0).getId(), "CPHBEJ6");
 		assertEquals(allcontainers.get(1).getId(), "BDPTOR5");
-	}
+	}   
 	
 	
 	
-	//Container Status Tracking
 	
-	//SCENARIO 1: Addition of internal-status measurements
-	@When("adding temp {int} hum {int} and pressure {int} to an assigned container of the journey {string}")
-	public void adding_temp_hum_and_pressure_to_an_assigned_container_of_the_journey(int temp, int pressure, int humidity, String jid) {
-		application.addData(journeys.get(jid).getContainerList().get(0), temp, pressure, humidity);	
-	}
-	
-	@Then("the internal-status measurements are present for an assigned container of the journey {string}")
-	public void the_internal_status_measurements_are_present_for_an_ssigned_container_of_the_journey(String jid) {
-		assertEquals(journeys.get(jid).getContainerList().get(0).getTempList().size(), 1);
-		assertEquals(journeys.get(jid).getContainerList().get(0).getPressureList().size(), 1);
-		assertEquals(journeys.get(jid).getContainerList().get(0).getHumList().size(), 1);
-	}
-	
-	
-	//SCENARIO 2: Readdition of internal-status measurements
-	@When("reading temp {int} hum {int} and pressure {int} to an assigned container of the journey {string}")
-	public void readding_temp_hum_and_pressure_to_an_assigned_container_of_the_journey(int temp, int pressure, int humidity, String jid) {
-		application.addData(journeys.get(jid).getContainerList().get(0), temp, pressure, humidity);	
-	}
-	
-	@Then("both sets of internal-status measurements are present for an assigned container of the journey {string}")
-	public void both_sets_of_internal_status_measurements_are_present_for_an_assigned_container_of_the_journey(String jid) {
-		assertEquals(journeys.get(jid).getContainerList().get(0).getTempList().size(), 2);
-		assertEquals(journeys.get(jid).getContainerList().get(0).getPressureList().size(), 2);
-		assertEquals(journeys.get(jid).getContainerList().get(0).getHumList().size(), 2);
-	} 
-	
-	
-	//SCENARIO 3: Update of internal-status measurements
-	@When("updating temp {int} hum {int} pressure {int} for {string}")
-	public void updating_temp_hum_pressure_for(int temp, int pressure, int humidity, String jid) {
-	    application.updateData(journeys.get(jid), journeys.get(jid).getContainerList().get(0), temp, pressure, humidity);
-	}
-	
-	@Then("measurements are present for container of {string}")
-	public void measurements_are_present_for_container_of(String jid) {
-		assertEquals(journeys.get(jid).getContainerList().get(0).getTempList().size(), 1);
-		assertEquals(journeys.get(jid).getContainerList().get(0).getPressureList().size(), 1);
-		assertEquals(journeys.get(jid).getContainerList().get(0).getHumList().size(), 1);	
-	}
-	
-	
-    
-	    
 	//Journey Simulator
 	    
-	//SCENARIO 1: Picking a Company for the client
+	//SCENARIO 1: Pick a Company for the client
 	@Given("a seed {int} pointing to a particular instance in the simulator")
 	public void a_seed_pointing_to_a_particular_instance_in_the_simulator(int seed) {
 	    this.seed = seed;
@@ -525,8 +660,6 @@ public class stepDef {
 	@When("a specific company out of the {int} available is selected based on the value of the seed")
 	public void a_specific_company_out_of_the_is_selected_based_on_the_value_of_the_seed(int numberOfSimulatedCompanies) {
 		sim.setSeed(seed);
-		//??
-//		assertEquals(sim.getCompanies().size(),numberOfSimulatedCompanies);
 	    companyName = sim.companySelection();
 	}
 	
@@ -541,7 +674,7 @@ public class stepDef {
 	}
 	
 	
-	//SCENARIO 2: Picking a name and email for the client
+	//SCENARIO 2: Pick a name and email for the client
 	@When("a specific name and email is selected based on the value of the seed")
 	public void a_specific_name_and_email_is_selected_based_on_the_value_of_the_seed() {
 		sim.setSeed(seed);
@@ -549,14 +682,14 @@ public class stepDef {
 	    mail = sim.emailCreation(companyName, name);
 	}
 	
-	@Then("that name and email will be {string} and {string}")
-	public void that_name_and_email_will_be_and(String generatedName, String generatedMail) {
+	@Then("the name and email {string} and {string} is returned")
+	public void the_name_and_email_will_is_returned(String generatedName, String generatedMail) {
 		assertEquals(name, generatedName);
 		assertEquals(mail, generatedMail);
 	}
 	
 	
-	//SCENARIO 3: Picking an address for the client
+	//SCENARIO 3: Pick an address for the client
 	@When("a specific address out of the {int} available is selected based on the value of the seed")
 	public void a_specific_address_out_of_the_available_is_selected_based_on_the_value_of_the_seed(int numberOfSimulatedAddresses) {
 		sim.setSeed(seed);
@@ -575,7 +708,7 @@ public class stepDef {
 	}
 	
 	
-	//SCENARIO 4: Creating a client
+	//SCENARIO 4: Create a client
 	@When("a client {string} is created based on the simulated information")
 	public void a_client_is_created_based_on_the_simulated_information(String cid) {
 		sim.setSeed(seed);
@@ -586,13 +719,13 @@ public class stepDef {
 		clients.put(cid, application.createClient(company, address, mail, name, password));
 	}
 
-	@Then("that client should be in the database")
-	public void that_client_should_be_in_the_database() {
+	@Then("the client exists in the database")
+	public void the_client_exists_in_the_database() {
 	    assertEquals(application.getClientDat().getClients().size(), 1);
 	}
 	
 	
-	//SCENARIO 5: Picking a client for creation of a journey
+	//SCENARIO 5: Pick a client for creation of a journey
 	@Given("a client {string} with seed {int}")
 	public void a_client_with_seed(String cid,Integer seed) {
 		sim.setSeed(seed);
@@ -615,60 +748,53 @@ public class stepDef {
 	}
 	
 	
-    
-	//SCENARIO 6: Picking content for creation of a journey
+	//SCENARIO 6: Pick content for creation of a journey
 	@When("a specific content is selected based on the value of the seed")
 	public void a_specific_content_is_selected_based_on_the_value_of_the_seed() {
 		sim.setSeed(seed);
 		content = sim.contentSelection();
 	}
 
-	@Then("that content will be {string}")
-	public void that_content_will_be(String generatedContent) {
+	@Then("the content {string} is returned")
+	public void the_content_is_returned(String generatedContent) {
 	    assertEquals(content, generatedContent);
 	}
 	
 
-	//SCENARIO 7: Picking origin for creation of a journey
+	//SCENARIO 7: Pick origin for creation of a journey
 	@When("a specific origin is selected based on the value of the seed")
 	public void a_specific_origin_is_selected_based_on_the_value_of_the_seed() {
 		sim.setSeed(seed);
 	    origin = sim.originSelection();
 	}
 
-	@Then("that origin will be {string}")
-	public void that_origin_will_be_CPH(String generatedOrigin) {
+	@Then("the origin {string} is returned")
+	public void the_origin_is_returned(String generatedOrigin) {
 	    assertEquals(origin, generatedOrigin);
 	}
 	
 	
-	//SCENARIO 8: Picking destination for creation of a journey
+	//SCENARIO 8: Pick destination for creation of a journey
 	@When("a specific destination is selected based on the value of the seed")
 	public void a_specific_destination_is_selected_based_on_the_value_of_the_seed() {
 		sim.setSeed(seed);
 	    destination = sim.destinationSelection(origin);
 	}
 
-	@Then("that destination will be {string}")
-	public void that_destination_will_be(String generatedDestination) {
+	@Then("the destination {string} is returned")
+	public void the_destination_is_returned(String generatedDestination) {
 	    assertEquals(destination, generatedDestination);
 	}
 
 	
-	//SCENARIO 9: creating a journey
+	//SCENARIO 9: Create a journey
 	@When("a journey {string} is created")
 	public void a_journey_is_created(String jid) {
 		journeys.put(jid, application.createJourney(origin, destination, content, company));
 	}
-
-	@Then("the journey exists in the database")
-	public void the_journey_exists_in_the_database() {
-	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().size(), 1);
-	    assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getId(),"CPHRIX10");
-	}
 	
 	
-	// SCENARIO 10: Initializing data for a Journey
+	// SCENARIO 10: Initialize data for a Journey
 	@When("the internal-status measurements are generated for the containers in the journey {string}")
 	public void the_internal_status_measurements_are_generated_for_the_containers_in_the_journey(String jid) {
 		sim.setSeed(seed);
@@ -679,11 +805,11 @@ public class stepDef {
 
 	@When("the data is added to the containers in the journey {string}")
 	public void the_data_is_added_to_the_containers_in_the_journey(String jid) {
-		c1 = application.getJourneyContainerDat().getActiveJourneys().get(0).getContainerList().get(0);
+		c1 = application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0);
 	    application.updateData(application.getJourneyContainerDat().getActiveJourneys().get(0), c1, temp, pressure, hum);
 	}
 
-	@Then("the data will exists in the container for the journey {string}")
+	@Then("the data exists in the container for the journey {string}")
 	public void the_data_will_exists_in_the_container_for_the_journey(String jid) {
 	    assertEquals(c1.getTempList().size(), 1);
 	    assertEquals(c1.getPressureList().size(), 1); 
@@ -701,7 +827,7 @@ public class stepDef {
 	}
 	
 	
-	//SCENARIO 11: Generating data based on previous data in a Container
+	//SCENARIO 11: Generate data based previously entered data in a Container
 	@When("the internal-status measurements are generated based on the previously generated internal-status measurements")
 	public void the_internal_status_measurements_are_generated_based_on_the_previously_generated_internal_status_measurements() {
 		sim.setSeed(seed);
@@ -719,9 +845,9 @@ public class stepDef {
 	}
 	
 	
-	//SCENARIO 12: Simulate data for 3 times
+	//SCENARIO 12: Simulate internal-status measurements thrice
 	@When("a simulated journey {string} is created")
-	public void a_journey_is_creatednew(String jid) {
+	public void a_simulated_journey_is_created(String jid) {
 		sim.setSeed(seed);
 		sim.journeyCreation(application);
 		journeys.put(jid, application.getJourneyContainerDat().getActiveJourneys().get(0));
@@ -739,19 +865,19 @@ public class stepDef {
 
 	@Then("three internal-status measurements of each type will be added to all the containers in the journey")
 	public void three_internal_status_measurements_of_each_type_will_be_added_to_all_the_containers_in_the_journey() {
-		c1 = application.getJourneyContainerDat().getActiveJourneys().get(0).getContainerList().get(0);
+		c1 = application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0);
 	    assertEquals(c1.getTempList().size(),3);
 	}
 
-	@Then("the three different data points are the following")
-	public void the_three_different_data_points_are_the_following() {
+	@Then("the three sets of internal-status measurements are returned")
+	public void the_three_sets_of_internal_status_measurements_are_returned() {
 	    assertEquals(c1.getTempList(), new ArrayList<Integer>(Arrays.asList(17,20,18)));
 	    assertEquals(c1.getPressureList(), new ArrayList<Integer>(Arrays.asList(980,946,898)));
 	    assertEquals(c1.getHumList(), new ArrayList<Integer>(Arrays.asList(56,51,47)));
 	}
 
 	
-	//SCENARIO 13: Update Location of a Journey from origin to transition state
+	//SCENARIO 13: Update the location of a Journey from origin to transition state
 	@Given("a simulated client {string} is created with seed {int}")
 	public void a_simulated_client_is_created_with_seed(String cid, Integer seed) {
 		sim.setSeed(seed);
@@ -770,14 +896,14 @@ public class stepDef {
 	    }
 	}
 
-	@Then("the current location is in transition")
-	public void the_current_location_is_in_transition() {
+	@Then("the current location is in transition between the origin and destination")
+	public void the_current_location_is_in_transition_between_the_origin_and_destination() {
 		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getCurrentLocation(), "IN TRANSIT FROM EBJ TO BOD");
 	}
 	
-	//SCENARIO 14: Update Location of a Journey from transit to destination
-	@Then("the current location should be the destination")
-	public void the_current_location_should_be_the_destination() {
+	//SCENARIO 14: Update the location of a Journey from transition state to destination
+	@Then("the current location is the destination")
+	public void the_current_location_is_the_destination() {
 		assertEquals(application.getJourneyContainerDat().getPastJourneys().get(0).getCurrentLocation(), application.getJourneyContainerDat().getPastJourneys().get(0).getDestination());
 		assertEquals(application.getJourneyContainerDat().getActiveJourneys().size(), 0);
 		assertEquals(application.getJourneyContainerDat().getPastJourneys().size(), 1);
@@ -799,165 +925,64 @@ public class stepDef {
 	public void the_sum_of_the_containers_in_all_the_active_journeys_and_in_the_past_journeys_is(Integer int1) {
 		int sum = 0;
 	    for (Journey j : application.getJourneyContainerDat().getActiveJourneys()) {
-	    	sum = sum + j.getContainerList().size();
+	    	sum = sum + j.getContainers().size();
 	    }
 	    for (Journey j : application.getJourneyContainerDat().getPastJourneys()) {
-	    	sum = sum + j.getContainerList().size();
+	    	sum = sum + j.getContainers().size();
 	    }
 	    assertEquals(sum, 10);
 	}
 	
-	
-	
-	//CONTAINER TRACKING
-    
-	//SCENARIO 1
-	//CHANGE CHANGE CHANGE
-	//CHANGE CHANGE CHANGE
-	//CHANGE CHANGE CHANGE
-	@Given("Journey and container counter is set to zero, where the counter describes the name of the corresponding id's")
-	public void journey_and_container_counter_is_set_to_zero_where_the_counter_describes_the_name_of_the_corresponding_id_s() {
-    	Container.setcCounter(0);   
-    	Journey.setCounter(0);
-    }
-	
-    @Given("a container with id {string} used in the journey {string}")
-    public void a_container_with_id_used_in_the_journey(String search, String jid) {
-    	this.search = search; 
-    	
-    }
 
-    @When("the container id is searched for in the journey history to find all appearences of the given container")
-    public void the_container_id_is_searched_for_in_the_journey_history_to_find_all_appearences_of_the_given_container() {
-    	containerJourneyHistoryList = application.findContainer(search, application.getJourneyContainerDat().getPastJourneys());
-    }
+    
 
-    @Then("the container history of container C0 should be returned")
-    public void the_container_history_of_container_C0_should_be_returned() {
-    	assertEquals(containerJourneyHistoryList.size(), 1);
-    	assertEquals(containerJourneyHistoryList.get(0).getId(), "BUAMIA0"); 	
+    //Persistency Layer
+	
+    //SCENARIO 1: Store two clients
+    @Given("copying the current list of clients")
+    public void copying_the_current_list_of_clients() {
+    	clientsCopy = new ArrayList<Client>(application.getClientDat().getClients()); 
     }
     
-    //SCENARIO 2
-    @Given("a container with id {string} used in journey {string} and journey {string}")
-    public void a_container_with_id_used_in_journey_and_journey(String search, String jid1, String jid2) {
-        this.search = search; 
+    @When("storing the current list of clients")
+    public void storing_the_current_list_of_clients() {
+    	application.getClientDat().storeClients();
     }
     
-    @Then("the journey history of the resued container {string} should be returned")
-    public void the_journey_history_of_the_resued_container_should_be_returned(String search) {
-    	assertEquals(containerJourneyHistoryList.get(0).getId(), "BUAMIA0");
-    	assertEquals(containerJourneyHistoryList.get(1).getId(), "BUAMIA1");
-    	assertEquals(containerJourneyHistoryList.size(),2); 
-    }
-    
-    
-    //SCENARIO 3
-    @Given("an unsused container with id {string}")
-    public void an_unsused_container_with_id(String search) {
-        this.search = search;
-    }
-    
-    @Then("the empty journey history of the unsued container {string} should be returned")
-    public void the_empty_journey_history_of_the_unsued_container_should_be_returned(String string) {
-    	assertEquals(containerJourneyHistoryList.size(),0);
-    }
-    
-    
-    //SCENARIO 4
-    @When("internal-status measurements for the containers corresponding to journey {string} are being simulated")
-    public void internal_status_measurements_for_the_journey_containers_are_being_simulated(String jid) {
-    	sim.setSeed(123);
-    	temp = sim.temperatureInitialization();
-    	pressure = sim.pressureInitialization();
-    	hum = sim.humidityInitialization(); 
-    }
-    
-    @When("the simulated internal-status measurements are being added to all containers in the journey {string}")
-    public void the_simulated_internal_status_measurements_are_being_added_to_all_containers_in_the_journey(String jid) {
-    	application.updateData(journeys.get(jid), journeys.get(jid).getContainerList().get(0), temp, pressure, hum);
-    }
-    
-    @When("the container id is searched for in the journey history to find the internal-status of all journeys the container has been used for")
-    public void the_container_id_is_searched_for_in_the_journey_history_to_find_the_internal_status_of_all_journeys_the_container_has_been_used_for() {
-    	containerInternalStatusHistoryList = application.containerInternalStatusHistory(search, application.getJourneyContainerDat().getPastJourneys());		
-    }
-    
-    @Then("the internal-status history of container {string} should be returned")
-    public void the_internal_status_history_of_container_should_be_returned(String search){
-    	assertEquals(containerInternalStatusHistoryList.size(), 1);
-    }
  
-    
-    // SCENARIO 5
-    
-    @When("a new set of internal-status measurements for the containers corresponding to journey {string} are being simulated")
-    public void a_new_set_of_internal_status_measurements_for_the_containers_corresponding_to_journey_are_being_simulated(String string) {
-    	sim.setSeed(321);
-    	temp1 = sim.temperatureInitialization();
-    	pressure1 = sim.pressureInitialization();
-    	hum1 = sim.humidityInitialization(); 
-    }
-    
-    @When("the new set of simulated internal-status measurements are being added to all containers in the journey {string}")
-    public void the_new_set_of_simulated_internal_status_measurements_are_being_added_to_all_containers_in_the_journey(String jid) {
-    	application.updateData(journeys.get(jid), journeys.get(jid).getContainerList().get(0), temp1, pressure1, hum1);
-    }
-    
-    
-    @Then("the internal-status history of the reused container {string} should be returned")
-    public void the_internal_status_history_of_the_reused_container_should_be_returned(String search) {
-    	assertEquals(containerInternalStatusHistoryList.size(),2);
-    }
-    
-    
-    //SCENARIO 6
-    @When("a container with id {string} not used in the journey {string}")
-    public void a_container_with_id_not_used_in_the_journey(String search, String jid) {
-    	this.search = search; 
-    }
-    
-    @Then("the empty internal-status history of the unused container {string} should be returned")
-    public void the_empty_internal_status_history_of_the_unused_container_should_be_returned(String search) {
-        assertEquals(containerInternalStatusHistoryList.size(),0);
+    @When("reading the generated client file")
+    public void reading_the_generated_client_file() {
+    	cb.readClientFile();
     }
 
+    @Then("the client file matches the copied list of clients")
+    public void the_client_file_matches_the_copied_list_of_clients() {
+    	assertEquals(application.getClientDat().getClients().size(), clientsCopy.size());
+    	assertEquals(application.getClientDat().getClients().get(0).getEmail(), clientsCopy.get(0).getEmail());
+    }
     
     
-
-    //PERSISTENCY LAYER
-
-    //SCENARIO 1: Storing two clients    
-	@Then("the clients are present in the Clients xml")
-	public void the_active_clients_are_present_in_the_Clients_xml() {
-		System.out.println("yay" + application.getClientDat().readClientFile());
-		assertEquals(application.getClientDat().readClientFile().size(),2);
-		assertEquals(application.getClientDat().readClientFile(), application.getClientDat().getClients());
-		assertEquals(application.getClientDat().readClientFile().get(0).getId(), application.getClientDat().getClients().get(0).getId());
-	}
-	
-	//SCENARIO 2: Restoring a client when client information is updated
+	//SCENARIO 2: Restore a client when client information is updated
 	@When("update and store the client {string} name to {string}")
 	public void update_the_client_name_to(String cid, String name) {
 		clients.get(cid).updateName(name);
 		application.getClientDat().storeClients();
 	}
 
-	@Then("the clients correct information is present in the Clients xml")
-	public void the_clients_correct_information_is_present_in_the_Clients_xml() {
-		assertEquals(application.getClientDat().readClientFile().size(),1);
-		assertEquals(application.getClientDat().readClientFile(), application.getClientDat().getClients());
-		assertEquals(application.getClientDat().readClientFile().get(0).getId(), application.getClientDat().getClients().get(0).getId());
-	}
+    @Then("the client file is the same as the copied list of clients") 
+    public void the_client_file_is_the_same_as_the_copied_list_of_clients() {
+    	assertEquals(application.getClientDat().getClients().get(0).getName(), clientsCopy.get(0).getName());
+    	assertEquals(application.getClientDat().getClients().size(), clientsCopy.size());
+    }
     
-    
-    //SCENARIO 3: Storing active journey 	
+
+    //SCENARIO 3: Store active journey 	
 	@Given("a second seed {int} pointing to a particular instance in the simulator")
-	public void a_second_seed_pointing_to_a_particular_instance_in_the_simulator(Integer int2) {
-		this.seed2 = int2;
+	public void a_second_seed_pointing_to_a_particular_instance_in_the_simulator(Integer seed) {
+		this.seed2 = seed;
 	}
     
-	@When("the second set of internal-status measurements are generated for the containers in the journey {string}")
+	@Given("the second set of internal-status measurements are generated for the containers in the journey {string}")
 	public void the_second_set_of_internal_status_measurements_are_generated_for_the_containers_in_the_journey(String jid) {
 		sim.setSeed(seed2);
 		hum2 = sim.humidityInitialization(); 
@@ -965,52 +990,157 @@ public class stepDef {
 		temp2 = sim.temperatureInitialization(); 
 	}
 	
-	@When("the second set of data is added to the containers in the journey {string}")
+	@Given("the second set of data is added to the containers in the journey {string}")
 	public void the_second_set_of_data_is_added_to_the_containers_in_the_journey(String jid) {
-		c1 = application.getJourneyContainerDat().getActiveJourneys().get(0).getContainerList().get(0);
+		c1 = application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0);
 	    application.updateData(application.getJourneyContainerDat().getActiveJourneys().get(0), c1, temp2, pressure2, hum2);
 	}
-
-	@Then("the internal-status measurements will be stored in the container for the journey {string}")
-	public void the_internal_status_measurements_will_be_stored_in_the_container_for_the_journey(String jid) {
+	
+	@Given("copying the current list of active journeys")
+	public void copying_the_current_list_of_active_journeys() {
+    	activeJourneysCopy = new ArrayList<Journey>(application.getJourneyContainerDat().getActiveJourneys());
+	}
+	
+	@When("storing the current list of active journeys")
+	public void storing_the_current_list_of_active_journeys() {
 		application.getJourneyContainerDat().readActiveJourneyFile();
-		assertEquals(application.getJourneyContainerDat().getActiveJourneys().size(), 1);
+	}
+    
+	@When("reading the generated activejourney file")
+	public void reading_the_generated_activejourneyFile() {
+		jb.readActiveJourneyFile();
 	}
 
-	@Then("the data has specific values")
-	public void the_data_has_specific_values() {
+	@Then("the activejourney file matches the copied list of active journeys")
+	public void the_activejourney_file_matches_the_copied_list_of_active_journeys() {
+		assertEquals(application.getJourneyContainerDat().getActiveJourneys().size(), activeJourneysCopy.size());
 		assertEquals(hum, c1.getHumList().get(0));
 		assertEquals(pressure, c1.getPressureList().get(0));
 		assertEquals(temp, c1.getTempList().get(0));
 		assertEquals(hum2, c1.getHumList().get(1));
 		assertEquals(pressure2, c1.getPressureList().get(1));
 		assertEquals(temp2, c1.getTempList().get(1));
+	}
+
+	@Then("the data has specific values")
+	public void the_data_has_specific_values() {
 		assertNotEquals(temp, temp2);
 		assertNotEquals(pressure, pressure2);
 		assertNotEquals(hum, hum2);
 	}
 	
     
-    //SCENARIO 4: Storing Journey history and ContainerWarehouse
-    @Then("the ended journey are present in the EndedJourney xml")
-    public void the_ended_journey_are_present_in_the_EndedJourney_xml() {
-    	assertEquals(application.getJourneyContainerDat().readEndedJourneyFile().size(), 1); 
-    	assertEquals(application.getJourneyContainerDat().readEndedJourneyFile().get(0).getContainerList().get(0).getId(), application.getJourneyContainerDat().getPastJourneys().get(0).getId());
-    }
-  	 
-	@Then("the container assigned to the given journeys are present in the ContainerWarehouse xml")
-	public void the_container_assigned_to_the_given_journeys_are_present_in_the_ContainerWarehouse_xml() {
-		assertEquals(application.getJourneyContainerDat().readContainerWarehouseFile().size(),1);
-		assertEquals(application.getJourneyContainerDat().readContainerWarehouseFile(), application.getJourneyContainerDat().getContainerWarehouse());
-		assertEquals(application.getJourneyContainerDat().readContainerWarehouseFile().get(0).getId(), application.getJourneyContainerDat().getContainerWarehouse().get(0).getId());
+    //SCENARIO 4: Store a past journey and store the changes in the container warehouse
+	@Given("copying the current list of past journeys and the containers in the container warehouse")
+	public void copying_the_current_list_of_past_journeys_and_the_containers_in_the_container_warehouse() {
+		pastJourneysCopy = new ArrayList<Journey>(application.getJourneyContainerDat().getPastJourneys());
+		containersCopy = new ArrayList<Container>(application.getJourneyContainerDat().getContainerWarehouse());
+	}
+	
+	@When("storing the current list of past journey and the containers in the container warehouse")
+	public void storing_the_current_list_of_past_journey_and_the_containers_in_the_container_warehouse() {
+		application.getJourneyContainerDat().storeEndedJourneys();
+		application.getJourneyContainerDat().storeContainerWarehouse();
+	}
+
+	@When("reading the generated pastjourney file and the containwarehouse file")
+	public void reading_the_generated_pastjourney_file_and_the_containwarehouse_file() {
+		jb.readEndedJourneyFile();
+		jb.readContainerWarehouseFile();
+	}
+
+	@Then("the pastjourney file matches the copied list of past journeys")
+	public void the_pastjourney_file_matches_the_copied_list_of_past_journeys() {
+    	assertEquals(application.getJourneyContainerDat().getPastJourneys().size(), pastJourneysCopy.size());
+    	assertEquals(application.getJourneyContainerDat().getPastJourneys().get(0).getId(), pastJourneysCopy.get(0).getId());
+	}
+	
+	@Then("the containerwarehouse file matches the copied list of containers in the container warehouse")
+	public void the_containerwarehouse_file_matches_the_copied_list_of_containers_in_the_container_warehouse() {
+    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().size(), containersCopy.size());
+    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().get(0).getId(), containersCopy.get(0).getId());
+	}
+	
+	//SCENARIO 5: Store a past journey that had multiple containers and store the changes in the container warehouse
+	@Then("the pastjourney file is the same as the copied list of past journeys")
+	public void the_pastjourney_file_is_the_same_as_the_copied_list_of_past_journeys() {
+    	assertEquals(application.getJourneyContainerDat().getPastJourneys().size(), pastJourneysCopy.size());
+    	assertEquals(application.getJourneyContainerDat().getPastJourneys().get(0).getId(), pastJourneysCopy.get(0).getId());
+	}
+	
+	@Then("the containerwarehouse file is the same as the copied list of containers in the container warehouse")
+	public void the_containerwarehouse_file_is_the_same_as_the_copied_list_of_containers_in_the_container_warehouse() {
+    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().size(), containersCopy.size()); 
+    	assertEquals(application.getJourneyContainerDat().getContainerWarehouse().get(0).getId(), containersCopy.get(0).getId());
+	}
+
+	
+	//SCENARIO 6: Store the most recent client counter
+	@Given("copying the most recent client counter")
+	public void copying_the_most_recent_client_counter() {
+		clientCounterCopy = Client.getCount();
+	}
+	
+	@When("storing the most recent client counter")
+	public void storing_the_most_recent_client_counter(){
+		application.getClientDat().storeClientCounters();
+	}
+	
+	@When("reading the generated client counter file")
+	public void reading_the_enerated_client_counter_file() {
+		Client.setCount(0);
+		application.getClientDat().readClientCounterFile();
+	}
+
+	@Then("the most recent client counter is")
+	public void the_most_recent_client_counter_is() {
+		assertEquals(Client.getCount(), clientCounterCopy);
 	}
 	
 	
-	//SCENARIO 5: Storing Journey history and ContainerWarehouse for journey with multiple containers
-	@Then("the containers assigned to the given journeys are present in the ContainerWarehouse xml")
-	public void the_containers_assigned_to_the_given_journeys_are_present_in_the_ContainerWarehouse_xml() {
-		assertEquals(application.getJourneyContainerDat().readContainerWarehouseFile().size(),2);
-		assertEquals(application.getJourneyContainerDat().readContainerWarehouseFile(), application.getJourneyContainerDat().getContainerWarehouse());
-	}	
-}
+	//SCENARIO 7: Store the most recent journey counter
+	
+	@Given("copying the most recent journey counter")
+	public void copying_the_most_recent_journey_counter() {
+		journeyCounterCopy = Journey.getCounter();
+	}
+	
+	@When("storing the most recent journey counter")
+	public void storing_the_most_recent_journey_counter(){
+		application.getJourneyContainerDat().storeJourneyCounters();
+	}
+	
+	@When("reading the generated journey counter file")
+	public void reading_the_generated_journey_counter_file() {
+		Journey.setCounter(0);
+		application.getJourneyContainerDat().readJourneyCounterFile();
+	}
 
+	@Then("the most recent journey counter is")
+	public void the_most_recent_journey_counter_is() {
+		assertEquals(Journey.getCounter(), journeyCounterCopy);
+	}
+	
+	
+	//SCENARIO 8: Store the most recent container counter
+	@Given("copying the most recent container counter")
+	public void copying_the_most_recent_container_counter() {
+		containerCounterCopy = Container.getcCounter();
+	}
+	
+	@When("storing the most recent container counter")
+	public void storing_the_most_recent_container_counter(){
+		application.getJourneyContainerDat().storeContainerCounters();
+	}
+	
+	@When("reading the generated container counter file")
+	public void reading_the_generated_container_counter_file() {
+		Container.setcCounter(0);
+		application.getJourneyContainerDat().readContainerCounterFile();
+	}
+
+	@Then("the most recent container counter is")
+	public void the_most_recent_container_counter_is() {
+		assertEquals(Container.getcCounter(), containerCounterCopy);
+	}
+}

@@ -52,7 +52,6 @@ public class MenuSectionPanels implements PropertyChangeListener{
 		
 		menupanel = new JPanel( new BorderLayout());
 		menupanel.setPreferredSize(new Dimension(800, 600));
-		menupanel.setBackground(Color.RED);
 	
 		menuPanel(application);
 	}
@@ -62,7 +61,8 @@ public class MenuSectionPanels implements PropertyChangeListener{
 	public void menuPanel(Application application) {
 		menupanel.removeAll();
 		if (topmain instanceof ClientMain) {
-
+			
+			
 			
 			JPanel clientDetails = new JPanel();
 			clientDetails.setLayout(new BoxLayout(clientDetails, BoxLayout.Y_AXIS));
@@ -84,6 +84,14 @@ public class MenuSectionPanels implements PropertyChangeListener{
 			menupanel.add(clientDetails, BorderLayout.CENTER);
 		}
 		if ( topmain instanceof CompanyMain) {
+			ImageIcon img = new ImageIcon("src/main/resources/Companymenu.png");
+			Image image = img.getImage(); // transform it 
+			Image newimg = image.getScaledInstance(800, 600,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
+			img = new ImageIcon(newimg);  // transform it back
+			JLabel background = new JLabel("");
+			background.setIcon(img);
+			
+			menupanel.add(background);
 			
 		}
 		
@@ -117,6 +125,39 @@ public class MenuSectionPanels implements PropertyChangeListener{
 				}		
 			});
 		}
+		
+		JMenuItem save = new JMenuItem("Save data");
+		menu.add(save);
+		save.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				application.store();
+			}
+		});
+		
+		JMenuItem load = new JMenuItem("Load data");
+		menu.add(load);
+		load.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(application.getJourneyContainerDat().getActiveJourneys().size());
+				System.out.println(application.getJourneyContainerDat().getPastJourneys().size());
+				application.read();
+				System.out.println(application.getJourneyContainerDat().getActiveJourneys().size());
+				System.out.println(application.getJourneyContainerDat().getPastJourneys().size());
+			}
+			
+		});
+		
+		JMenuItem clear = new JMenuItem("Clear all data");
+		menu.add(clear);
+		clear.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				application.clear();
+			}
+		});
+		
 		
 		menu.add(logout);
 

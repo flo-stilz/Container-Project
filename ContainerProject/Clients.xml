@@ -1,79 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<java version="13.0.2" class="java.beans.XMLDecoder">
+<java version="13.0.1" class="java.beans.XMLDecoder">
  <object class="java.util.ArrayList">
   <void method="add">
    <object class="model.Client">
     <void property="address">
-     <string>Priorgade 14, 9000 Aalborg</string>
+     <string>madisonsquaregarden</string>
     </void>
     <void property="company">
-     <string>NovoNordisk</string>
+     <string>Nike</string>
     </void>
     <void property="email">
-     <string>Micheal.Ivanova@NovoNordisk.com</string>
+     <string>nike@administration.com</string>
     </void>
     <void property="id">
-     <int>69421</int>
+     <int>69451</int>
     </void>
     <void property="name">
-     <string>Micheal Ivanova</string>
+     <string>Mads Mikkelsen</string>
     </void>
-   </object>
-  </void>
-  <void method="add">
-   <object class="model.Client">
-    <void property="address">
-     <string>Fiskedamsgade 28, 2100 Koebenhavn</string>
-    </void>
-    <void property="company">
-     <string>Novozymes</string>
-    </void>
-    <void property="email">
-     <string>Mette.Christensen@Novozymes.com</string>
-    </void>
-    <void property="id">
-     <int>69422</int>
-    </void>
-    <void property="name">
-     <string>Mette Christensen</string>
-    </void>
-   </object>
-  </void>
-  <void method="add">
-   <object class="model.Client">
-    <void property="address">
-     <string>Enighedsvej 2, 2800 Kongens Lyngby</string>
-    </void>
-    <void property="company">
-     <string>Netto</string>
-    </void>
-    <void property="email">
-     <string>Tina.Gruber@Netto.com</string>
-    </void>
-    <void property="id">
-     <int>69423</int>
-    </void>
-    <void property="name">
-     <string>Tina Gruber</string>
-    </void>
-   </object>
-  </void>
-  <void method="add">
-   <object class="model.Client">
-    <void property="address">
-     <string>Edvard Falcks Gade 5, 1569 Koebenhavn</string>
-    </void>
-    <void property="company">
-     <string>JPMorganChase</string>
-    </void>
-    <void property="email">
-     <string>Phil.Clemensen@JPMorganChase.com</string>
-    </void>
-    <void property="id">
-     <int>69424</int>
-    </void>
-    <void property="name">
-     <string>Phil Clemensen</string>
+    <void property="password">
+     <string>peter</string>
     </void>
    </object>
   </void>

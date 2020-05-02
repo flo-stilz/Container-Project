@@ -49,6 +49,10 @@ public class Client {
 	public void setId(int id) {
 		this.id = id;
 	}
+	
+	public static int getCount() {
+		return count;
+	}
 
 	public static void setCount(int count) {
 		Client.count = count;

@@ -24,14 +24,25 @@ public class Application {
 	public Client getCurrentUser() {
 		return currentUser;
 	}
-	public Application() {
-//		loadData();
-	}
+
 	public ClientDatabase getClientDat() {
 		return clientDat;
 	}
 	public JourneyContainerDatabase getJourneyContainerDat() {
 		return journeyContainerDat;
+	}
+	public void store() {
+		clientDat.store();
+		journeyContainerDat.store();
+	}
+	
+	public void read() {
+		clientDat.read();
+		journeyContainerDat.read();
+	}
+	public void clear() {
+		clientDat.clear();
+		journeyContainerDat.clear();
 	}
 
 //	private ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
@@ -62,7 +73,6 @@ public class Application {
 	public Client createClient( String company, String address, String email, String name, String password) {
 		Client c = new Client(company, address, email, name, password);
 		clientDat.getClients().add(c);
-		clientDat.storeClients(); 
 		support.firePropertyChange("clients",null,null);
 		return c;
 	}
@@ -130,16 +140,15 @@ public class Application {
 			 Journey j = new Journey(origin, destination, content, company);
 			 journeyContainerDat.getActiveJourneys().add(j);
 			 Container container = assignContainer(content, company, j.getId());
-			 j.getContainerList().add(container);
+			 j.getContainers().add(container);
 			 updateCurrentLocation(j, origin);
 			 support.firePropertyChange("journey",null,null);
-			 journeyContainerDat.storeActiveJourneys();
 			 return j;
 		}
 		else {
 			Journey j = findJourney( origin, destination).get(0);
 			Container container = assignContainer(content, company, j.getId());
-			j.getContainerList().add(container);
+			j.getContainers().add(container);
 			updateCurrentLocation(j, origin);
 			support.firePropertyChange("journey",null,null);
 			return findJourney( origin, destination).get(0);
@@ -151,7 +160,7 @@ public class Application {
 	public ArrayList<Container> findContainer(String keyword, ArrayList<Journey> journeyList) {
 		ArrayList<Container> containers = new ArrayList<Container>();
 		for (Journey j : journeyList) {
-			for (Container c : j.getContainerList()) {
+			for (Container c : j.getContainers()) {
 				if ((c.getContainerId().equalsIgnoreCase(keyword)) 
 						|| (c.getCompany().equalsIgnoreCase(keyword)) 
 						|| (c.getContent().equalsIgnoreCase(keyword))
@@ -170,7 +179,7 @@ public class Application {
 		if (j.getDestination().equals(j.getCurrentLocation())) {
 			journeyContainerDat.getPastJourneys().add(j);
 			journeyContainerDat.storeEndedJourneys();
-			for (Container c : j.getContainerList()) {
+			for (Container c : j.getContainers()) {
 				Container container = new Container(c);
 				container.setContainerID(c.getContainerId());
 				container.setContent("empty");
@@ -180,10 +189,8 @@ public class Application {
 				container.getPressureList().clear();
 				container.getHumList().clear();
 				journeyContainerDat.getContainerWarehouse().add(container);
-				journeyContainerDat.storeContainerWarehouse();
 			}
 			journeyContainerDat.getActiveJourneys().remove(j);
-			journeyContainerDat.storeActiveJourneys();
 		} 
 		support.firePropertyChange("history",null,null);
 		support.firePropertyChange("journey",null,null);
@@ -192,7 +199,6 @@ public class Application {
 	public void addData(Container c, int temp, int pressure, int humidity) {
 		c.addData(temp, pressure, humidity);
 		support.firePropertyChange("journey",null,null);
-		journeyContainerDat.storeActiveJourneys();
 //		c.getTempList().add(temp);
 //		c.getPressureList().add(pressure);
 //		c.getHumList().add(humidity);
@@ -201,7 +207,7 @@ public class Application {
 	
 	public void updateData(Journey j, Container c, int temp, int pressure, int humidity) {
 		if (c.isEmpty()) {
-			for (Container con : j.getContainerList()) {
+			for (Container con : j.getContainers()) {
 				con.addData(temp, pressure, humidity);
 			}
 		}
@@ -231,7 +237,7 @@ public class Application {
 	public Container containerInternalStatusHistory(String search, ArrayList<Journey> history) {
 		Container containerHis = new Container(findContainer(search, history).get(0));
 		for(Journey j : history) {
-			for(Container c : j.getContainerList()) {
+			for(Container c : j.getContainers()) {
 				if (c.getContainerId().contentEquals(search)) {
 					containerHis.getTempList().addAll(c.getTempList());
 					containerHis.getPressureList().addAll(c.getPressureList());
@@ -276,20 +282,13 @@ public class Application {
 	public Set<Journey> findClientJourneys(ArrayList<Journey> journeyList){
 		Set<Journey> result = new HashSet<Journey>();
 		for ( Journey j : journeyList) {
-			for (Container c : j.getContainerList()) {
+			for (Container c : j.getContainers()) {
 				if (currentUser.getCompany().contentEquals(c.getCompany())) {
 					result.add(j);
 				}
 			}
 		}
 		return result;
-	}
-	
-	public void loadData(){
-		clientDat.readClientFile();
-		journeyContainerDat.readActiveJourneyFile();
-		journeyContainerDat.readEndedJourneyFile();
-		journeyContainerDat.readContainerWarehouseFile();
 	}
 	
 	public boolean registrationValidation(String company, String name, String mail, String address, String password) {
@@ -336,8 +335,8 @@ public class Application {
 //	}
 	
 	public void updateCurrentLocation(Journey j, String newcurrentLocation) {
-		for (int i=0; i < j.getContainerList().size(); i++){
-			j.getContainerList().get(i).setCurrentLocation(newcurrentLocation);
+		for (int i=0; i < j.getContainers().size(); i++){
+			j.getContainers().get(i).setCurrentLocation(newcurrentLocation);
 		}
 		j.setCurrentLocation(newcurrentLocation.toUpperCase());
 		support.firePropertyChange("journey",null,null);

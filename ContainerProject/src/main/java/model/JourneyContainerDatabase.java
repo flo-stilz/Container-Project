@@ -9,18 +9,138 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class JourneyContainerDatabase implements JourneyContainerPersistency {
+public class JourneyContainerDatabase implements Persistency {
 	
 	private ArrayList<Journey> activeJourneys = new ArrayList<Journey>();
 	private ArrayList<Container> containerWarehouse = new ArrayList<Container>();
 	private ArrayList<Journey> pastJourneys = new ArrayList<Journey>();
+	
+	public void store() {
+		storeActiveJourneys();
+		storeEndedJourneys();
+		storeJourneyCounters();
+		storeContainerWarehouse();
+		storeContainerCounters();
+	}
+	public void read() {
+		readActiveJourneyFile();
+		readEndedJourneyFile();
+		readJourneyCounterFile();
+		readContainerWarehouseFile();
+		readContainerCounterFile();
+	}
+	
+	public void clear() {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./ActiveJourneys.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(new ArrayList<Journey>());
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace(); 
+		} 
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./EndedJourneys.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(new ArrayList<Journey>());
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) { 
+			ex.printStackTrace();
+		}
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./JourneyCounter.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(0);
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./ContainerWarehouse.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(new ArrayList<Container>());
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./ContainerCounter.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(0);
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		
+		read();
+
+	}
+	
+	
+	public void storeJourneyCounters() {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./JourneyCounter.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(Journey.getCounter());
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	} 
+	
+	public void readJourneyCounterFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./JourneyCounter.xml"));
+			} catch (FileNotFoundException e) {
+				throw new Error(e);
+				}
+		XMLDecoder decoder = new XMLDecoder(fis);
+//		Journey.setCounter(0);
+		Journey.setCounter((Integer)decoder.readObject()); 
+		decoder.close();
+	}
+	
+	
+	public void storeContainerCounters() {
+		try {
+			FileOutputStream fos = new FileOutputStream(new File("./ContainerCounter.xml"));
+			XMLEncoder encoder = new XMLEncoder(fos);
+			encoder.writeObject(Container.getcCounter());
+			encoder.close();
+			fos.close();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	} 
+	
+	public void readContainerCounterFile() {
+		FileInputStream fis;
+		try {
+			fis = new FileInputStream(new File("./ContainerCounter.xml"));
+			} catch (FileNotFoundException e) {
+				throw new Error(e);
+				}
+		XMLDecoder decoder = new XMLDecoder(fis);
+//		Container.setcCounter(2);
+		Container.setcCounter((Integer)decoder.readObject()); 
+		decoder.close();
+	}
+	
+	
 	
 	//needs testing
 	public ArrayList<Container> getfilteredContainers( ArrayList<Journey> jList) {
 
 		ArrayList<Container> Containers = new ArrayList<Container>();
 		for (Journey j : jList) {
-			for (Container c : j.getContainerList()) {
+			for (Container c : j.getContainers()) {
 				Containers.add(c);
 			}
 		}
@@ -91,7 +211,7 @@ public class JourneyContainerDatabase implements JourneyContainerPersistency {
 			throw new Error(e);
 		}
 		XMLDecoder decoder = new XMLDecoder(fis);
-		activeJourneys = (ArrayList<Journey>)decoder.readObject();
+		pastJourneys = (ArrayList<Journey>)decoder.readObject();
 		decoder.close();
 
 	}
