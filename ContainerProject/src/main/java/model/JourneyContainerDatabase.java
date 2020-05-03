@@ -30,58 +30,6 @@ public class JourneyContainerDatabase implements Persistency {
 		readContainerCounterFile();
 	}
 	
-	public void clear() {
-		try {
-			FileOutputStream fos = new FileOutputStream(new File("./ActiveJourneys.xml"));
-			XMLEncoder encoder = new XMLEncoder(fos);
-			encoder.writeObject(new ArrayList<Journey>());
-			encoder.close();
-			fos.close();
-		} catch (IOException ex) {
-			ex.printStackTrace(); 
-		} 
-		try {
-			FileOutputStream fos = new FileOutputStream(new File("./EndedJourneys.xml"));
-			XMLEncoder encoder = new XMLEncoder(fos);
-			encoder.writeObject(new ArrayList<Journey>());
-			encoder.close();
-			fos.close();
-		} catch (IOException ex) { 
-			ex.printStackTrace();
-		}
-		try {
-			FileOutputStream fos = new FileOutputStream(new File("./JourneyCounter.xml"));
-			XMLEncoder encoder = new XMLEncoder(fos);
-			encoder.writeObject(0);
-			encoder.close();
-			fos.close();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		try {
-			FileOutputStream fos = new FileOutputStream(new File("./ContainerWarehouse.xml"));
-			XMLEncoder encoder = new XMLEncoder(fos);
-			encoder.writeObject(new ArrayList<Container>());
-			encoder.close();
-			fos.close();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		try {
-			FileOutputStream fos = new FileOutputStream(new File("./ContainerCounter.xml"));
-			XMLEncoder encoder = new XMLEncoder(fos);
-			encoder.writeObject(0);
-			encoder.close();
-			fos.close();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		
-		read();
-
-	}
-	
-	
 	public void storeJourneyCounters() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./JourneyCounter.xml"));
@@ -157,10 +105,6 @@ public class JourneyContainerDatabase implements Persistency {
 		return Containers;
 	}
 	
-//	public void storeActiveJourneys() {
-//		storeActiveJourneys(activeJourneys);
-//	}
-	
 	public void storeActiveJourneys() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./ActiveJourneys.xml"));
@@ -186,11 +130,6 @@ public class JourneyContainerDatabase implements Persistency {
 
 		}
 	
-	
-//	public void storeEndedJourneys() {
-//		storeEndedJourneys(pastJourneys);
-//	}
-	
 	public void storeEndedJourneys() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./EndedJourneys.xml"));
@@ -215,10 +154,6 @@ public class JourneyContainerDatabase implements Persistency {
 		decoder.close();
 
 	}
-	
-//	public void storeContainerWarehouse() {
-//		storeContainerWarehouse(containerWarehouse);
-//	}
 	
 	public void storeContainerWarehouse() {
 		try {

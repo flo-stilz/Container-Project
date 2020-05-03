@@ -21,28 +21,7 @@ public class ClientDatabase implements Persistency {
 		readClientCounterFile();
 	}
 	
-	public void clear() {
-		try {
-			FileOutputStream fos = new FileOutputStream(new File("./Clients.xml"));
-			XMLEncoder encoder = new XMLEncoder(fos);
-			encoder.writeObject(new ArrayList<Client>());
-			encoder.close();
-			fos.close();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		try {
-			FileOutputStream fos = new FileOutputStream(new File("./ClientCounter.xml"));
-			XMLEncoder encoder = new XMLEncoder(fos);
-			encoder.writeObject(69420);
-			encoder.close();
-			fos.close();
-		} catch (IOException ex) {
-			ex.printStackTrace();
-		}
-		
-		read();
-	}
+	
 	
 	public void storeClientCounters() {
 		try {
@@ -99,7 +78,4 @@ public class ClientDatabase implements Persistency {
 		
 	}
 
-//	public void setClients(ArrayList<client> clients) {
-//		this.clients = clients;
-//	}
 }

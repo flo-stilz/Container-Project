@@ -21,38 +21,11 @@ public class CompanyMain extends TopMain{
 	
 	private ClientSectionPanels c;
 	private Application application;
-//	private JPanel options;
-//	private JPanel cards;
-//	private CardLayout cl;
-//
-//	public JPanel getCards() {
-//		return cards;
-//	}
-//
-//	public CardLayout getCl() {
-//		return cl;
-//	}
 
 	public CompanyMain(final Application application, final JFrame login) {
 		super(application, login);
 		
 		this.application = application;
-//		final JFrame company = new JFrame("Company Overview");
-
-		// CardLayout
-//		cards = new JPanel(new CardLayout());
-//		
-//		options(database, main, company);
-//		
-//		cl = (CardLayout)(cards.getLayout());
-//		
-//		
-//		company.add(options, BorderLayout.WEST);
-//		company.add(cards, BorderLayout.EAST);
-//		cl.show(cards, "menu");
-//		company.pack();		
-//		company.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//		company.setVisible(true);
 	}
 	
 	@Override
@@ -90,26 +63,7 @@ public class CompanyMain extends TopMain{
 		
 	
 	} 
-	
-//	public void menuButton(Database database, JFrame main, JButton menu, JFrame company) {
-//		final JPanel menupanel = new JPanel();
-//		menupanel.setPreferredSize(new Dimension(800, 600));
-//		menupanel.setBackground(Color.RED);
-//		
-//		getCards().add(menupanel, "menu");
-//		
-//		JLabel lbl = new JLabel("Description");
-//		menupanel.add(lbl, BorderLayout.NORTH);
-//		logOutButton(database, main, company, menupanel);
-//		
-//		menu.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				cl.show(cards, "menu");
-//			}
-//		});
-//	}
-	
+
 	public void clientButton(final Application application, JFrame login, JButton clients) {
 		c = new ClientSectionPanels(application, this);
 		getCards().add(c.getClientSearch(), "clientSearch");
@@ -124,42 +78,6 @@ public class CompanyMain extends TopMain{
 		});
 		
 	}
-	
-//	public void journeyButton(Database database, JFrame main, JButton journeys) {
-//		// journey section
-//		
-//		JourneySectionPanels j = new JourneySectionPanels(database, this);
-//		cards.add(j.getJourneySearch(), "journeySearch");
-//		cards.add(j.getViewJourneys(), "viewJourneys");
-//		
-//		journeys.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				
-//				cl.show(cards,  "journeySearch");
-//			}
-//		});
-//		
-//
-//		
-//	}
-	
-//	public void containerButton(Database database, JFrame main, JButton containers) {
-//	// container section
-//	
-//		ContainerSelectionPanels cont = new ContainerSelectionPanels(database, this);
-//		cards.add(cont.getContainerSearch(), "containerSearch");
-//		cards.add(cont.getViewContainers(), "viewContainers");
-//		cards.add(cont.getPlotPanel(), "plotPanel");
-//		
-//		containers.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//						
-//				cl.show(cards,  "containerSearch");
-//				}
-//		});
-//			
-//	}
 	
 	public void simulationButton(final Application application, JFrame login, JButton simulation) {	
 		// simulation section
@@ -177,8 +95,7 @@ public class CompanyMain extends TopMain{
 		start.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				Simulator simulation = new Simulator();
-				simulation.simulation(application, Integer.parseInt(days.getText()));
+				application.simulation(Integer.parseInt(days.getText()));
 
 			}
 		});
@@ -194,20 +111,6 @@ public class CompanyMain extends TopMain{
 			}
 		});
 	}
-	
-//	public void logOutButton(Database database, final JFrame main, final JFrame company, JPanel menupanel) {
-//		// Logout as company user
-//		
-//		JButton logout = new JButton("Logout");
-//		menupanel.add(logout);
-//		logout.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				main.setVisible(true);
-//				company.dispose();
-//			}
-//		});
-//	}
 	
 	@Override
 	public void removeListeners() {

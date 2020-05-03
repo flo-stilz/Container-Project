@@ -58,16 +58,7 @@ public class Simulator {
 	public void setSeed(int seed) {
 		r.setSeed(seed);
 	}
-	
-	
-//	public String companySelection(int seed) {
-//		r.setSeed(seed);
-//		int value = r.nextInt(companies.size()-1);
-//		String company = companies.get(value);
-//		companies.remove(value);
-//		return company;
-//		
-//	}
+
 	public String companySelection() {
 		int value = r.nextInt(companies.size()-1);
 		String company = companies.get(value);
@@ -75,12 +66,7 @@ public class Simulator {
 		return company;
 		
 	}
-//	public String nameSelection(int seed) {
-//		r.setSeed(seed);
-//		int value1 = r.nextInt(firstnames.size()-1);
-//		int value2 = r.nextInt(surnames.size()-1);
-//		return firstnames.get(value1) + " " + surnames.get(value2);
-//	}
+
 	public String nameSelection() {
 		int value1 = r.nextInt(firstnames.size()-1);
 		int value2 = r.nextInt(surnames.size()-1);
@@ -91,67 +77,32 @@ public class Simulator {
 			
 		return name + "@" + companyName + ".com";
 	}
-//	public String addressSelection(int seed) {
-//		r.setSeed(seed);
-//		int value = r.nextInt(addresses.size()-1);
-//		String address = addresses.get(value);
-//		addresses.remove(value);
-//		return address;
-//	}
+	
 	public String addressSelection() {
 		int value = r.nextInt(addresses.size()-1);
 		String address = addresses.get(value);
 		addresses.remove(value);
 		return address;
-	}
-	
-//	public client clientSelection(Application application, int seed) {
-//		r.setSeed(seed);
-//		int value = r.nextInt(application.getClientDa().getClients().size()-1);
-//		client client = application.getClientDat().getClients().get(value);
-//		return client;
-//	}	
+	}	
 	
 	public Client clientSelection(Application application) {
 		int value = r.nextInt(application.getClientDat().getClients().size()-1);
 		Client client = application.getClientDat().getClients().get(value);
 		return client;
 	}
-	
-//	public String contentSelection(int seed) {
-//		r.setSeed(seed);
-//		int value = r.nextInt(contents.size()-1);
-//		String content = contents.get(value);
-//		return content;
-//	}
+
 	public String contentSelection() {
 		int value = r.nextInt(contents.size()-1);
 		String content = contents.get(value);
 		return content;
 	}
-	
-//	public String originSelection(int seed) {
-//		r.setSeed(seed);
-//		int value = r.nextInt(locations.size()-1);
-//		String origin = locations.get(value);
-//		return origin;
-//	}
-	
+
 	public String originSelection() {
 		int value = r.nextInt(locations.size()-1);
 		String origin = locations.get(value);
 		return origin;
 	}
-	
-//	public String destinationSelection(int seed, String origin) {
-//		ArrayList<String> possiblelocations = new ArrayList<String>(locations);
-//		possiblelocations.remove(origin);
-//		r.setSeed(seed);
-//		int value = r.nextInt(possiblelocations.size()-1);
-//		String destination = possiblelocations.get(value);
-//		return destination;
-//	}
-	
+
 	public String destinationSelection(String origin) {
 		ArrayList<String> possiblelocations = new ArrayList<String>(locations);
 		possiblelocations.remove(origin);
@@ -159,53 +110,24 @@ public class Simulator {
 		String destination = possiblelocations.get(value);
 		return destination;
 	}
-	
-//	public int temperatureInitialization(int seed) {
-//		r.setSeed(seed);
-//		int value = r.nextInt(45);
-//		int temp = value;
-//		return temp;
-//	}
-	
+
 	public int temperatureInitialization() {
 		int value = r.nextInt(45);
 		int temp = value;
 		return temp;
 	}
-	
-//	public int pressureInitialization(int seed) {
-//		r.setSeed(seed);
-//		int value = r.nextInt(120);
-//		int pressure = 930+value;
-//		return pressure;
-//	}
-	
+
 	public int pressureInitialization() {
 		int value = r.nextInt(120);
 		int pressure = 930+value;
 		return pressure;
 	}
 	
-//	public int humidityInitialization(int seed) {
-//		r.setSeed(seed);
-//		int value = r.nextInt(90);
-//		int hum = value;
-//		return hum;
-//	}
-	
 	public int humidityInitialization() {
 		int value = r.nextInt(90);
 		int hum = value;
 		return hum;
 	}
-	
-//	public int temperatureGenerator(Container c,int seed) {
-//		r.setSeed(seed);
-//		int value = r.nextInt(10);
-//		int previousdataindex = c.getTempList().size()-1;
-//		int temp = c.getTempList().get(previousdataindex) + value - 5 ;
-//		return temp;
-//	}
 	
 	public int temperatureGenerator(Container c) {
 		int value = r.nextInt(10);
@@ -214,28 +136,12 @@ public class Simulator {
 		return temp;
 	}
 	
-//	public int pressureGenerator(Container c,int seed) {
-//		r.setSeed(seed);
-//		int value = r.nextInt(100);
-//		int previousdataindex = c.getPressureList().size()-1;
-//		int pressure = c.getPressureList().get(previousdataindex) + value - 50 ;
-//		return pressure;
-//	}
-	
 	public int pressureGenerator(Container c) {
 		int value = r.nextInt(100);
 		int previousdataindex = c.getPressureList().size()-1;
 		int pressure = c.getPressureList().get(previousdataindex) + value - 50 ;
 		return pressure;
 	}
-	
-//	public int humidityGenerator(Container c,int seed) {
-//		r.setSeed(seed);
-//		int value = r.nextInt(10);
-//		int previousdataindex = c.getHumList().size()-1;
-//		int hum = c.getHumList().get(previousdataindex) + value - 5 ;
-//		return hum;
-//	}
 	
 	public int humidityGenerator(Container c) {
 		int value = r.nextInt(10);
@@ -263,25 +169,6 @@ public class Simulator {
 		}
 	}
 	
-//	public void simulateData(Application application, int seed) {
-//		for (Journey j : application.getJourney()) {
-//			for (Container c : j.getContainers()) {
-//				if (c.isEmpty()) {
-//					int temp = temperatureInitialization(seed);
-//					int pressure = pressureInitialization(seed);
-//					int hum = humidityInitialization(seed);
-//					application.updateData(j, c, temp, pressure, hum);
-//				}
-//				else {
-//					int temp = temperatureGenerator(c, seed);
-//					int pressure = pressureGenerator(c, seed);
-//					int hum = humidityGenerator(c, seed);
-//					application.updateData(j, c, temp, pressure, hum);
-//				}
-//			}
-//		}
-//	}
-	
 	public void simulation(Application application, int day) {
 		for (int i = 0; i<day; i++) {
 			
@@ -296,15 +183,7 @@ public class Simulator {
 				journeyCreation(application);
 			}
 			
-			for (int j = 0; j<5; j++) {
-				
-				// sleep
-//				try {
-//					TimeUnit.SECONDS.sleep(2);
-//				} catch (InterruptedException e) {
-//					e.printStackTrace();
-//				}
-				
+			for (int j = 0; j<5; j++) {				
 				simulateData(application);
 			}
 			
@@ -316,14 +195,6 @@ public class Simulator {
 		}
 	}
 	
-//	public void clientCreation(Application application, int seed) {
-//		company = companySelection(seed);
-//		address = addressSelection(seed);
-//		name = nameSelection(seed);
-//		mail = emailCreation(company, name);
-//		client = application.createClient(company, address, mail, name, password);
-//	}
-	
 	public void clientCreation(Application application) {
 		company = companySelection();
 		address = addressSelection();
@@ -331,17 +202,6 @@ public class Simulator {
 		mail = emailCreation(company, name);
 		client = application.createClient(company, address, mail, name, password);
 	}
-	
-//	public void journeyCreation(Application application, int seed) {
-//		client = clientSelection(application, seed);
-//		content = contentSelection(seed);
-//		origin = originSelection(seed);
-//		destination = destinationSelection(seed, origin);
-//		Journey j = application.createJourney(origin, destination, content, client.getCompany());
-//		int originindex = locations.indexOf(origin) + 1;
-//		int destinationindex = locations.indexOf(destination) + 1;
-//		j.setDistance(5 + Integer.parseInt(travelTime[originindex][destinationindex]));
-//	}
 	
 	public void journeyCreation(Application application) {
 		client = clientSelection(application);

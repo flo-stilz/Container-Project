@@ -33,17 +33,6 @@ public class MenuSectionPanels implements PropertyChangeListener{
 	public JPanel getMenupanel() {
 		return menupanel;
 	}
-	
-//	public MenuSectionPanels(final Database database, final ClientMain clientmain, JFrame login) {
-//
-//		this.clientmain = clientmain;
-//		menupanel = new JPanel( new BorderLayout());
-//		menupanel.setPreferredSize(new Dimension(800, 600));
-//		menupanel.setBackground(Color.RED);
-//		
-//		
-//		menuPanel(database, login, menupanel);
-//	}
 
 	public MenuSectionPanels(final Application application, final TopMain topmain, JFrame login) {
 
@@ -149,16 +138,6 @@ public class MenuSectionPanels implements PropertyChangeListener{
 			
 		});
 		
-		JMenuItem clear = new JMenuItem("Clear all data");
-		menu.add(clear);
-		clear.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				application.clear();
-			}
-		});
-		
-		
 		menu.add(logout);
 
 		profile.addActionListener(new ActionListener() {
@@ -192,13 +171,6 @@ public class MenuSectionPanels implements PropertyChangeListener{
 		
 		JPanel textFields = new JPanel();
 		textFields.setLayout(new BoxLayout(textFields, BoxLayout.Y_AXIS));
-			
-//			JPanel company = new JPanel();
-//			company.add(new JLabel("Company name: "));
-//			JTextField companyText = new JTextField("companyname");
-//			companyText.setPreferredSize(new Dimension(100, 25));
-//			company.add(companyText);
-//			textFields.add(company);
 			
 		JPanel refname = new JPanel();
 		refname.add(new JLabel("Reference name: "));

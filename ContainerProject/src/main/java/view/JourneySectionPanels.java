@@ -320,11 +320,6 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		}
 		return containerids;
 	}
-	
-//	public boolean checkJourneyListForPast(Database database) {
-//		String journeyid = wJourneys.get(0).getId();
-//		return (database.findUsingLoop(journeyid, database.getJourney()).size() == 0);
-//	}
 
 	public void propertyChange(PropertyChangeEvent evt) {
 

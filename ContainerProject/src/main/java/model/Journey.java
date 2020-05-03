@@ -55,13 +55,6 @@ public class Journey {
 	public String getCurrentLocation() {
 		return currentLocation;
 	}
-
-//	public void updateCurrentLocation(String newcurrentLocation) {
-//		for (int i=0; i < containers.size(); i++){
-//			containers.get(i).setCurrentLocation(newcurrentLocation);
-//		}
-//		this.currentLocation = newcurrentLocation.toUpperCase();
-//	}
 	
 	public void setCurrentLocation(String currentLocation) {
 		this.currentLocation = currentLocation;

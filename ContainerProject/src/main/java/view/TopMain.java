@@ -28,6 +28,12 @@ public class TopMain {
 	private JFrame main1;
 	private JPanel options;
 	private JPanel cards;
+	private CardLayout cl;
+	private JourneySectionPanels j;
+	private ContainerSelectionPanels cont;
+	private MenuSectionPanels m;
+	private Application application;
+	
 	public void setJ(JourneySectionPanels j) {
 		this.j = j;
 	}
@@ -47,21 +53,6 @@ public class TopMain {
 	public void setCont(ContainerSelectionPanels cont) {
 		this.cont = cont;
 	}
-
-
-	private CardLayout cl;
-	private JourneySectionPanels j;
-	private ContainerSelectionPanels cont;
-	private MenuSectionPanels m;
-	private Application application;
-
-//	public JourneySectionPanels getJ() {
-//		return j;
-//	}
-//
-//	public ContainerSelectionPanels getCont() {
-//		return cont;
-//	}
 
 	public JPanel getCards() {
 		return cards;
@@ -85,15 +76,6 @@ public class TopMain {
 	public void setOptions(JPanel options) {
 		this.options = options;
 	}
-
-//	public void setCards(JPanel cards) {
-//		this.cards = cards;
-//	}
-
-//	public void setCl(CardLayout cl) {
-//		this.cl = cl;
-//	}
-	
 
 	public TopMain(final Application application, final JFrame login) {
 		
@@ -193,51 +175,6 @@ public class TopMain {
 		});
 			
 	}
-	
-
-
-//	public void logOutButton(final Database database, final JFrame login, JPanel menupanel) {
-//		// Logout as company user
-//		
-//		final JButton profile = new JButton("Profile");
-//		ImageIcon img = new ImageIcon("src/main/resources/profile.png");
-//		Image image = img.getImage(); // transform it 
-//		Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
-//		img = new ImageIcon(newimg);  // transform it back
-//	    profile.setIcon(img);
-//
-//		JPanel top = new JPanel(new BorderLayout());
-//		menupanel.add(top, BorderLayout.NORTH);
-//		top.add(profile, BorderLayout.EAST);
-//		final JPopupMenu menu = new JPopupMenu("Profile Options");
-//		
-//		JMenuItem setDetails = new JMenuItem("Update profile details");
-//		JMenuItem logout = new JMenuItem("Logout");
-////		if (this instanceof ClientMain) {
-////			menu.add(setDetails);
-////		}
-//		menu.add(logout);
-//
-//		profile.addActionListener(new ActionListener() {
-//			
-//			public void actionPerformed(ActionEvent e) {
-//				
-//				Component b=(Component)e.getSource();
-//				Point p=b.getLocationOnScreen();
-//				menu.show(profile, 0, 0);;
-//				menu.setLocation(p.x,p.y+b.getHeight());
-//				
-//			}
-//		});
-//		
-//		logout.addActionListener(new ActionListener() {
-//
-//			public void actionPerformed(ActionEvent e) {
-//				login.setVisible(true);
-//				main1.dispose();
-//			}
-//		});
-//	}
 	
 	public void removeListeners() {
 		application.removeObserver(m);

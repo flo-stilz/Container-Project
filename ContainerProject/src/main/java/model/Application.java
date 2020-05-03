@@ -40,10 +40,7 @@ public class Application {
 		clientDat.read();
 		journeyContainerDat.read();
 	}
-	public void clear() {
-		clientDat.clear();
-		journeyContainerDat.clear();
-	}
+
 
 //	private ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
 	private PropertyChangeSupport support = new PropertyChangeSupport(this);
@@ -54,22 +51,12 @@ public class Application {
 	public void removeObserver(PropertyChangeListener l) {
         support.removePropertyChangeListener(l);
     }
-		
-//	void add (client c) {
-//		if (!exists(c)) {
-//		clients.add(c);
-//		}
-//	}
-//	
-//	boolean exists (client c) {
-//		for (int i=0; i < clients.size(); i++) {
-//			if ((clients.get(i)).getId()==c.getId()) {return true;}	
-//		} 
-//		return false;
-//	}
 	
-
-	
+	public void simulation(int days) {
+		Simulator simulation = new Simulator();
+		simulation.simulation(this, days);
+	}
+			
 	public Client createClient( String company, String address, String email, String name, String password) {
 		Client c = new Client(company, address, email, name, password);
 		clientDat.getClients().add(c);
@@ -199,10 +186,7 @@ public class Application {
 	public void addData(Container c, int temp, int pressure, int humidity) {
 		c.addData(temp, pressure, humidity);
 		support.firePropertyChange("journey",null,null);
-//		c.getTempList().add(temp);
-//		c.getPressureList().add(pressure);
-//		c.getHumList().add(humidity);
-//		notifyObservers(c);
+
 	} 
 	
 	public void updateData(Journey j, Container c, int temp, int pressure, int humidity) {
@@ -215,23 +199,6 @@ public class Application {
 			c.addData(temp, pressure, humidity);
 		}
 	}
-	
-//	// probably not needed anymore
-//	
-//	public Set<Journey> findJourneysFromContainers(String search){
-//		Set<Journey> result = new HashSet<Journey>();
-//		for(Journey j : history) {
-//			for(Container c : j.getContainerList()) {
-//				if ((c.getContainerId().equals(search)) 
-//					|| (c.getContent().equals(search))
-//					|| (c.getCompany().equals(search))) {
-//					result.add(j);	
-//				}
-//			}
-//		}
-//		return result;			
-//	}
-	
 	
 	//Needs to loose a arraylist from the output. 
 	public Container containerInternalStatusHistory(String search, ArrayList<Journey> history) {
@@ -247,37 +214,6 @@ public class Application {
 		}
 		return containerHis;
 	}
-	
-	
-//	public ArrayList<ArrayList<Integer>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
-//		ArrayList<Integer> a = new ArrayList<Integer>();
-//		ArrayList<Integer> a1 = new ArrayList<Integer>();
-//		ArrayList<Integer> a2 = new ArrayList<Integer>();
-//		ArrayList<ArrayList<Integer>> measurement = new ArrayList<ArrayList<Integer>>();
-//		for(Journey j : history) {
-//			for(Container c : j.getContainerList()) {
-//				if (c.getContainerId().contentEquals(search)) {
-//					measurement.add(c.getTempList());
-//					measurement.add(c.getPressureList());
-//					measurement.add(c.getHumList());
-//					containerInternalStatusHistoryList.add(measurement);
-//				}
-//			}	
-//		}
-//		return containerInternalStatusHistoryList;
-//	}
-	
-	
-	
-//	public void addObserver(observer o) {
-//		obs.add(o);
-//	}
-//
-//	private void notifyObservers( Container c) {
-//		for (observer o: obs) {
-//			o.update(c.getTempList(),c.getPressureList(),c.getHumList());
-//		}
-//	}
 	
 	public Set<Journey> findClientJourneys(ArrayList<Journey> journeyList){
 		Set<Journey> result = new HashSet<Journey>();
@@ -324,16 +260,6 @@ public class Application {
 		}
 	}
 	
-//	public ArrayList<Container> findClientContainers(String client, ArrayList<Container> containerList){
-//		ArrayList<Container> result = new ArrayList<Container>();
-//		for ( Container c : containerList) {
-//			if (client.contentEquals(c.getCompany())) {
-//				result.add(c);
-//			}
-//		}
-//		return result;
-//	}
-	
 	public void updateCurrentLocation(Journey j, String newcurrentLocation) {
 		for (int i=0; i < j.getContainers().size(); i++){
 			j.getContainers().get(i).setCurrentLocation(newcurrentLocation);
@@ -357,35 +283,7 @@ public class Application {
 	}
 	public void updateClientPassword(Client c, String password) {
 		c.setPassword(password);
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-
-
-	
-	
-	
-	
-	
-//	public ArrayList<Journey> containerJourneyHistory(String search, ArrayList<Journey> history){
-//		for(Journey j : history) {
-//			for(Container c : j.getContainerList()) {
-//				if (c.getContainerId().equals(search)) {
-//					containerJourneyHistoryList.add(j);	
-//				}
-//			}
-//		}
-//		return containerJourneyHistoryList;			
-//	}
-	
+	}	
 }
 		
 

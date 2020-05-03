@@ -38,39 +38,7 @@ public class comparisonlinePlots extends ApplicationFrame implements observer, G
 
 	
 	}
-//	public comparisonlinePlots(String plottitle, List<Integer> temp, List<Integer> pres, List<Integer> hum, ContainerSelectionPanels csp, TopMain topmain) {
-//		super(plottitle, csp, topmain);
-//
-//	JFreeChart xylineChart = ChartFactory.createXYLineChart("Changes in Container's Enviornment",
-//			"Time elapsed from Journey", "changes", create2Dataset(temp, pres, hum), PlotOrientation.VERTICAL, true, true,
-//			false);
-//
-//	chartPanel = new ChartPanel(xylineChart);
-//	chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
-//	final XYPlot plot = xylineChart.getXYPlot();
-//
-//	XYLineAndShapeRenderer renderer = new XYLineAndShapeRenderer();
-//	renderer.setSeriesPaint(0, Color.RED);
-//	renderer.setSeriesPaint(1, Color.GREEN);
-//	renderer.setSeriesPaint(2, Color.YELLOW);
-//	renderer.setSeriesStroke(0, new BasicStroke(4.0f));
-//	renderer.setSeriesStroke(1, new BasicStroke(3.0f));
-//	renderer.setSeriesStroke(2, new BasicStroke(2.0f));
-//	plot.setRenderer(renderer);
-//	setContentPane(chartPanel);
-//
-////	display();
-//	
-//	}
 
-//	public void update(Container c) {
-//		
-//		
-////	display();
-//	}
-//	public ChartPanel plotCreation(Container c) {
-//		
-//	}
 	public XYDataset create2Dataset(List<Integer> temp2, List<Integer> pres, List<Integer> hum2) {
 		final XYSeries temp = new XYSeries("Temperature");
 		int c = 0;

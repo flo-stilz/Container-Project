@@ -115,18 +115,6 @@ public class Container {
 		this.journeyID = journeyID;
 	}
 
-//	public void getExpandedUniqueIDAll(String uniqueID) {
-//        holdID1 = uniqueID + "," + "pressure";
-//        holdID2 = uniqueID + "," + "hum";
-//        holdID3 = uniqueID + "," + "temp";
-//        outPressure.add(holdID1);
-//        outHum.add(holdID2);
-//        outTemp.add(holdID3);
-//    }
-//    
-//    public String getUniqueID() {
-//		return uniqueID;
-//	}
 	public String getContainerId() {
 		return containerId;
 	}
