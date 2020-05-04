@@ -23,7 +23,7 @@ public class Container {
 //    private ArrayList <String> outHum = new ArrayList<String>(); 
 //    private ArrayList <String> outTemp = new ArrayList<String>();
     private static int cCounter = 0;
-    private ArrayList<observer> obs = new ArrayList<observer>();
+    private ArrayList<Observer> obs = new ArrayList<Observer>();
     
     public void setPressureList(ArrayList<Integer> pressureList) {
 		this.pressureList = pressureList;
@@ -59,12 +59,13 @@ public class Container {
 		notifyObservers(this);
 	}
     
-    public void addObserver(observer o) {
+    //add plots that are observing the container's data
+    public void addObserver(Observer o) {
 		obs.add(o);
 	}
-
+//tells the observer plots to update 
 	private void notifyObservers( Container c) {
-		for (observer o: obs) {
+		for (Observer o: obs) {
 			o.update(c.getTempList(),c.getPressureList(),c.getHumList());
 		}
 	}

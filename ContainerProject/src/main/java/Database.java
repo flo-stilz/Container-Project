@@ -18,7 +18,6 @@ public class Database {
 	private ArrayList<Container> containerWarehouse = new ArrayList<Container>();
 	private ArrayList<Journey> history = new ArrayList<Journey>();
 	private ArrayList<Client> clients = new ArrayList<Client>();
-	//private ArrayList<observer> obs = new ArrayList<observer>();
 	private ArrayList<ChartObserver> cobs = new ArrayList<ChartObserver>();
 	
 	private ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
@@ -32,6 +31,7 @@ public class Database {
 		support.addPropertyChangeListener(l);
 	}
 		
+	
 	void add (Client c) {
 		if (!exists(c)) {
 		clients.add(c);
@@ -45,9 +45,9 @@ public class Database {
 		return false;
 	}
 	
+	
+	
 	public ArrayList<Client> search (String keyword){
-
-//	public ArrayList<client> search (String keyword, ArrayList<client> clients){
 		ArrayList<Client> results = new ArrayList<Client>();
 		for (Client cl: clients) {
 
@@ -245,16 +245,6 @@ public class Database {
 		return containerInternalStatusHistoryList;
 	}
 	
-	
-//	public void addObserver(observer o) {
-//		obs.add(o);
-//	}
-//
-//	private void notifyObservers( Container c) {
-//		for (observer o: obs) {
-//			o.update(c.getTempList(),c.getPressureList(),c.getHumList());
-//		}
-//	}
 	
 	public void addchartObserver(ChartObserver o) {
 		cobs.add(o);

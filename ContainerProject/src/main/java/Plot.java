@@ -62,9 +62,7 @@ public class Plot extends ApplicationFrame implements Observer{
 		
 	}
 
-
-
-
+//creates dataset used in line plots
 	protected DefaultCategoryDataset createDataset(List<Integer> data, String type) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 		int t = 0;
@@ -77,7 +75,7 @@ public class Plot extends ApplicationFrame implements Observer{
 		return dataset;
 	}
 
-
+//creates a multi-variable dataset
 	protected XYDataset create2Dataset(List<Integer> temp2, List<Integer> pres, List<Integer> hum2) {
 		final XYSeries temp = new XYSeries("Temperature");
 		int c = 0;
@@ -104,12 +102,9 @@ public class Plot extends ApplicationFrame implements Observer{
 		return dataset;
 	}
 
-	int range(List<Integer> t) {
-		int r = Collections.max(t) - Collections.min(t);
-		return r;
-
-	}
-
+	
+	
+//updates the single line plot with new data
 	public void update(ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h) {
 		
 		if (this.getTitle().contentEquals("Temperature")) {

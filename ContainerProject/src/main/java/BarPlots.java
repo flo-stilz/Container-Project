@@ -1,5 +1,6 @@
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -15,7 +16,7 @@ import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.TextAnchor;
 
-public class BarPlots extends plot implements observer {
+public class BarPlots extends Plot implements Observer {
 	
 	private ChartPanel chartPanel;
 	
@@ -45,6 +46,12 @@ public class BarPlots extends plot implements observer {
 
 	}
 
+
+	int range(List<Integer> t) {
+		int r = Collections.max(t) - Collections.min(t);
+		return r;
+
+	}
 	// create a bar plot with initial data
 	public BarPlots(String plottitle, ArrayList<Integer> temp, ArrayList<Integer> pres, ArrayList<Integer> hum, ContainerSelectionPanels csp, TopMain topmain) {
 		super(plottitle, csp, topmain);
@@ -69,7 +76,7 @@ public class BarPlots extends plot implements observer {
 		chart.setBackgroundPaint(Color.WHITE);
 
 	}
-//creates a new bar plot with new data
+//updates the bar plot with new data
 	public void update(ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -92,9 +99,7 @@ public class BarPlots extends plot implements observer {
 	     getCsp().updateAllPlots(getTopmain());
 
 		chart.setBackgroundPaint(Color.WHITE);
-//		setbackground(chart);
-//		display();
-		
+
 	}
 
 }

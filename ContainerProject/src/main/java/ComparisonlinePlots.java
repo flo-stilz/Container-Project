@@ -19,6 +19,8 @@ public class ComparisonlinePlots extends Plot implements Observer {
 	public ChartPanel getChartPanel() {
 		return chartPanel;
 	}
+	
+	//creates an empty line plot
 	public ComparisonlinePlots(String plottitle, ContainerSelectionPanels csp, TopMain topmain) {
 		super(plottitle, csp, topmain);
 		ArrayList<Integer> e = new ArrayList<Integer>();
@@ -78,7 +80,6 @@ public class ComparisonlinePlots extends Plot implements Observer {
 		setContentPane(chartPanel);
 		
 		getCsp().updateAllPlots(getTopmain());
-		
-//	display();
+
 	}
 }
