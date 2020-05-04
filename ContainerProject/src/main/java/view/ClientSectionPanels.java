@@ -8,6 +8,7 @@ import java.beans.PropertyChangeListener;
 import java.util.ArrayList;
 
 import javax.swing.JButton;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -94,6 +95,8 @@ public class ClientSectionPanels implements PropertyChangeListener {
 		
 		viewClients.removeAll();
 		DefaultTableModel tableModel = new DefaultTableModel();
+		JLabel label = new JLabel("All Clients");
+		viewClients.add(label, BorderLayout.NORTH);
 		JTable table = new JTable(tableModel);
 		String[] columnNames = {
 				"Company",
@@ -118,7 +121,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 		
 			tableModel.insertRow(0, new Object[] {c.getCompany(),c.getName(),c.getEmail(),c.getAddress(), c.getId(), containerids});
 		}
-		viewClients.add(new JScrollPane(table), BorderLayout.NORTH);
+		viewClients.add(new JScrollPane(table), BorderLayout.CENTER);
 	}
 	
 	

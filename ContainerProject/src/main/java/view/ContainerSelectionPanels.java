@@ -1,6 +1,7 @@
 package view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -15,7 +16,6 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
-import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -25,7 +25,6 @@ import javax.swing.table.DefaultTableModel;
 
 import org.jfree.chart.ChartPanel;
 
-import controller.ShowAllListener;
 import model.Container;
 import model.Application;
 import model.Journey;
@@ -65,42 +64,9 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 	private JPanel checkOptions;
 	private Container containerPlot = new Container();
 	private JButton showAll;
-	
-	
-	public String getKeyword() {
-		return keyword;
-	}
 
-	public void setKeyword(String keyword) {
-		this.keyword = keyword;
-	}
-
-	public boolean isShowAllCommand() {
-		return showAllCommand;
-	}
-
-	public void setShowAllCommand(boolean showAllCommand) {
-		this.showAllCommand = showAllCommand;
-	}
-
-	public boolean isPast() {
-		return isPast;
-	}
-
-	public void setPast(boolean isPast) {
-		this.isPast = isPast;
-	}
-
-	public void setwContainers(ArrayList<Container> wContainers) {
-		this.wContainers = wContainers;
-	}
-
-	public ArrayList<Container> getwContainers() {
-		return wContainers;
-	}
-
-	public JPanel getPlotPanel() {
-		return plotPanel;
+	public Container getContainerPlot() {
+		return containerPlot;
 	}
 
 	public JPanel getContainerSearch() {
@@ -110,9 +76,9 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 	public JPanel getViewContainers() {
 		return viewContainers;
 	}
-	
-	public Container getContainerPlot() {
-		return containerPlot;
+
+	public JPanel getPlotPanel() {
+		return plotPanel;
 	}
 
 	public ContainerSelectionPanels(final Application application, final TopMain topmain) {
@@ -177,20 +143,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			}
 		});
 	}
-//	public void addShowAllListener(JButton showAll, ShowAllListener listenForShowAll) {
-//		
-//		showAll.addActionListener(listenForShowAll);
-//	}
 
-
-
-	public JButton getShowAll() {
-		return showAll;
-	}
-
-	public void setShowAll(JButton showAll) {
-		this.showAll = showAll;
-	}
 
 	public void searchActiveContainers(final Application application, final TopMain topmain) {
 		JLabel activecontainer = new JLabel("Active Container");
@@ -268,7 +221,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 	public void additionalInformation(final Application application, TopMain topmain) {
 		
 		extraOptions = new JPanel(new BorderLayout());
-		viewContainers.add(extraOptions, BorderLayout.CENTER);
+		viewContainers.add(extraOptions, BorderLayout.SOUTH);
 		
 		final JComboBox<String> id = chooseContainerOptions(application);
 		containerPlot = chooseContainerForPlot(application, id.getSelectedItem().toString());
@@ -455,6 +408,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 	public void displayContainers() {
 		
 		viewContainers.removeAll();
+		setTableLabel();
 		additionalInformation(application, topmain);
 		DefaultTableModel tableModel = new DefaultTableModel();
 		JTable table = new JTable(tableModel);
@@ -480,7 +434,32 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			formRowForContainer(tableModel, c, application); 
 			
 		}
-		viewContainers.add(new JScrollPane(table), BorderLayout.NORTH);
+		viewContainers.add(new JScrollPane(table), BorderLayout.CENTER);
+	}
+
+	public void setTableLabel() {
+		JLabel label = new JLabel("");
+		if (isPast == false && showAllCommand) {
+			label = new JLabel("All active containers");
+			Font f = label.getFont();
+			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		}
+		else if ( isPast && showAllCommand) {
+			label = new JLabel("All past containers");
+			Font f = label.getFont();
+			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		}
+		else if (isPast == false && showAllCommand == false) {
+			label = new JLabel("Active containers related to " + keyword);
+			Font f = label.getFont();
+			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		}
+		else if (isPast && showAllCommand == false) {
+			label = new JLabel("Past containers related to " + keyword);
+			Font f = label.getFont();
+			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		}
+		viewContainers.add(label, BorderLayout.NORTH);
 	}
 
 	public void formRowForContainer(DefaultTableModel tableModel, Container c, Application application) {

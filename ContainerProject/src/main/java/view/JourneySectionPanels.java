@@ -1,6 +1,7 @@
 package view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
@@ -32,6 +33,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	private TopMain topmain;
 	private String keyword;
 	private boolean isPast;
+	private JButton showAll;
 	
 	public ArrayList<Journey> getwJourneys() {
 		return wJourneys;
@@ -58,14 +60,64 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			
 		searchActiveJourneys(application, topmain);
 			
-		showAllActiveJourneys(application, topmain);
+		showAll(application, topmain, false);
 			
 		journeyPastSearch(application, topmain);
 			
-		showAllPast(application, topmain);	
+		showAll(application, topmain, true);	
 		
 		if (topmain instanceof ClientMain) {
 			signUpGoods(application, topmain);
+		}
+	}
+	public void showAll(final Application application, final TopMain topmain, final boolean b) {
+		showAll = new JButton("Show All");
+		journeySearch.add(showAll);
+		showAll.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ArrayList<Journey> journeys = new ArrayList<Journey>();
+				if (b) {
+					journeys = application.getJourneyContainerDat().getPastJourneys();
+				}
+				else {
+					journeys = application.getJourneyContainerDat().getActiveJourneys();	
+				}
+				showAllCommand = true;
+				isPast = b;
+				ArrayList<Journey> result = filterJourneysForClients(application, topmain, journeys);
+				if (topmain instanceof ClientMain) {
+					wJourneys = result;
+				}
+				else {
+					wJourneys = result;
+				}
+				checksSearchEntryC(application, topmain);
+			}
+		});
+	}
+	public void checksSearchEntryC(final Application application, final TopMain topmain) {
+		if (wJourneys.size() == 0) {
+			if (showAllCommand) {
+				new ErrorFrame();
+			}
+			else {
+				new ErrorFrame(keyword);
+			}
+		}
+		else {
+			displayJourneys();
+			topmain.getCl().show(topmain.getCards(), "viewJourneys");
+		}
+	}
+	
+	public ArrayList<Journey> filterJourneysForClients(final Application application, final TopMain topmain, ArrayList<Journey> unfiltered) {
+		if (topmain instanceof ClientMain) {
+			ArrayList<Journey> result = new ArrayList<Journey>();
+			result.addAll(application.findClientJourneys(unfiltered));
+			return result;
+		}
+		else {
+			return unfiltered;
 		}
 	}
 	
@@ -82,21 +134,21 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		
 	}
 
-	public void showAllPast(final Application application, final TopMain topmain) {
-		JButton showAllPast = new JButton("Show All");
-		journeySearch.add(showAllPast);
-		showAllPast.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				isPast = true;
-				showAllCommand = true;
-				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(application, topmain));
-				wJourneys = result;
-				checksSearchEntryJ(application, topmain);
-			}
-
-		});
-	}
+//	public void showAllPast(final Application application, final TopMain topmain) {
+//		JButton showAllPast = new JButton("Show All");
+//		journeySearch.add(showAllPast);
+//		showAllPast.addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent e) {
+//				isPast = true;
+//				showAllCommand = true;
+//				ArrayList<Journey> result = new ArrayList<Journey>(filterPastJourneysForClient(application, topmain));
+//				wJourneys = result;
+//				checksSearchEntryJ(application, topmain);
+//			}
+//
+//		});
+//	}
 
 	public void journeyPastSearch(final Application application, final TopMain topmain) {
 		JLabel journeyPast = new JLabel("Journey's History");
@@ -132,22 +184,22 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		}
 	}
 
-	public void showAllActiveJourneys(final Application application, final TopMain topmain) {
-		
-		JButton showAllActive = new JButton("Show All");
-		journeySearch.add(showAllActive);
-		showAllActive.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				isPast = false;
-				showAllCommand = true;
-				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(application, topmain));
-				wJourneys = result;
-				checksSearchEntryJ(application, topmain);
-			}
-
-		});
-	}
+//	public void showAllActiveJourneys(final Application application, final TopMain topmain) {
+//		
+//		JButton showAllActive = new JButton("Show All");
+//		journeySearch.add(showAllActive);
+//		showAllActive.addActionListener(new ActionListener() {
+//
+//			public void actionPerformed(ActionEvent e) {
+//				isPast = false;
+//				showAllCommand = true;
+//				ArrayList<Journey> result = new ArrayList<Journey>(filterActiveJourneysForClient(application, topmain));
+//				wJourneys = result;
+//				checksSearchEntryJ(application, topmain);
+//			}
+//
+//		});
+//	}
 
 	public void searchActiveJourneys(final Application application, final TopMain topmain) {
 		
@@ -178,8 +230,10 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	
 	public void changeloc(final Application application) {
 		
+		JPanel locationUpdate = new JPanel(new BorderLayout());
+		viewJourneys.add(locationUpdate, BorderLayout.SOUTH);
 		JPanel updateLocation = new JPanel(new BorderLayout());
-		viewJourneys.add(updateLocation, BorderLayout.CENTER);
+		locationUpdate.add(updateLocation, BorderLayout.CENTER);
 		String[] options = new String[application.getJourneyContainerDat().getActiveJourneys().size()];
 		int i = 0;
 		for (Journey j : application.getJourneyContainerDat().getActiveJourneys()) {
@@ -205,7 +259,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				application.endOfJourney(j);
 			}
 		});
-		viewJourneys.add(update, BorderLayout.SOUTH);
+		locationUpdate.add(update, BorderLayout.SOUTH);
 	}
 	
 	public void signUpGoods(final Application application, final TopMain topmain) {
@@ -284,6 +338,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		}
 		
 		DefaultTableModel tableModel = new DefaultTableModel();
+		setTableLabel();
 		JTable table = new JTable(tableModel);
 		String[] columnNames = {
 				"ID",
@@ -300,7 +355,32 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			ArrayList<String> containerids = filterClientContainers(application, topmain, j);
 			tableModel.insertRow(0, new Object[] {j.getId(),j.getOrigin(),j.getDestination(),j.getCurrentLocation(), containerids});
 		}
-		viewJourneys.add(new JScrollPane(table), BorderLayout.NORTH);
+		viewJourneys.add(new JScrollPane(table), BorderLayout.CENTER);
+	}
+	
+	public void setTableLabel() {
+		JLabel label = new JLabel("");
+		if (isPast == false && showAllCommand) {
+			label = new JLabel("All active containers");
+			Font f = label.getFont();
+			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		}
+		else if ( isPast && showAllCommand) {
+			label = new JLabel("All past containers");
+			Font f = label.getFont();
+			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		}
+		else if (isPast == false && showAllCommand == false) {
+			label = new JLabel("Active containers related to " + keyword);
+			Font f = label.getFont();
+			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		}
+		else if (isPast && showAllCommand == false) {
+			label = new JLabel("Past containers related to " + keyword);
+			Font f = label.getFont();
+			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		}
+		viewJourneys.add(label, BorderLayout.NORTH);
 	}
 	
 	public ArrayList<String> filterClientContainers(Application application, TopMain topmain, Journey j){
