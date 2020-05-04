@@ -12,14 +12,14 @@ import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
 
-public class comparisonlinePlots extends plot implements observer {
+public class ComparisonlinePlots extends Plot implements Observer {
 	
 	private ChartPanel chartPanel;
 	
 	public ChartPanel getChartPanel() {
 		return chartPanel;
 	}
-	public comparisonlinePlots(String plottitle, ContainerSelectionPanels csp, TopMain topmain) {
+	public ComparisonlinePlots(String plottitle, ContainerSelectionPanels csp, TopMain topmain) {
 		super(plottitle, csp, topmain);
 		ArrayList<Integer> e = new ArrayList<Integer>();
 	JFreeChart xylineChart = ChartFactory.createXYLineChart("Changes in Container's Enviornment",
@@ -29,12 +29,10 @@ public class comparisonlinePlots extends plot implements observer {
 	ChartPanel chartPanel = new ChartPanel(xylineChart);
 	chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
 	
-
-
-	//display();
-	
 	}
-	public comparisonlinePlots(String plottitle, List<Integer> temp, List<Integer> pres, List<Integer> hum, ContainerSelectionPanels csp, TopMain topmain) {
+	
+	//creates a line plot with a line for each element tracked in a container
+	public ComparisonlinePlots(String plottitle, List<Integer> temp, List<Integer> pres, List<Integer> hum, ContainerSelectionPanels csp, TopMain topmain) {
 		super(plottitle, csp, topmain);
 
 	JFreeChart xylineChart = ChartFactory.createXYLineChart("Changes in Container's Enviornment",
@@ -55,10 +53,11 @@ public class comparisonlinePlots extends plot implements observer {
 	plot.setRenderer(renderer);
 	setContentPane(chartPanel);
 
-//	display();
+
 	
 	}
 
+	//creates a new line plot with new data
 	public void update(ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h) {
 		JFreeChart xylineChart = ChartFactory.createXYLineChart("Changes in Container's Enviornment",
 				"Time elapsed from Journey", "changes", create2Dataset(t, p, h), PlotOrientation.VERTICAL, true, true,

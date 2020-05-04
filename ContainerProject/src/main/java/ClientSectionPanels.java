@@ -17,12 +17,12 @@ public class ClientSectionPanels implements PropertyChangeListener {
 
 	private JPanel clientSearch;
 	private JPanel viewClients;
-	private ArrayList<client> wClients = new ArrayList<client>();
+	private ArrayList<Client> wClients = new ArrayList<Client>();
 	private boolean showAllCommand;
 	private String keyword;
 	private CompanyMain companymain;
 	
-	public ArrayList<client> getwClients() {;
+	public ArrayList<Client> getwClients() {;
 		return wClients;
 	}
 
@@ -49,7 +49,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				keyword = search.getText();
 				showAllCommand = false;
-				wClients = new ArrayList<client>(database.search(keyword));
+				wClients = new ArrayList<Client>(database.search(keyword));
 				checksSearchEntryC(database);
 			}
 		});
@@ -60,7 +60,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 
 			public void actionPerformed(ActionEvent e) {
 				showAllCommand = true;
-				wClients = new ArrayList<client>(database.getClients());
+				wClients = new ArrayList<Client>(database.getClients());
 				checksSearchEntryC(database);
 			}
 		});
@@ -102,7 +102,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 		}
 		
 		
-		for (client c : wClients) {
+		for (Client c : wClients) {
 			ArrayList<String> containerids = new ArrayList<String>();
 			ArrayList<Container> containers = database.findContainer(c.getCompany(), database.getJourney());
 			for (Container x : containers) {
@@ -137,10 +137,10 @@ public class ClientSectionPanels implements PropertyChangeListener {
 	
 	public void showAllOrSearch(Database dat) {
 		if (showAllCommand) {
-			wClients = new ArrayList<client>(dat.getClients());
+			wClients = new ArrayList<Client>(dat.getClients());
 		}
 		else {
-			wClients = new ArrayList<client>(dat.search(keyword));
+			wClients = new ArrayList<Client>(dat.search(keyword));
 		}
 	}
 }

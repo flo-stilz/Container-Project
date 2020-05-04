@@ -17,9 +17,9 @@ public class Database {
 	private ArrayList<Journey> journey = new ArrayList<Journey>();
 	private ArrayList<Container> containerWarehouse = new ArrayList<Container>();
 	private ArrayList<Journey> history = new ArrayList<Journey>();
-	private ArrayList<client> clients = new ArrayList<client>();
+	private ArrayList<Client> clients = new ArrayList<Client>();
 	//private ArrayList<observer> obs = new ArrayList<observer>();
-	private ArrayList<chartobserver> cobs = new ArrayList<chartobserver>();
+	private ArrayList<ChartObserver> cobs = new ArrayList<ChartObserver>();
 	
 	private ArrayList<Journey> containerJourneyHistoryList = new ArrayList<Journey>();
 	private ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
@@ -32,24 +32,24 @@ public class Database {
 		support.addPropertyChangeListener(l);
 	}
 		
-	void add (client c) {
+	void add (Client c) {
 		if (!exists(c)) {
 		clients.add(c);
 		}
 	}
 	
-	boolean exists (client c) {
+	boolean exists (Client c) {
 		for (int i=0; i < clients.size(); i++) {
 			if ((clients.get(i)).getId()==c.getId()) {return true;}	
 		} 
 		return false;
 	}
 	
-	public ArrayList<client> search (String keyword){
+	public ArrayList<Client> search (String keyword){
 
 //	public ArrayList<client> search (String keyword, ArrayList<client> clients){
-		ArrayList<client> results = new ArrayList<client>();
-		for (client cl: clients) {
+		ArrayList<Client> results = new ArrayList<Client>();
+		for (Client cl: clients) {
 
 			if ((cl.getAddress().contentEquals(keyword)||cl.getCompany().contentEquals(keyword)||cl.getEmail().contentEquals(keyword)||cl.getName().contentEquals(keyword))) {
 				results.add(cl);
@@ -58,8 +58,8 @@ public class Database {
 		return results;	
 	}
 	
-	public client createClient( String company, String address, String email, String name, String password) {
-		client c = new client(company, address, email, name, password);
+	public Client createClient( String company, String address, String email, String name, String password) {
+		Client c = new Client(company, address, email, name, password);
 		clients.add(c);
 		storeClients(); 
 		support.firePropertyChange("clients",null,null);
@@ -256,12 +256,12 @@ public class Database {
 //		}
 //	}
 	
-	public void addchartObserver(chartobserver o) {
+	public void addchartObserver(ChartObserver o) {
 		cobs.add(o);
 	}
 	//where containers get added to warehouse
 	private void notifychartOberver() {
-		for (chartobserver o :cobs) {
+		for (ChartObserver o :cobs) {
 			o.updateC(containerWarehouse);
 		}
 	}
@@ -295,17 +295,17 @@ public class Database {
 		j.setCurrentLocation(newcurrentLocation.toUpperCase());
 	}
 	
-	public void updateClientName(client c, String refname) {
+	public void updateClientName(Client c, String refname) {
 		c.updateName(refname);
 	}
 	
-	public void updateClientMail(client c, String mail) {
+	public void updateClientMail(Client c, String mail) {
 		c.updateEmail(mail);
 	}
-	public void updateClientAddress(client c, String address) {
+	public void updateClientAddress(Client c, String address) {
 		c.updateAddress(address);
 	}
-	public void updateClientPassword(client c, String password) {
+	public void updateClientPassword(Client c, String password) {
 		c.updatePassword(password);
 	}
 	
@@ -318,7 +318,7 @@ public class Database {
 		storeClients(clients);
 	}
 	
-	public void storeClients(ArrayList<client> clients) {
+	public void storeClients(ArrayList<Client> clients) {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./Clients.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
@@ -330,7 +330,7 @@ public class Database {
 		}
 	} 
 	
-	public ArrayList<client> readClientFile() {
+	public ArrayList<Client> readClientFile() {
 		FileInputStream fis;
 		try {
 			fis = new FileInputStream(new File("./Clients.xml"));
@@ -338,7 +338,7 @@ public class Database {
 				throw new Error(e);
 				}
 		XMLDecoder decoder = new XMLDecoder(fis);
-		clients = (ArrayList<client>)decoder.readObject(); 
+		clients = (ArrayList<Client>)decoder.readObject(); 
 		decoder.close();
 		return clients;
 	}
@@ -456,11 +456,11 @@ public class Database {
 	public void setContainerWarehouse(ArrayList<Container> containerWarehouse) {
 		this.containerWarehouse = containerWarehouse;
 	}
-	public ArrayList<client> getClients() {
+	public ArrayList<Client> getClients() {
 		return clients;
 	}
 
-	public void setClients(ArrayList<client> clients) {
+	public void setClients(ArrayList<Client> clients) {
 		this.clients = clients;
 	}
 	

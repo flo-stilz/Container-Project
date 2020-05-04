@@ -15,7 +15,7 @@ import org.jfree.chart.renderer.category.CategoryItemRenderer;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.ui.TextAnchor;
 
-public class barPlots extends plot implements observer {
+public class BarPlots extends plot implements observer {
 	
 	private ChartPanel chartPanel;
 	
@@ -23,7 +23,8 @@ public class barPlots extends plot implements observer {
 		return chartPanel;
 	}
 
-	public barPlots(String plottitle, ContainerSelectionPanels csp, TopMain topmain) {
+	// create an empty bar plot
+	public BarPlots(String plottitle, ContainerSelectionPanels csp, TopMain topmain) {
 		super(plottitle, csp, topmain);
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -41,11 +42,11 @@ public class barPlots extends plot implements observer {
 
 	
 		chart.setBackgroundPaint(Color.WHITE);
-//		setbackground(chart);
-		//display();
+
 	}
 
-	public barPlots(String plottitle, ArrayList<Integer> temp, ArrayList<Integer> pres, ArrayList<Integer> hum, ContainerSelectionPanels csp, TopMain topmain) {
+	// create a bar plot with initial data
+	public BarPlots(String plottitle, ArrayList<Integer> temp, ArrayList<Integer> pres, ArrayList<Integer> hum, ContainerSelectionPanels csp, TopMain topmain) {
 		super(plottitle, csp, topmain);
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
@@ -66,11 +67,9 @@ public class barPlots extends plot implements observer {
 	     setContentPane( chartPanel ); 
 
 		chart.setBackgroundPaint(Color.WHITE);
-		
-//		setbackground(chart);
-//		display();
-	}
 
+	}
+//creates a new bar plot with new data
 	public void update(ArrayList<Integer> t, ArrayList<Integer> p, ArrayList<Integer> h) {
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 

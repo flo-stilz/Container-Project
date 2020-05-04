@@ -23,7 +23,7 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
-public class plot extends ApplicationFrame implements observer{
+public class Plot extends ApplicationFrame implements Observer{
 	
 	private ChartPanel chartPanel;
 	private String plottitle;
@@ -44,24 +44,14 @@ public class plot extends ApplicationFrame implements observer{
 		return chartPanel;
 	}
 
-	public plot(String plottitle, ContainerSelectionPanels csp, TopMain topmain) {
+	public Plot(String plottitle, ContainerSelectionPanels csp, TopMain topmain) {
 		super(plottitle);
 		this.plottitle = plottitle;
 		this.csp = csp;
 		this.topmain = topmain;
 	}
 
-	public void display() {
-		pack();
-		RefineryUtilities.centerFrameOnScreen(this);
-		setVisible(true);
-		try {
-			TimeUnit.SECONDS.sleep(3);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}
-	}
-	
+	//creates a single line plot for an element of the container's internal data 
 	public void linePlot(List<Integer> data) {
 		JFreeChart lineChart = ChartFactory.createLineChart("this is the " + plottitle + " plot", "Time elapsed (min)",
 				plottitle, createDataset(data, plottitle), PlotOrientation.VERTICAL, true, true, false);
@@ -70,7 +60,6 @@ public class plot extends ApplicationFrame implements observer{
 		chartPanel.setPreferredSize(new java.awt.Dimension(560, 367));
 		setContentPane(chartPanel);
 		
-//		display();
 	}
 
 

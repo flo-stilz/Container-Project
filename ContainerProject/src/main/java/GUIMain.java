@@ -172,7 +172,7 @@ public class GUIMain {
 				}
 				else if ((database.search(userText).size())!= 0) {
 						
-					client client = database.search(userText).get(0);
+					Client client = database.search(userText).get(0);
 						
 					if (client.getPassword().contentEquals(passtext)) {
 						new ClientMain(userText, database, LoginFrame);

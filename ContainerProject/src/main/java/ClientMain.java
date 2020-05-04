@@ -23,7 +23,7 @@ import javax.swing.JTextField;
 
 public class ClientMain extends TopMain{
 	
-	private client currentClient;
+	private Client currentClient;
 	private JourneySectionPanels j;
 	private ContainerSelectionPanels cont;
 

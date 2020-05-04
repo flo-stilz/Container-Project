@@ -49,7 +49,7 @@ public class Simulator {
 	private String mail;
 	private String address;
 	private String password;
-	private client client;
+	private Client client;
 	
 	
 	public String companySelection(int seed) {
@@ -97,16 +97,16 @@ public class Simulator {
 		return address;
 	}
 	
-	public client clientSelection(Database database, int seed) {
+	public Client clientSelection(Database database, int seed) {
 		r.setSeed(seed);
 		int value = r.nextInt(database.getClients().size()-1);
-		client client = database.getClients().get(value);
+		Client client = database.getClients().get(value);
 		return client;
 	}	
 	
-	public client clientSelection(Database database) {
+	public Client clientSelection(Database database) {
 		int value = r.nextInt(database.getClients().size()-1);
-		client client = database.getClients().get(value);
+		Client client = database.getClients().get(value);
 		return client;
 	}
 	

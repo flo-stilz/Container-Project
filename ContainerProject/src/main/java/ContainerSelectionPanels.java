@@ -44,16 +44,16 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 	private JPanel extraOptions;
 	private JPanel plotPanel;
 	private ContainerSelectionPanels csp;
-	private barPlots bPlot;
-	private comparisonlinePlots cPlot;
+	private BarPlots bPlot;
+	private ComparisonlinePlots cPlot;
 	private JCheckBox checkBoxTemp;
 	private JCheckBox checkBoxPres;
 	private JCheckBox checkBoxHum;
 	private JCheckBox checkBoxAllinOne;
 	private JCheckBox checkBoxBarPlot;
-	private plot tempPlot;
-	private plot presPlot;
-	private plot humPlot;
+	private Plot tempPlot;
+	private Plot presPlot;
+	private Plot humPlot;
 	private Database database;
 	private TopMain topmain;
 	private boolean showAllCommand;
@@ -401,7 +401,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			
 			ArrayList<Integer> data = c.getTempList();
 			 
-			 tempPlot = new plot("Temperature", csp, topmain);
+			 tempPlot = new Plot("Temperature", csp, topmain);
 			 tempPlot.linePlot(data);;
 			 c.addObserver(tempPlot);
 //			 JPanel tempPanel = tempPlot.getChartPanel();
@@ -415,7 +415,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			 
 			ArrayList<Integer> data = c.getPressureList();
 			 
-			 presPlot = new plot("Pressure", csp, topmain);
+			 presPlot = new Plot("Pressure", csp, topmain);
 			 presPlot.linePlot(data);;
 			 c.addObserver(presPlot);
 			 
@@ -424,7 +424,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			 
 			 ArrayList<Integer> data = c.getHumList();
 			 
-			 humPlot = new plot("Humidity", csp, topmain);
+			 humPlot = new Plot("Humidity", csp, topmain);
 			 humPlot.linePlot(data);;
 			 c.addObserver(humPlot);
 //			 JPanel humPanel = humPlot.getChartPanel();
@@ -436,7 +436,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			 ArrayList<Integer> pres = c.getPressureList();
 			 ArrayList<Integer> hum = c.getHumList();
 			 
-			 cPlot = new comparisonlinePlots("Comparison line plot", temp, pres, hum, csp, topmain);
+			 cPlot = new ComparisonlinePlots("Comparison line plot", temp, pres, hum, csp, topmain);
 //			 updateComparisonPlot(cPlot);
 			 c.addObserver(cPlot);
 			 
@@ -446,7 +446,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			 ArrayList<Integer> pres = c.getPressureList();
 			 ArrayList<Integer> hum = c.getHumList();
 			 
-			 bPlot = new barPlots("Bar plot", temp, pres, hum, csp, topmain);
+			 bPlot = new BarPlots("Bar plot", temp, pres, hum, csp, topmain);
 			 c.addObserver(bPlot);
 //			 updateBarPlot(bPlot);
 		 }
@@ -469,7 +469,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		c.setHumList(result3);
 	}
 
-	public void updateLinePlots(plot linePlot) {
+	public void updateLinePlots(Plot linePlot) {
 		JPanel linePanel = linePlot.getChartPanel();
 		plotPanel.add(linePanel);
 	}
@@ -498,12 +498,12 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		topmain.getMain1().revalidate();
 	}
 	
-	public void updateComparisonPlot(comparisonlinePlots cPlot) {
+	public void updateComparisonPlot(ComparisonlinePlots cPlot) {
 		JPanel comparisonplot = cPlot.getChartPanel();
 		 plotPanel.add(comparisonplot);
 	}
 	
-	public void updateBarPlot(barPlots bPlot) {
+	public void updateBarPlot(BarPlots bPlot) {
 		JPanel barplot = bPlot.getChartPanel();
 		plotPanel.add(barplot);
 	}

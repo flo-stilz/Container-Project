@@ -1,6 +1,6 @@
+//
 
-
-public class client {
+public class Client {
 	private String company;
 	private String address;
 	private String email;
@@ -9,7 +9,7 @@ public class client {
 	private int id;
 	private static int count = 69420;
 	
-	public client(String company, String address, String email, String name, String password) {
+	public Client(String company, String address, String email, String name, String password) {
 		count= count +1;
 		this.company = company;
 		this.address = address;
@@ -50,9 +50,6 @@ public class client {
 	public void updateName(String name) {
 		this.name = name;
 	}
-
-
-
 
 	public int getId() {
 		return id;
