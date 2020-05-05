@@ -202,7 +202,7 @@ public class Application {
 	
 	//Needs to loose a arraylist from the output. 
 	public Container containerInternalStatusHistory(String search, ArrayList<Journey> history) {
-		Container containerHis = new Container(findContainer(search, history).get(0));
+		Container containerHis = new Container();
 		for(Journey j : history) {
 			for(Container c : j.getContainers()) {
 				if (c.getContainerId().contentEquals(search)) {
