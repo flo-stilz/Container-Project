@@ -31,12 +31,15 @@ Feature: Journey Management
     When searching through the journeys in the database using the keyword
     Then an empty list of journeys in the database matching the keyword is returned
 
-  Scenario: Search for a journey in a database using a specific origin
+  Scenario: Search for a journey multiple times in a database using different specific origins
     Given a journey "j1" with origin "Mum" destination "Nav" content "Cotton" and company "East India Cotton Manufacturing Co., Limited"
     And a journey "j2" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
     And a keyword "Mum" describing a journey
+    And searching through the journeys in the database using the keyword
+    And a list of one journey matching the specific origin "Mum" is returned
+    And a keyword "Gwa" describing a journey
     When searching through the journeys in the database using the keyword
-    Then a list of one journey matching the specific origin "Mum" is returned
+    Then a list of one journey matching the specific origin "Gwa" is returned
 
   Scenario: Search for a journey in a database using a specific destination
     Given a journey "j1" with origin "Dij" destination "Tia" content "Pharmaceuticals" and company "Oncodesign"
@@ -75,10 +78,13 @@ Feature: Journey Management
     Then the journeys assigned container should be taken from the container warehouse
     And the same container is used for both journeys
     
-    Scenario: Search for a container in a database using a specific content
+    Scenario: Search for a container multiple times in a database using different specific contents
     Given a journey "j1" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
     And a journey "j2" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
     And a keyword "Diamonds" describing a container
+    And searching for the container using the keyword
+    And a list of containers matching the specific content is returned 
+    And a keyword "rice" describing a container
     When searching for the container using the keyword
     Then a list of containers matching the specific content is returned 
     

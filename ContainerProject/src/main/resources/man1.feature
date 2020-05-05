@@ -29,14 +29,18 @@ Feature: Client Management
      And the client "client1" requests their contact person to be updated to "Filip Hemmingsen"
      Then the information of the client "client1" has been updated
      
-  Scenario: Search for a client in a database using a specific email
+  Scenario: Search for a client in a database multiple times using different specific emails
      Given a client "client1" with company name "Tesla" address "Pao Alto, California" email "Tesla@administration.com" contact person "Travis Fimmel" password "travis"
      And a second client "client2" with company name "Dansk Metal" address "Aarhus" email "DanskMetal@administration.com" contact person "Morten Pedersen" password "morten"
      And the client "client1" is registered in the database
      And the second client "client2" is registered in the database
      And an email "Tesla@administration.com" to search for
+     And searching for a client in the database using the email
+     And  a list of one client matching the specific email "Tesla@administration.com" is returned
+     And an email "DanskMetal@administration.com" to search for
      When searching for a client in the database using the email
-     Then a list of one client matching the specific email "Tesla@administration.com" is returned
+     Then a list of one client matching the specific email "DanskMetal@administration.com" is returned
+     
      
   Scenario: Search for a client in a database using a specific address that is no client is listed under
      Given a client "client1" with company name "IBM" address "Armonk New York, United States" email "IBM@administration.com" contact person "Arvind Krishna" password "arvind"

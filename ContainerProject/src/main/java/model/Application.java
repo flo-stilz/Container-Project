@@ -18,7 +18,7 @@ public class Application {
 	private ClientDatabase clientDat = new ClientDatabase();
 	private JourneyContainerDatabase journeyContainerDat = new JourneyContainerDatabase();
 	private Admin admin = new Admin();
-	private Client currentUser;
+	private Client currentUser; 
 
 
 	public Client getCurrentUser() {
@@ -56,7 +56,8 @@ public class Application {
 		Simulator simulation = new Simulator();
 		simulation.simulation(this, days);
 	}
-			
+	
+	//This method is responsible for creating a new client object
 	public Client createClient( String company, String address, String email, String name, String password) {
 		Client c = new Client(company, address, email, name, password);
 		clientDat.getClients().add(c);
@@ -79,6 +80,7 @@ public class Application {
 			
 		}
 	
+	//This method is responsible 
 	public ArrayList<Client> search (String keyword){
 		ArrayList<Client> results = new ArrayList<Client>();
 		for (Client cl: clientDat.getClients()) {
@@ -211,10 +213,29 @@ public class Application {
 					containerHis.getHumList().addAll(c.getHumList());
 				}
 			}	
-		}
-		return containerHis;
+		}  
+//		System.out.println("temp: " + containerHis.getTempList());
+//		System.out.println("pres: " + containerHis.getPressureList());
+//		System.out.println("hum: " + containerHis.getHumList());
+//		System.out.println("con ID: " + containerHis.getContainerId());
+//		System.out.println("con ID: " + containerHis);
+
+		return containerHis;  
 	}
-	
+//	public List<List<List<Integer>>> containerInternalStatusHistory(String search, ArrayList<Journey> history) {
+//		for(Journey j : history) {
+//			for(Container c : j.getContainerList()) {
+//				List<List<Integer>> measurements = new ArrayList<List<Integer>>();
+//				if (c.getContainerId().contentEquals(search)) {
+//					measurements.add(c.getTempList());
+//					measurements.add(c.getPressureList());
+//					measurements.add(c.getHumList());
+//					containerInternalStatusHistoryList.add(measurements);
+//				}
+//			}	
+//		}
+//		return containerInternalStatusHistoryList;
+//	}
 	public Set<Journey> findClientJourneys(ArrayList<Journey> journeyList){
 		Set<Journey> result = new HashSet<Journey>();
 		for ( Journey j : journeyList) {

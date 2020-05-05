@@ -176,7 +176,7 @@ public class stepDef {
 	}
 	     
 	
-	//SCENARIO 5: Search for a client in a database using a specific email
+	//SCENARIO 5: Search for a client in a database multiple times using different specific emails
 	@Given("an email {string} to search for")
 	public void an_email_to_search_for(String mail) {
 		this.mail = mail;
@@ -231,7 +231,7 @@ public class stepDef {
 
 	@Then("a unique journey id is created")
 	public void a_unique_journey_id_is_created() {
-		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getId(), "CPHRIO19");
+		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getId(), "CPHRIO26");
 	}
 	
 	@Then("the origin and destination for the journey is correct")
@@ -309,7 +309,7 @@ public class stepDef {
 	}
 	
 	
-	//SCENARIO 5: Search for a journey in a database using a specific origin
+	//SCENARIO 5: Search for a journey multiple times in a database using different specific origins
 	@Then("a list of one journey matching the specific origin {string} is returned")
 	public void a_list_of_one_journey_matching_the_specific_origin_is_returned(String origin) {
 		assertEquals(journeyMatches.get(0).getOrigin(), origin.toUpperCase());
@@ -396,7 +396,7 @@ public class stepDef {
 	}
 	
 	
-	//SCENARIO 11: Search for a container in a database using a specific content	
+//    SCENARIO 11: Search for a container multiple times in a database using different specific contents
 	@Given("a keyword {string} describing a container")
 	public void a_keyword_describing_a_container(String keyword) {
 		this.keyword = keyword;	
@@ -570,7 +570,7 @@ public class stepDef {
     public void the_internal_status_history_of_container_is_returned(String search){
     	assertEquals(containerStatusHistory.getTempList().size(), 2);
     	assertEquals(containerStatusHistory.getPressureList().size(), 2);
-    	assertEquals(containerStatusHistory.getHumList().size(), 2);
+    	assertEquals(containerStatusHistory.getHumList().size(), 2); 
     }
  
     
@@ -591,7 +591,11 @@ public class stepDef {
     
     @Then("the internal-status history of the reused container {string} is returned")
     public void the_internal_status_history_of_the_reused_container_is_returned(String search) {
-    	assertEquals(containerInternalStatusHistoryList.size(),2);
+//    	assertEquals(containerInternalStatusHistoryList.size(),2);
+    	assertEquals(containerStatusHistory.getTempList().size(), 3);
+    	assertEquals(containerStatusHistory.getPressureList().size(), 3);
+    	assertEquals(containerStatusHistory.getHumList().size(), 3); 
+
     }
     
     
@@ -603,7 +607,9 @@ public class stepDef {
     
     @Then("the empty internal-status history of the unused container {string} is returned")
     public void the_empty_internal_status_history_of_the_unused_container_is_returned(String search) {
-        assertEquals(containerInternalStatusHistoryList.size(),0);
+//        assertEquals(containerInternalStatusHistoryList.size(),0);
+        assertEquals(containerStatusHistory.getTempList().size(),0);
+
     }
     
     
@@ -999,6 +1005,7 @@ public class stepDef {
 	@Given("copying the current list of active journeys")
 	public void copying_the_current_list_of_active_journeys() {
     	activeJourneysCopy = new ArrayList<Journey>(application.getJourneyContainerDat().getActiveJourneys());
+//    	System.out.println(activeJourneysCopy);
 	}
 	
 	@When("storing the current list of active journeys")
@@ -1013,6 +1020,10 @@ public class stepDef {
 
 	@Then("the activejourney file matches the copied list of active journeys")
 	public void the_activejourney_file_matches_the_copied_list_of_active_journeys() {
+//		System.out.println("yyy");
+//		System.out.println(application.getJourneyContainerDat().getActiveJourneys());
+//		System.out.println(application.getJourneyContainerDat().getActiveJourneys().size());
+
 		assertEquals(application.getJourneyContainerDat().getActiveJourneys().size(), activeJourneysCopy.size());
 		assertEquals(hum, c1.getHumList().get(0));
 		assertEquals(pressure, c1.getPressureList().get(0));

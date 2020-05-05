@@ -1,6 +1,7 @@
 package model;
 import java.util.ArrayList;
 
+// Journey Class
 public class Journey {
 	private String destination;
 	private String origin;
@@ -12,13 +13,19 @@ public class Journey {
 	private int humidity;
 	private static int counter = 0;
 	private ArrayList<Container> containers = new ArrayList<Container>();
+
 	
-	//for persistency layer
-	public Journey() {
+	
+	//An empty  default journey constructor needed to create a new instance via reflection by the persistence framework
+	
+	public Journey() {   
 	}
 
-
-	public Journey(String origin, String destination, String content, String company) {
+	
+	
+	// The Journey class contains the journey constructor that initialises the newly created journey object
+	
+	public Journey(String origin, String destination, String content, String company) {   
 		
 			this.origin = origin.toUpperCase();
 			this.destination = destination.toUpperCase();

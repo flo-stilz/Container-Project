@@ -29,7 +29,7 @@ Feature: Journey Simulator
     And a client "client2" with seed 98765
     And a client "client3" with seed 123123
     When a client is choosen with seed 1234
-    Then that clientId will be 69434
+    Then that clientId will be 69423
 	    
 	Scenario: Pick content for creation of a journey
 	    Given a seed 123 pointing to a particular instance in the simulator

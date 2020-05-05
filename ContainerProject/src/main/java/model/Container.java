@@ -7,7 +7,7 @@ public class Container {
 	private String content;
 	private String company;
 	private String id; //journeyId
-	private String currentLocation;
+	private String currentLocation; 
 	
     //Take input and store data
     private ArrayList<Integer> pressureList = new ArrayList<Integer>();
@@ -41,7 +41,7 @@ public class Container {
 	}
     
     public Container(Container org) {
-    	this.containerId = org.getContainerId();
+    	this.containerId = org.getContainerId(); 
    	 	this.content = org.getContent();
    	 	this.company = org.getCompany();
    	 	this.id = org.getId(); //journeyId
