@@ -10,12 +10,16 @@ import javax.swing.JLabel;
 
 public class ErrorFrame {
 
+	// constructor that uses a keyword in case the object was created when pressing a search button in the different search panels
+	// creates the label for the window
 	public ErrorFrame(String keyword) {
 		
 		JLabel lbl = new JLabel(" Sorry, we couldnt find any results matching " + keyword);	
 		createErrorFrame(lbl);
 		
 	}
+	// constructor that doesnt use any input in case the object was created when pressing a showAll button in any of the search panels
+	// creates the label for the window
 	public ErrorFrame() {
 		
 		JLabel lbl = new JLabel(" Sorry, we couldnt find any results ");	
@@ -23,6 +27,7 @@ public class ErrorFrame {
 		
 	}
 
+	// creates the actual window with the given label created in the constructor of the object
 	public void createErrorFrame(JLabel lbl) {
 		
 		final JFrame eFrame = new JFrame("Error");

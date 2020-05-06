@@ -45,25 +45,24 @@ import model.Journey;
 public class ContainerSelectionPanels implements PropertyChangeListener{
 
 	
+	// search panel and display panel of the container
 	private JPanel containerSearch;
 	private JPanel viewContainers;
+	// list of containers that have been searched for
 	private ArrayList<Container> wContainers = new ArrayList<Container>();
+	// input in the search field
 	private String keyword;
 	private JPanel extraOptions;
 	private JPanel plotPanel;
 	private ContainerSelectionPanels csp;
-	private JCheckBox checkBoxTemp;
-	private JCheckBox checkBoxPres;
-	private JCheckBox checkBoxHum;
-	private JCheckBox checkBoxAllinOne;
-	private JCheckBox checkBoxBarPlot;
 	private Application application;
 	private TopMain topmain;
+	// indicates that show all button was pressed if true
 	private boolean showAllCommand;
+	// indicates that past containers has been chosen if true
 	private boolean isPast;
-	private JPanel checkOptions;
+	// the chosen container which measurements should be plotted
 	private Container containerPlot = new Container();
-	private JButton showAll;
 
 	public Container getContainerPlot() {
 		return containerPlot;
@@ -86,15 +85,19 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		this.application = application;
 		this.topmain = topmain;
 		
+		// creation of the search panel
 		containerSearch = new JPanel();
 		containerSearch.setPreferredSize(new Dimension(800, 600));
 		
+		// creation of the view panel
 		viewContainers = new JPanel(new BorderLayout());
 		viewContainers.setPreferredSize(new Dimension(800, 600));
 		
+		// creation of the plot panel
 		plotPanel = new JPanel(new GridLayout(0,2));
 		plotPanel.setPreferredSize(new Dimension(800, 600));
 		
+		// store current class object as csp
 		csp = this;
 		
 		// Search Containers
@@ -117,9 +120,10 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		
 	}
 	
-	
+	// sets wContainers either to past or to the active container list
+	// past if b was true
 	public void showAll(final Application application, final TopMain topmain, final boolean b) {
-		showAll = new JButton("Show All");
+		JButton showAll = new JButton("Show All");
 		containerSearch.add(showAll);
 		showAll.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -144,7 +148,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		});
 	}
 
-
+	// filters the active journeys regarding the input in the searchActiveContainer TextField
 	public void searchActiveContainers(final Application application, final TopMain topmain) {
 		JLabel activecontainer = new JLabel("Active Container");
 		containerSearch.add(activecontainer);
@@ -169,6 +173,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		});
 	}
 	
+	// checks if anything matches the search and differentiates between search and showAll command
 	public void checksSearchEntryC(final Application application, final TopMain topmain) {
 		if (wContainers.size() == 0) {
 			if (showAllCommand) {
@@ -184,6 +189,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		}
 	}
 	
+	// filters active or past journeys for the user
 	public ArrayList<Journey> filterJourneysForClients(final Application application, final TopMain topmain, ArrayList<Journey> unfiltered) {
 		if (topmain instanceof ClientMain) {
 			ArrayList<Journey> result = new ArrayList<Journey>();
@@ -195,6 +201,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		}
 	}
 	
+	// filters the past journeys regarding the input in the searchPastContainers TextField
 	public void searchForPastContainers(final Application application, final TopMain topmain) {
 		JLabel containeritempast = new JLabel("History of Containers");
 		containerSearch.add(containeritempast);
@@ -218,6 +225,8 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		});
 	}
 	
+	// gives extra features depending on the user
+	// creates combo box id to choose container 
 	public void additionalInformation(final Application application, TopMain topmain) {
 		
 		extraOptions = new JPanel(new BorderLayout());
@@ -238,6 +247,9 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		showPlots(application, id, topmain);
 	}
 
+	// filters for the possible options in the combo box created in additionalInformation
+	// hereby decides whether past or active and whether show all was chosen or search
+	// afterwards removes the duplicates by using a set
 	public JComboBox<String> chooseContainerOptions(Application application) {
 		ArrayList<Container> op;
 		if (isPast) {
@@ -309,48 +321,54 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 				ArrayList<Container> result = new ArrayList<Container>();
 				result.addAll(application.findContainer(id.getSelectedItem().toString(), application.getJourneyContainerDat().getActiveJourneys()));
 				Container c = result.get(0);
-//				database.addData(c, newTemp, newPressure, newHum);
+				// performs the actual updating of the data
 				application.addData(c, newTemp, newPressure, newHum);
 			}
 		});
 		dataUpdate.add(update, BorderLayout.SOUTH);
 	}
 	
+	// creates several check boxes for the different plot types
+	// if check box is chosen then plot can be shown after pressing the show button
 	public void showPlots(final Application application, final JComboBox<String> id, final TopMain topmain) {
 		
 		JPanel choosePlots = new JPanel(new BorderLayout());
 		extraOptions.add(choosePlots, BorderLayout.EAST);
 		
-		checkOptions = new JPanel(new GridLayout(0,2));
+		// creation of the panel to store the check boxes
+		JPanel checkOptions = new JPanel(new GridLayout(0,2));
 		plotPanel.removeAll();
+		// creation of the storage lists for the check boxes and the plots
 		final ArrayList<JCheckBox> checkBoxes = new ArrayList<JCheckBox>();
 		final ArrayList<Graph> graphs = new ArrayList<Graph>();
 		
-		checkBoxTemp = new JCheckBox("Temperature Plot");
+		// creation of the actual check boxes and plots and stores them
+		JCheckBox checkBoxTemp = new JCheckBox("Temperature Plot");
 		LinePlot temp = new LinePlot("Temperature", csp, new TemperaturePlot());
 		checkBoxes.add(checkBoxTemp);
 		graphs.add(temp);
 		
-		checkBoxPres = new JCheckBox("Pressure Plot");
+		JCheckBox checkBoxPres = new JCheckBox("Pressure Plot");
 		LinePlot pres = new LinePlot("Pressure", csp, new PressurePlot());
 		checkBoxes.add(checkBoxPres);
 		graphs.add(pres);
 		
-		checkBoxHum = new JCheckBox("Humidity Plot");
+		JCheckBox checkBoxHum = new JCheckBox("Humidity Plot");
 		LinePlot hum = new LinePlot("Humidity", csp, new HumidityPlot());
 		checkBoxes.add(checkBoxHum);
 		graphs.add(hum);
 		
-		checkBoxAllinOne = new JCheckBox("All in One");
+		JCheckBox checkBoxAllinOne = new JCheckBox("All in One");
 		comparisonlinePlots comp = new comparisonlinePlots("All in One", csp);
 		checkBoxes.add(checkBoxAllinOne);
 		graphs.add(comp);
 		
-		checkBoxBarPlot = new JCheckBox("Bar Plot");
+		JCheckBox checkBoxBarPlot = new JCheckBox("Bar Plot");
 		barPlots bar = new barPlots("BarPlot", csp);
 		checkBoxes.add(checkBoxBarPlot);
 		graphs.add(bar);
 		
+		// adding the check boxes to the panel
 		checkOptions.add(checkBoxTemp);
 		checkOptions.add(checkBoxPres);
 		checkOptions.add(checkBoxHum);
@@ -359,6 +377,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		
 		choosePlots.add(checkOptions, BorderLayout.CENTER);
 		
+		// creation of the button that switches to the plot panel
 		JButton show = new JButton("Show the Plots");
 		choosePlots.add(show, BorderLayout.SOUTH);
 		show.addActionListener(new ActionListener() {
@@ -368,6 +387,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 				// stop the ContainerSelectionPanels from listening to the application layer
 				application.removeObserver(csp);
 				
+				// checks which plot has been selected and then creates the chart panel for each plot
 				for (int i = 0; i<checkBoxes.size(); i++) {
 					JCheckBox checkb = checkBoxes.get(i);
 					Graph graph = graphs.get(i);
@@ -381,18 +401,23 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		});
 	}
 
+	// creates chart panel given a certain plot
 	public void generatePlot(final Graph g) {
 		
 		ChartPanel chartPanel = g.plotCreation(containerPlot);
 		updatePlot(chartPanel, chartPanel);
 
 	}
+	// removes old chart panel and adds new chart panel to the plot panel
+	// refreshes the window afterwards
 	public void updatePlot(ChartPanel newChartPanel, ChartPanel oldChartPanel) {
 		plotPanel.remove(oldChartPanel);
 		plotPanel.add(newChartPanel);
 		topmain.getMain1().revalidate();
 	}
 	
+	// either picks the sum of all measurements of a certain container if past
+	// or just finds a specific container from the active journeys
 	public Container chooseContainerForPlot(Application application, String id) {
 		if (isPast) {
 			Container con = application.containerInternalStatusHistory(id, application.getJourneyContainerDat().getPastJourneys());
@@ -405,13 +430,16 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		}
 	}
 
+	// this method is building the table that shows all the matching containers
 	public void displayContainers() {
 		
+		// first of all deletes all previous components of viewContainers
 		viewContainers.removeAll();
 		setTableLabel();
 		additionalInformation(application, topmain);
 		DefaultTableModel tableModel = new DefaultTableModel();
 		JTable table = new JTable(tableModel);
+		// specifies the column names
 		String[] columnNames = {
 				"Container ID",
 				"Journey ID",
@@ -437,6 +465,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		viewContainers.add(new JScrollPane(table), BorderLayout.CENTER);
 	}
 
+	// depending on which button has been pressed in the search containers it creates the fitting label
 	public void setTableLabel() {
 		JLabel label = new JLabel("");
 		if (isPast == false && showAllCommand) {
@@ -462,6 +491,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		viewContainers.add(label, BorderLayout.NORTH);
 	}
 
+	// inserts the to the column names corresponding information into the row
 	public void formRowForContainer(DefaultTableModel tableModel, Container c, Application application) {
 
 		// checks whether the measurement lists are empty and whether a container belongs to the active Journey list
@@ -473,6 +503,8 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		}
 	}
 	 
+	// handles the notification from the observer pattern
+	// updates the wContainers accordingly and rebuilds the tables in displayContainers()
 	public void propertyChange(PropertyChangeEvent evt) {
 
 		Application dat = ((Application)evt.getSource());;
@@ -489,7 +521,8 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 			topmain.getMain1().revalidate();
 		}
 	}
-
+	
+	// checks whether the showAll button has been pressed or the search and updates the wContainers accordingly
 	public void showAllOrSearch(ArrayList<Journey> jList, Application dat, boolean isPast) {
 		if (showAllCommand) {
 			ArrayList<Journey> result = filterJourneysForClients(application, topmain, jList);

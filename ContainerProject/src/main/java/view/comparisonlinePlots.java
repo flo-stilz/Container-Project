@@ -22,7 +22,9 @@ import model.observer;
 
 public class comparisonlinePlots extends ApplicationFrame implements observer, Graph {
 	
+	// stores the previously made chart panel
 	private ChartPanel oldChartPanel;
+	// the corresponding container selection panel object
 	private ContainerSelectionPanels csp;
 	
 	public comparisonlinePlots(String plottitle, ContainerSelectionPanels csp) {
@@ -65,12 +67,14 @@ public class comparisonlinePlots extends ApplicationFrame implements observer, G
 		return dataset;
 	}
 	
-	
-public ChartPanel plotCreation(Container c) {
+	// adds the plot to the observer list and calls makeChart(c) which creates the chart panel
+	public ChartPanel plotCreation(Container c) {
 		c.addObserver(this);
 		return makeChart(c);
 	}
-
+	
+	// updates the chartPanel and fast forwards it to the containerSelectionPanels
+	// afterwards sets the oldChartPanel to the just created one
 	public void update(Container c) {
 		
 		ChartPanel chartPanel = makeChart(c);
@@ -78,7 +82,7 @@ public ChartPanel plotCreation(Container c) {
 		oldChartPanel = chartPanel;
 	}
 	
-	
+	// creates a comparison line plot with data given by the input container c and return the chartPanel consisting of the plot
 	public ChartPanel makeChart(Container c) {
 		ArrayList<Integer> t = c.getTempList();
 		ArrayList<Integer> p = c.getPressureList();
@@ -102,6 +106,7 @@ public ChartPanel plotCreation(Container c) {
 		plot.setRenderer(renderer);
 		setContentPane(chartPanel);
 		
+		// initialisation of the oldChartPanel
 		if (oldChartPanel == null) {
 			oldChartPanel = chartPanel;
 		}

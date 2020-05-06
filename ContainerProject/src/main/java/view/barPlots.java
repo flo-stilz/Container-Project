@@ -21,7 +21,9 @@ import model.observer;
 
 public class barPlots extends ApplicationFrame implements observer, Graph {
 	
+	// the corresponding container selection panel object
 	private ContainerSelectionPanels csp;
+	// stores the previously made chart panel
 	private ChartPanel oldChartPanel;
 
 	public barPlots(String plottitle, ContainerSelectionPanels csp) {
@@ -52,19 +54,22 @@ public class barPlots extends ApplicationFrame implements observer, Graph {
 	return r;
 
 }
-	
+	// adds the plot to the observer list and calls makeChart(c) which creates the chart panel
 	public ChartPanel plotCreation(Container c) {
 		c.addObserver(this);
 		return makeChart(c);
 	}
 
+	// updates the chartPanel and fast forwards it to the containerSelectionPanels
+	// afterwards sets the oldChartPanel to the just created one
 	public void update(Container c) {
-		 
+	
 		ChartPanel chartPanel = makeChart(c);
 		csp.updatePlot(chartPanel, oldChartPanel);
 		oldChartPanel = chartPanel;
 	}
 	
+	// creates a bar plot with data given by the input container c and return the chartPanel consisting of the plot
 	public ChartPanel makeChart(Container c) {
 		
 		DefaultCategoryDataset dataset = new DefaultCategoryDataset();
@@ -76,6 +81,7 @@ public class barPlots extends ApplicationFrame implements observer, Graph {
 		dataset.setValue(range(p), "hum", "Pressure");
 		dataset.setValue(range(h), "hum", "Volume");
 
+		// plot title and axis description
 		JFreeChart chart = ChartFactory.createBarChart(" Maximum change in Conditions for Container "+c.getContainerId(), "Internal Status",
 				"change in values overtime", dataset, PlotOrientation.VERTICAL, false, false, false);
 
@@ -88,7 +94,7 @@ public class barPlots extends ApplicationFrame implements observer, Graph {
 	    chartPanel.setPreferredSize(new java.awt.Dimension( 560 , 367 ) );        
 	    setContentPane( chartPanel ); 
 		chart.setBackgroundPaint(Color.WHITE);
-		
+		// initialisation of the oldChartPanel
 		if (oldChartPanel == null) {
 			oldChartPanel = chartPanel;
 		}

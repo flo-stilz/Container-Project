@@ -22,10 +22,14 @@ import model.Client;
 
 public class ClientSectionPanels implements PropertyChangeListener {
 
+	// panels for the search and the display of the clients
 	private JPanel clientSearch;
 	private JPanel viewClients;
+	// stores the matching clients to the given input in the search panel
 	private ArrayList<Client> wClients = new ArrayList<Client>();
+	// indicates whether the search or the showAll button were pressed
 	private boolean showAllCommand;
+	// input in the textfield
 	private String keyword;
 	private CompanyMain companymain;
 	
@@ -38,19 +42,21 @@ public class ClientSectionPanels implements PropertyChangeListener {
 		this.companymain = companymain;
 		// Search the clients
 		
+		// Initialisation of the clientSearch panel and the viewClients panel
 		clientSearch = new JPanel();
 		clientSearch.setPreferredSize(new Dimension(800, 600));
 		
 		viewClients = new JPanel(new BorderLayout());
 		viewClients.setPreferredSize(new Dimension(800, 600));
 		
+		// search text field and search button
 		final JTextField search = new JTextField();
 		search.setPreferredSize(new Dimension(100, 25));
 		clientSearch.add(search);
 		
 		JButton searchButton = new JButton("Search");
 		clientSearch.add(searchButton);
-		
+		// sets wClients to the matching results
 		searchButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
@@ -60,7 +66,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 				checksSearchEntryC(application);
 			}
 		});
-		
+		// sets wClients to all clients
 		JButton showAll = new JButton("Show All");
 		clientSearch.add(showAll);
 		showAll.addActionListener(new ActionListener() {
@@ -73,7 +79,9 @@ public class ClientSectionPanels implements PropertyChangeListener {
 		});
 
 	}
-	
+	// checks whether an input exists and if not creates an error frame
+	// also depends on the button pressed
+	// otherwise forwards it to the viewClients panel
 	public void checksSearchEntryC(final Application application) {
 		if (wClients.size() == 0) {
 			if (showAllCommand) {
@@ -91,13 +99,16 @@ public class ClientSectionPanels implements PropertyChangeListener {
 	
 	// display the clients
 	
+	// shows table of wClients
 	public void displayClients(Application application) {
 		
+		// removes all previous components of viewClients
 		viewClients.removeAll();
 		DefaultTableModel tableModel = new DefaultTableModel();
 		JLabel label = new JLabel("All Clients");
 		viewClients.add(label, BorderLayout.NORTH);
 		JTable table = new JTable(tableModel);
+		// column names of the table
 		String[] columnNames = {
 				"Company",
                 "Ref. Person",
@@ -111,7 +122,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 			tableModel.addColumn(s);
 		}
 		
-		
+		// goes through each client and inserts the corresponding information into the row
 		for (Client c : wClients) {
 			ArrayList<String> containerids = new ArrayList<String>();
 			ArrayList<Container> containers = application.findContainer(c.getCompany(), application.getJourneyContainerDat().getActiveJourneys());
@@ -133,6 +144,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 		return clientSearch;
 	}
 
+	// udpates client after being notified from the application class that a change has occured
 	public void propertyChange(PropertyChangeEvent evt) {
 
 		Application dat = ((Application)evt.getSource());
@@ -145,6 +157,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 		}
 	}
 	
+	// filters clients depending on which button has been pressed previously
 	public void showAllOrSearch(Application dat) {
 		if (showAllCommand) {
 			wClients = new ArrayList<Client>(dat.getClientDat().getClients());
