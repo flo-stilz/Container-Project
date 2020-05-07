@@ -28,6 +28,7 @@ import model.Client;
 
 public class ClientMain extends TopMain{
 	
+	// The currentClient for the given menu.
 	private Client currentClient;
 	
 	public Client getCurrentClient() {
@@ -36,11 +37,15 @@ public class ClientMain extends TopMain{
 
 	public ClientMain(final Application application, final JFrame login) {
 		super(application, login);
+		currentClient = application.getCurrentUser();
 	}
 	
+	/*
+	 * Overrides the options menu from TopMain to show my journeys and my containers instead.
+	 * This restricts the clients options.
+	 */
 	@Override
 	public void options(Application application, JFrame login) {
-		currentClient = application.getCurrentUser();
 		setOptions(new JPanel());
 		getOptions().setLayout(new BoxLayout(getOptions(), BoxLayout.Y_AXIS));
 		
@@ -61,6 +66,10 @@ public class ClientMain extends TopMain{
 		containerButton(application, login, containers);
 	} 
 
+	/*
+	 * Creates a JourneySectionPanel, adds the cards to cl, removes old listeners and then adds the observer to it.
+	 * Shows the card if pressed.
+	 */
 	@Override
 	public void journeyButton(final Application application, JFrame login, JButton journeys) {
 		// journey section
@@ -79,6 +88,10 @@ public class ClientMain extends TopMain{
 		});
 	}
 	
+	/*
+	 * Creates a ContainerselectionPanel, adds the cards to cl, removes old listeners and then adds the observer to it.
+	 * Shows the card if pressed.
+	 */
 	@Override
 	public void containerButton(final Application application, JFrame login, JButton containers) {
 	// container section

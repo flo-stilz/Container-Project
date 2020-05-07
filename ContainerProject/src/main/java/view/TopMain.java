@@ -25,9 +25,13 @@ import model.Application;
 public class TopMain {
 	
 
+	//The frame itself.
 	private JFrame main1;
+	//The options menu panel
 	private JPanel options;
+	//The panel with a cardlayout
 	private JPanel cards;
+	// The different cards for the given cardlayout
 	private CardLayout cl;
 	private JourneySectionPanels j;
 	private ContainerSelectionPanels cont;
@@ -77,6 +81,9 @@ public class TopMain {
 		this.options = options;
 	}
 
+	/*
+	 * Creates the main menu frame, initiates the layouts and makes the frame visible.
+	 */
 	public TopMain(final Application application, final JFrame login) {
 		
 		this.application = application;
@@ -98,7 +105,9 @@ public class TopMain {
 		main1.setVisible(true);
 	}
 	
-	
+	/*
+	 * Creates the options menu by making the buttons and hereafter calling the corresponding methods to give the buttons things to do.
+	 */
 	public void options(Application application, JFrame login) {
 		options = new JPanel();
 		options.setLayout(new BoxLayout(options, BoxLayout.Y_AXIS));
@@ -121,6 +130,10 @@ public class TopMain {
 			
 	} 
 	
+	/*
+	 * Creates a MenuSectionPanel, adds it as a card to cl, removes old listeners and then adds the observer to it.
+	 * Shows the card if pressed.
+	 */
 	public void menuButton(final Application application, JFrame login, JButton menu) {
 		m = new MenuSectionPanels(application, this, login);
 		application.addObserver(m);
@@ -137,7 +150,10 @@ public class TopMain {
 	}
 	
 
-	
+	/*
+	 * Creates a JourneySectionPanel, adds  the cards of the  journey panels into cl, removes old listeners and then adds the observer to it.
+	 * Shows the card if pressed.
+	 */
 	public void journeyButton(final Application application, JFrame login, JButton journeys) {
 		// journey section
 		
@@ -157,7 +173,11 @@ public class TopMain {
 
 		
 	}
-
+	
+	/*
+	 * Creates a ContainerSelectionPanel, adds the cards of container panel into cl, removes old listeners and then adds the observer to it.
+	 * Shows the card if pressed.
+	 */
 	public void containerButton(final Application application, JFrame login, JButton containers) {
 	// container section
 	
@@ -176,6 +196,7 @@ public class TopMain {
 			
 	}
 	
+	//Removes the current listeners from the observer.
 	public void removeListeners() {
 		application.removeObserver(m);
 		application.removeObserver(j);

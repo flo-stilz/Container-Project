@@ -26,14 +26,18 @@ import model.Application;
 
 public class MenuSectionPanels implements PropertyChangeListener{
 	
+	//The topmain is the class where the frame used in this class is created.
 	private TopMain topmain;
+	//Where the different components are used.
 	private JPanel menupanel;
+	// The login frame from which th
 	private JFrame login;
 
 	public JPanel getMenupanel() {
 		return menupanel;
 	}
 
+	//Creates the menu panel
 	public MenuSectionPanels(final Application application, final TopMain topmain, JFrame login) {
 
 		this.topmain = topmain;
@@ -46,7 +50,10 @@ public class MenuSectionPanels implements PropertyChangeListener{
 	}
 	
 
-	
+	/*
+	 * Fills out the menu panel depending on weather it is a client menu or a admin menu.
+	 * Also runs the logOutButton method.
+	 */
 	public void menuPanel(Application application) {
 		menupanel.removeAll();
 		if (topmain instanceof ClientMain) {
@@ -87,6 +94,9 @@ public class MenuSectionPanels implements PropertyChangeListener{
 		logOutButton(application, login, menupanel);
 	}
 	
+	/*
+	 * The logOutButton method creates the the profile button where you can logOut, save/load data, and if a client is initiated a change details.
+	 */
 	public void logOutButton(final Application application, final JFrame login, final JPanel menupanel) {
 		// Logout as company user
 		
@@ -164,7 +174,10 @@ public class MenuSectionPanels implements PropertyChangeListener{
 		
 	}
 
-
+	/*
+	 * The updateClientDetails creates the frame where you can change your details.
+	 * This is done by changing the text fields and here after pressing the button which will change the currentUser object from application.
+	 */
 	public void updateClientDetails(final Application application) {
 		final JFrame updateDetails = new JFrame("Update details");
 		updateDetails.setPreferredSize(new Dimension(300, 200));
@@ -226,6 +239,7 @@ public class MenuSectionPanels implements PropertyChangeListener{
 		updateDetails.setVisible(true);
 	}
 
+	//Observer for updating details.
 	public void propertyChange(PropertyChangeEvent evt) {
 		Application dat = ((Application)evt.getSource());;
 		menuPanel(dat);

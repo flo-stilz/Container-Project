@@ -18,8 +18,10 @@ import model.Application;
 
 
 public class GUIMain {
-
-	static Application application = new Application(); 
+	
+	// The application that will be passed through the entire menu is created.
+	static private Application application = new Application(); 
+	//The two different failed frames is held here.
 	static private JFrame failedLogin;
 	static private JFrame failedReg;
 
@@ -145,6 +147,9 @@ public class GUIMain {
 		
 		final JFrame LoginFrame = new JFrame("Login");
 			
+		/*
+		 * The login screen is created with at logo and the text fields to input the needed information to login.
+		 */
 		ImageIcon img = new ImageIcon("src/main/resources/logo.png");
 		Image image = img.getImage(); // transform it 
 		Image newimg = image.getScaledInstance(400, 200,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
@@ -170,6 +175,10 @@ public class GUIMain {
 		JButton confirm = new JButton("Confirm");
 		confirm.addActionListener(new ActionListener() {
 	
+			/*
+			 * The inputed information is validated through the loginValidation method from application
+			 * and it is determined which main menu should be shown.
+			 */
 			public void actionPerformed(ActionEvent e) {
 				String passText = new String(password.getPassword());
 				String userText = username.getText();
@@ -192,6 +201,9 @@ public class GUIMain {
 			}
 		});
 			
+		/*
+		 * The opportunity to register a new client is done with a register button.
+		 */
 		JButton register = new JButton("Register");
 		register.addActionListener(new ActionListener() {
 	
@@ -202,7 +214,9 @@ public class GUIMain {
 			
 			
 		JPanel loginField = new JPanel();
-			
+		/*
+		 * The different components are added to the frame and it is shown.	
+		 */
 		LoginFrame.add(logo, BorderLayout.NORTH);
 		LoginFrame.add(choices, BorderLayout.SOUTH);		
 		LoginFrame.add(loginField, BorderLayout.CENTER);

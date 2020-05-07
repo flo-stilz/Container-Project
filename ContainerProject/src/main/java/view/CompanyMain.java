@@ -28,6 +28,9 @@ public class CompanyMain extends TopMain{
 		this.application = application;
 	}
 	
+	/*
+	 * Overrides the options menu so it contains view Clients and simulation as well.
+	 */
 	@Override
 	public void options(Application application, JFrame login) {
 		setOptions(new JPanel());
@@ -64,6 +67,10 @@ public class CompanyMain extends TopMain{
 	
 	} 
 
+	/*
+	 * Creates a ClientSectionPanel, adds it as a card to cl, removes old listeners and then adds the observer to it.
+	 * Shows the card if pressed.
+	 */
 	public void clientButton(final Application application, JFrame login, JButton clients) {
 		c = new ClientSectionPanels(application, this);
 		getCards().add(c.getClientSearch(), "clientSearch");
@@ -78,7 +85,10 @@ public class CompanyMain extends TopMain{
 		});
 		
 	}
-	
+	/*
+	 * Creates a sim panel, adds it as a card to cl, removes old listeners and then adds the observer to it.
+	 * Shows the card if pressed.
+	 */
 	public void simulationButton(final Application application, JFrame login, JButton simulation) {	
 		// simulation section
 		
@@ -112,6 +122,7 @@ public class CompanyMain extends TopMain{
 		});
 	}
 	
+	//Removes listeners.
 	@Override
 	public void removeListeners() {
 		application.removeObserver(getM());
