@@ -255,7 +255,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		if (isPast) {
 			ArrayList<Journey> filtered = new ArrayList<Journey>(filterJourneysForClients(application,topmain, application.getJourneyContainerDat().getPastJourneys()));
 			if (showAllCommand) {
-				op = new ArrayList<Container>(application.getJourneyContainerDat().getfilteredContainers(filtered));
+				op = new ArrayList<Container>(application.getJourneyContainerDat().getFilteredContainers(filtered));
 			}
 			else {
 				op = new ArrayList<Container>(application.findContainer(keyword, filtered));
@@ -264,7 +264,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		else {
 			ArrayList<Journey> filtered = new ArrayList<Journey>(filterJourneysForClients(application,topmain, application.getJourneyContainerDat().getActiveJourneys()));
 			if (showAllCommand) {
-				op = new ArrayList<Container>(application.getJourneyContainerDat().getfilteredContainers(filtered));
+				op = new ArrayList<Container>(application.getJourneyContainerDat().getFilteredContainers(filtered));
 			}
 			else {
 				op = new ArrayList<Container>(application.findContainer(keyword, filtered));
@@ -495,7 +495,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 	public void formRowForContainer(DefaultTableModel tableModel, Container c, Application application) {
 
 		// checks whether the measurement lists are empty and whether a container belongs to the active Journey list
-		if ((c.isEmpty()) || (application.findUsingLoop(c.getId(),application.getJourneyContainerDat().getActiveJourneys()).size() == 0)) {
+		if ((c.isEmpty()) || (application.findJourneys(c.getId(),application.getJourneyContainerDat().getActiveJourneys()).size() == 0)) {
 			tableModel.insertRow(0, new Object[] {c.getContainerId(), c.getId(), c.getCompany(), c.getContent(), c.getCurrentLocation(), "N/A", "N/A", "N/A", c.getTempList(), c.getPressureList(), c.getHumList()});
 		}
 		else {

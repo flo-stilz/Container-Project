@@ -151,7 +151,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				showAllCommand = false;
 				ArrayList<Journey> result = new ArrayList<Journey>(filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getPastJourneys()));
 				keyword = searchjourneyPastTxt.getText();
-				wJourneys = application.findUsingLoop(keyword, result);
+				wJourneys = application.findJourneys(keyword, result);
 				checksSearchEntryJ(application, topmain);
 			}
 		});
@@ -176,8 +176,8 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				showAllCommand = false;
 				ArrayList<Journey> result = new ArrayList<Journey>(filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getActiveJourneys()));
 				keyword = searchActive.getText();
-				application.findUsingLoop(keyword, result);
-				wJourneys = application.findUsingLoop(keyword, result);;
+				application.findJourneys(keyword, result);
+				wJourneys = application.findJourneys(keyword, result);;
 				checksSearchEntryJ(application, topmain);
 			}
 		});
@@ -213,7 +213,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 				String newcurrentLocation = loc.getText();
 				ArrayList<Journey> result = new ArrayList<Journey>();
 				// filters for the journey which was selected in the combo box id
-				result.addAll(application.findUsingLoop(id.getSelectedItem().toString(), application.getJourneyContainerDat().getActiveJourneys()));
+				result.addAll(application.findJourneys(id.getSelectedItem().toString(), application.getJourneyContainerDat().getActiveJourneys()));
 				Journey j = result.get(0);
 				// changes the actual location of the journeyin the model
 				application.updateCurrentLocation(j, newcurrentLocation);
@@ -400,7 +400,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			wJourneys = jList;
 		}
 		else {
-			wJourneys = dat.findUsingLoop(keyword,jList);
+			wJourneys = dat.findJourneys(keyword,jList);
 		}
 	}
 	

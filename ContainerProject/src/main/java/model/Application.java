@@ -56,7 +56,8 @@ public class Application {
 		Simulator simulation = new Simulator();
 		simulation.simulation(this, days);
 	}
-			
+	
+	//This method is responsible for creating a new client object
 	public Client createClient( String company, String address, String email, String name, String password) {
 		Client c = new Client(company, address, email, name, password);
 		clientDat.getClients().add(c);
@@ -64,8 +65,8 @@ public class Application {
 		return c;
 	}
 
-	public ArrayList<Journey> findUsingLoop (String search, ArrayList<Journey> journeyList){
-	
+	//searches for a journey that matches a keyword
+	public ArrayList<Journey> findJourneys (String search, ArrayList<Journey> journeyList){
 			ArrayList<Journey> matches = new ArrayList<Journey>();
 			for (Journey j : journeyList) {
 				if ((j.getOrigin().equalsIgnoreCase(search))||
@@ -76,13 +77,12 @@ public class Application {
 					}
 				}
 			return matches;
-			
 		}
 	
-	public ArrayList<Client> search (String keyword){
+	//searches for a client that matches a keyword
+	public ArrayList<Client> searchClient (String keyword){
 		ArrayList<Client> results = new ArrayList<Client>();
 		for (Client cl: clientDat.getClients()) {
-
 			if ((cl.getAddress().equalsIgnoreCase(keyword)||cl.getCompany().contentEquals(keyword)||cl.getEmail().equalsIgnoreCase(keyword)||cl.getName().equalsIgnoreCase(keyword))) {
 				results.add(cl);
 			}
@@ -90,8 +90,8 @@ public class Application {
 		return results;	
 	}
 
-	public ArrayList<Journey> findJourney (String origin, String destination){
-		
+	//searches for all active journeys that contain a given set of origin and destination
+	public ArrayList<Journey> findSimilairJourneys (String origin, String destination){
 		ArrayList<Journey> results = new ArrayList<Journey>();
 		for (Journey j : journeyContainerDat.getActiveJourneys()) {
 			if ((j.getOrigin().equalsIgnoreCase(origin))&&
@@ -104,8 +104,9 @@ public class Application {
 		
 	}
 	
-	
-	
+	/* Responsible for assigning containers to new journeys in two different ways, 
+	 * depending on the size of the container warehouse.
+	 */
 	public Container assignContainer(String content, String company, String id) {
 		if (journeyContainerDat.getContainerWarehouse().size() == 0) {
 			Container container = new Container( content, company, id);
@@ -119,11 +120,12 @@ public class Application {
 			container.setId(id);
 			return container;
 		}
-		
 	}
 	
+	//Handles the creation of new journeys. If a journey with the same destination and origin is ongoing,
+	//then another container is added to that journey.
 	public Journey createJourney( String origin, String destination, String content, String company) {
-		if (findJourney( origin, destination).size() == 0) {
+		if (findSimilairJourneys( origin, destination).size() == 0) {
 			 Journey j = new Journey(origin, destination, content, company);
 			 journeyContainerDat.getActiveJourneys().add(j);
 			 Container container = assignContainer(content, company, j.getId());
@@ -133,17 +135,16 @@ public class Application {
 			 return j;
 		}
 		else {
-			Journey j = findJourney( origin, destination).get(0);
+			Journey j = findSimilairJourneys( origin, destination).get(0);
 			Container container = assignContainer(content, company, j.getId());
 			j.getContainers().add(container);
 			updateCurrentLocation(j, origin);
 			support.firePropertyChange("journey",null,null);
-			return findJourney( origin, destination).get(0);
+			return findSimilairJourneys( origin, destination).get(0);
 		}
 	}
 	
 	// Find containers that match a certain keyword in the active journey list
-	
 	public ArrayList<Container> findContainer(String keyword, ArrayList<Journey> journeyList) {
 		ArrayList<Container> containers = new ArrayList<Container>();
 		for (Journey j : journeyList) {
@@ -158,20 +159,19 @@ public class Application {
 		}
 		return containers;
 	}
-	
-	
 
-	
+	//responsible for moving the journey from the active journeylist to the pastjourney list, 
+	//once the journey has reached its destination.
 	public void endOfJourney(Journey j) {
 		if (j.getDestination().equals(j.getCurrentLocation())) {
 			journeyContainerDat.getPastJourneys().add(j);
 			journeyContainerDat.storeEndedJourneys();
 			for (Container c : j.getContainers()) {
 				Container container = new Container(c);
-				container.setContainerID(c.getContainerId());
+				container.setContainerId(c.getContainerId());
 				container.setContent("empty");
 				container.setCompany("empty");
-				container.setCurrentLocation("container warehouse");
+				container.setCurrentLocation("container warehouse"); 
 				container.getTempList().clear();
 				container.getPressureList().clear();
 				container.getHumList().clear();
@@ -186,9 +186,9 @@ public class Application {
 	public void addData(Container c, int temp, int pressure, int humidity) {
 		c.addData(temp, pressure, humidity);
 		support.firePropertyChange("journey",null,null);
-
 	} 
 	
+	//adds internal-status measurements to all containers in a given journey. 
 	public void updateData(Journey j, Container c, int temp, int pressure, int humidity) {
 		if (c.isEmpty()) {
 			for (Container con : j.getContainers()) {
@@ -200,7 +200,7 @@ public class Application {
 		}
 	}
 	
-	//Needs to loose a arraylist from the output. 
+	//finds all internal-status measurement of a given container, throughout each of it completed journeys
 	public Container containerInternalStatusHistory(String search, ArrayList<Journey> history) {
 		Container containerHis = new Container();
 		for(Journey j : history) {
@@ -215,6 +215,7 @@ public class Application {
 		return containerHis;
 	}
 	
+	//finds all active and past journeys belonging to a given client
 	public Set<Journey> findClientJourneys(ArrayList<Journey> journeyList){
 		Set<Journey> result = new HashSet<Journey>();
 		for ( Journey j : journeyList) {
@@ -227,8 +228,9 @@ public class Application {
 		return result;
 	}
 	
+	//verifies whether a client fulfills the requirements for registration
 	public boolean registrationValidation(String company, String name, String mail, String address, String password) {
-		if ((search(company).size() == 0)
+		if ((searchClient(company).size() == 0)
 						&& (password.length()>4)) {
 			createClient(company, address, mail, name, password);
 			return true;
@@ -237,14 +239,16 @@ public class Application {
 			return false;
 		}
 	}
+	
+	//identifies which type of user is login into the system
 	public String loginValidation(String username, String password) {
 		if (admin.getUsername().contentEquals(username) && admin.getPassword().contentEquals(password)) {
 			return "admin";
 //			company.dispose();
 		}
-		else if ((search(username).size())!= 0) {
+		else if ((searchClient(username).size())!= 0) {
 	
-			Client client = search(username).get(0);
+			Client client = searchClient(username).get(0);
 			
 			if (client.getPassword().contentEquals(password)) {
 				currentUser = client;
@@ -259,7 +263,7 @@ public class Application {
 			return "N/A";
 		}
 	}
-	
+	// updates a journeys current location to a new location
 	public void updateCurrentLocation(Journey j, String newcurrentLocation) {
 		for (int i=0; i < j.getContainers().size(); i++){
 			j.getContainers().get(i).setCurrentLocation(newcurrentLocation);

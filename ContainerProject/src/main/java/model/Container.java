@@ -14,9 +14,6 @@ public class Container {
     private ArrayList<Integer> humList = new ArrayList<Integer>();
     private ArrayList<Integer> tempList = new ArrayList<Integer>(); 
     
-    private String containerID;
-    private String journeyID;
-    
     private static int cCounter = 0;
     private ArrayList<observer> obs = new ArrayList<observer>();
     
@@ -36,22 +33,24 @@ public class Container {
 		this.tempList = tempList;
 	}
     
-	//For persistency layer
+	//Allows for creation of a java bean for the persistency layer
 	public Container() {
 	}
     
-    public Container(Container org) {
-    	this.containerId = org.getContainerId();
-   	 	this.content = org.getContent();
-   	 	this.company = org.getCompany();
-   	 	this.id = org.getId(); //journeyId
-   	 	this.currentLocation = org.getCurrentLocation();
-   	 	this.pressureList = new ArrayList<Integer>(org.getPressureList());
-   	 	this.humList = new ArrayList<Integer>(org.getHumList());
-   	 	this.tempList = new ArrayList<Integer>(org.getTempList()); 
+	//This constructor takes as input a container c.  
+	//And creates a deep copy of the container c.
+    public Container(Container c) {
+    	this.containerId = c.getContainerId();
+   	 	this.content = c.getContent();
+   	 	this.company = c.getCompany();
+   	 	this.id = c.getId(); //journeyId
+   	 	this.currentLocation = c.getCurrentLocation();
+   	 	this.pressureList = new ArrayList<Integer>(c.getPressureList());
+   	 	this.humList = new ArrayList<Integer>(c.getHumList());
+   	 	this.tempList = new ArrayList<Integer>(c.getTempList()); 
    }
-    
-    
+   
+    //Adds an integer to all the different internal-status measurement lists
     public void addData(int temp, int pressure, int humidity) {
 		getTempList().add(temp);
 		getPressureList().add(pressure);
@@ -69,14 +68,16 @@ public class Container {
 		}
 	}
 	
+	//Instances a client object
 	public Container( String content, String company, String id) {
 		this.id = id;
 		this.content = content;
 		this.company = company;
 		this.containerId = "C"+ cCounter;
-		
 		cCounter++;
 	}
+	
+	//checks if the size of all internal-status measurements lists are empty. 
     public boolean isEmpty() {
     	if (tempList.size() == 0 && humList.size() == 0 && pressureList.size() == 0) {
     		return true;
@@ -93,11 +94,9 @@ public class Container {
 		Container.cCounter = cCounter;
 	}
     
-    
     public ArrayList<Integer> getPressureList() {
 		return pressureList;
 	}
-
 
 	public ArrayList<Integer> getHumList() {
 		return humList;
@@ -105,14 +104,6 @@ public class Container {
 	
 	public ArrayList<Integer> getTempList() {
 		return tempList;
-	}
-
-	public void setContainerID(String containerID) {
-        this.containerID = containerID;
-    }
-
-	public void setJourneyID(String journeyID) {
-		this.journeyID = journeyID;
 	}
 
 	public String getContainerId() {

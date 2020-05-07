@@ -58,26 +58,31 @@ public class Simulator {
 	public void setSeed(int seed) {
 		r.setSeed(seed);
 	}
-
+	
+	//Randomly picks out a company from the arraylist named companies
 	public String companySelection() {
 		int value = r.nextInt(companies.size()-1);
 		String company = companies.get(value);
 		companies.remove(value);
 		return company;
-		
 	}
-
+	
+	/* Creates a name based on a randomly chosen first- and surname
+	 * from the arraylists firstname and surname.
+	 */
 	public String nameSelection() {
 		int value1 = r.nextInt(firstnames.size()-1);
 		int value2 = r.nextInt(surnames.size()-1);
 		return firstnames.get(value1) + " " + surnames.get(value2);
 	}
+	
+	//Creates an email based on a created name and a randomly chosen company name
 	public String emailCreation(String companyName, String name) {
-		name = name.replaceAll("\\s+", ".");
-			
+		name = name.replaceAll("\\s+", ".");	
 		return name + "@" + companyName + ".com";
 	}
 	
+	//Randomly picks out an address from the arraylist named addresses
 	public String addressSelection() {
 		int value = r.nextInt(addresses.size()-1);
 		String address = addresses.get(value);
@@ -85,24 +90,28 @@ public class Simulator {
 		return address;
 	}	
 	
+	//Randomly picks a client in the database.
 	public Client clientSelection(Application application) {
 		int value = r.nextInt(application.getClientDat().getClients().size()-1);
 		Client client = application.getClientDat().getClients().get(value);
 		return client;
 	}
 
+	//Randomly picks out a content from the arraylist named contents
 	public String contentSelection() {
 		int value = r.nextInt(contents.size()-1);
 		String content = contents.get(value);
 		return content;
 	}
-
+	
+	//Randomly picks out an origin from the arraylist named locations
 	public String originSelection() {
 		int value = r.nextInt(locations.size()-1);
 		String origin = locations.get(value);
 		return origin;
 	}
 
+	//Randomly picks out a destination from the arraylist named locations
 	public String destinationSelection(String origin) {
 		ArrayList<String> possiblelocations = new ArrayList<String>(locations);
 		possiblelocations.remove(origin);
@@ -111,24 +120,30 @@ public class Simulator {
 		return destination;
 	}
 
+	//Initializes a random temperature measurement
 	public int temperatureInitialization() {
 		int value = r.nextInt(45);
 		int temp = value;
 		return temp;
 	}
-
+	
+	//Initializes a random pressure measurement
 	public int pressureInitialization() {
 		int value = r.nextInt(120);
 		int pressure = 930+value;
 		return pressure;
 	}
 	
+	//Initializes a random humidity measurement
 	public int humidityInitialization() {
 		int value = r.nextInt(90);
 		int hum = value;
 		return hum;
 	}
 	
+	/* Generates a random temperature measurement based on the most recently
+	 * entered temperature measurement
+	 */
 	public int temperatureGenerator(Container c) {
 		int value = r.nextInt(10);
 		int previousdataindex = c.getTempList().size()-1;
@@ -136,6 +151,9 @@ public class Simulator {
 		return temp;
 	}
 	
+	/* Generates a random pressure measurement based on the most recently
+	 * entered pressure measurement
+	 */
 	public int pressureGenerator(Container c) {
 		int value = r.nextInt(100);
 		int previousdataindex = c.getPressureList().size()-1;
@@ -143,6 +161,9 @@ public class Simulator {
 		return pressure;
 	}
 	
+	/* Generates a humidity temperature measurement based on the most recently
+	 * entered humidity measurement
+	 */
 	public int humidityGenerator(Container c) {
 		int value = r.nextInt(10);
 		int previousdataindex = c.getHumList().size()-1;
@@ -150,6 +171,9 @@ public class Simulator {
 		return hum;
 	}
 	
+	/*Adds internal-status measurements to all journeys in one of two ways depending on 
+	* whether the containers assigned to the journey already posses any internal-status measurements. 
+	*/
 	public void simulateData(Application application) {
 		for (Journey j : application.getJourneyContainerDat().getActiveJourneys()) {
 			for (Container c : j.getContainers()) {
@@ -169,32 +193,31 @@ public class Simulator {
 		}
 	}
 	
+	//Simulates the system during a specificed number of days. Within this time frame
+	//a certain number of clients, journeys etc. are being generated to accurately
+	//simulate a period of time for a system that has multiple companies and clients 
+	//interacting with it. 
 	public void simulation(Application application, int day) {
 		for (int i = 0; i<day; i++) {
-			
-			
 			if (i == 0) {
 				for (int k = 0; k<2; k++) {
 					clientCreation(application);
 				}
 			}
-			
 			if (i%2 == 0) {
 				journeyCreation(application);
 			}
-			
 			for (int j = 0; j<5; j++) {				
-				simulateData(application);
+				simulateData(application); 
 			}
-			
 			if (i%10 == 0) {
 				clientCreation(application);
 			}
-			
 			updateLocation(application);
 		}
 	}
 	
+	//Creates a client based on randomly selected attributes.
 	public void clientCreation(Application application) {
 		company = companySelection();
 		address = addressSelection();
@@ -203,6 +226,8 @@ public class Simulator {
 		client = application.createClient(company, address, mail, name, password);
 	}
 	
+	//Creates a journey based on randomly selected attributes.
+	//And also sets the duration of this journey.
 	public void journeyCreation(Application application) {
 		client = clientSelection(application);
 		content = contentSelection();
@@ -214,8 +239,8 @@ public class Simulator {
 		j.setDistance(5 + Integer.parseInt(travelTime[originindex][destinationindex]));
 	}
 	
+	//Updates the location of all active journeys
 	public void updateLocation(Application application) {
-		
 		for (int h = 0; h < application.getJourneyContainerDat().getActiveJourneys().size(); h++) {
 			Journey j = application.getJourneyContainerDat().getActiveJourneys().get(h);
 			if (j.getDistance() == 0) {

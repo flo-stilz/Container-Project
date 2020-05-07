@@ -62,7 +62,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 			public void actionPerformed(ActionEvent e) {
 				keyword = search.getText();
 				showAllCommand = false;
-				wClients = new ArrayList<Client>(application.search(keyword));
+				wClients = new ArrayList<Client>(application.searchClient(keyword));
 				checksSearchEntryC(application);
 			}
 		});
@@ -163,7 +163,7 @@ public class ClientSectionPanels implements PropertyChangeListener {
 			wClients = new ArrayList<Client>(dat.getClientDat().getClients());
 		}
 		else {
-			wClients = new ArrayList<Client>(dat.search(keyword));
+			wClients = new ArrayList<Client>(dat.searchClient(keyword));
 		}
 	}
 }

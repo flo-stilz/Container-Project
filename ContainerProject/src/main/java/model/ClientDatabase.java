@@ -13,7 +13,7 @@ public class ClientDatabase implements Persistency {
 	
 	public void store() {
 		storeClients();
-		storeClientCounters();
+		storeClientCounter();
 	}
 	
 	public void read() {
@@ -22,8 +22,8 @@ public class ClientDatabase implements Persistency {
 	}
 	
 	
-	
-	public void storeClientCounters() {
+	//Store the most recently generated client counter
+	public void storeClientCounter() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./ClientCounter.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
@@ -35,6 +35,7 @@ public class ClientDatabase implements Persistency {
 		}
 	} 
 	
+	//Reads the most recently generated client counter
 	public void readClientCounterFile() {
 		FileInputStream fis;
 		try {
@@ -48,7 +49,7 @@ public class ClientDatabase implements Persistency {
 		decoder.close();
 	}
 	
-
+	//Store every client object along with its attributes
 	public void storeClients() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./Clients.xml"));
@@ -60,7 +61,7 @@ public class ClientDatabase implements Persistency {
 			ex.printStackTrace();
 		}
 	} 
-	
+	//Read all clients in the database
 	public void readClientFile() {
 		FileInputStream fis;
 		try {

@@ -65,17 +65,14 @@ public class stepDef {
 	
 	//Imports for Keep Track of the Evolution
 	ArrayList<Container> containerJourneyHistoryList = new ArrayList<Container>();
-	ArrayList<ArrayList<ArrayList<Integer>>> containerInternalStatusHistoryList = new ArrayList<ArrayList<ArrayList<Integer>>>();
-	ArrayList<Container> filteredcontainer = new ArrayList<Container>();
-	ArrayList<Container> allcontainers = new ArrayList<Container>();
+	ArrayList<Container> filteredContainers = new ArrayList<Container>();
+	ArrayList<Container> allContainers = new ArrayList<Container>();
 	Container containerStatusHistory;
 	Journey journey;
 	Client client;
 	
 	
 	//Imports for Persistency Layer
-	private ClientDatabase cb = new ClientDatabase();
-	private JourneyContainerDatabase jb = new JourneyContainerDatabase();
 	ArrayList<Client> clientsCopy;
 	ArrayList<Journey> activeJourneysCopy;
 	ArrayList<Journey> pastJourneysCopy;
@@ -176,7 +173,7 @@ public class stepDef {
 	}
 	     
 	
-	//SCENARIO 5: Search for a client in a database using a specific email
+	//SCENARIO 5: Search for a client in a database multiple times using different specific emails
 	@Given("an email {string} to search for")
 	public void an_email_to_search_for(String mail) {
 		this.mail = mail;
@@ -184,7 +181,7 @@ public class stepDef {
 	
 	@When("searching for a client in the database using the email")
 	public void searching_for_a_client_in_the_database_using_the_email() {
-		clientMatches = application.search(mail);
+		clientMatches = application.searchClient(mail);
 	}
 	
 	@Then("a list of one client matching the specific email {string} is returned")
@@ -202,7 +199,7 @@ public class stepDef {
 	
 	@When("searching for client in the database using the address")
 	public void searching_for_client_in_the_database_using_the_address() {
-	    clientMatches = application.search(address);
+	    clientMatches = application.searchClient(address);
 	}
 
 	@Then("an empty list of clients matching the keyword is returned")
@@ -210,6 +207,86 @@ public class stepDef {
 	    assertEquals(clientMatches.size(),0); 
 	}
 	
+	
+	//SCENARIO 7: Validate client with valid clientdetails
+	@When("checking if the client {string} fulfills the requirements for registration")
+	public void checking_if_the_client_fulfills_the_requirements_for_registration(String cid) {
+		application.registrationValidation(company, name, mail, address, password);
+	}
+
+	@Then("the client {string} is registered and added to the list of clients")
+	public void the_client_is_registered_and_added_to_the_list_of_clients(String cid) {
+		assertEquals(application.getClientDat().getClients().size(),1);
+	}
+
+	
+	//SCENARIO 8: Validate client with invalid password
+	@Then("the client {string} is not registered due to invalid password")
+	public void the_client_is_not_registered_due_to_invalid_password(String cid) {
+		assertEquals(application.getClientDat().getClients().size(),0);
+	}
+	
+	
+	//SCENARIO 9: Check type of login for a client
+	@When("checking the type of login for the clients details")
+	public void checking_the_type_of_login_for_the_clients_details() {
+	    application.loginValidation(name,password);
+	}
+	
+	@Then("the login of the client is of type client")
+	public void the_login_of_the_client_is_of_type_client() {
+	    assertEquals(application.loginValidation(name,password), "client");
+	}
+
+	
+	//SCENARIO 10: Check type of login for an admin
+	@Then("the login of the client is of type admin")
+	public void the_login_of_the_client_is_of_type_admin() {
+		 assertEquals(application.loginValidation(name,password), "admin");
+	}
+
+	
+	//SCENARIO 11: Check type of login for a client with invalid name and valid password
+	@When("checking the type of login for the clients information")
+	public void checking_the_type_of_login_for_the_clients_information() {
+		 assertEquals(application.loginValidation("admin",password), "N/A");
+	}
+	
+	@Then("the login of the client is not valid")
+	public void the_login_of_the_client_is_not_valid() {
+		 assertEquals(application.loginValidation("admin",password), "N/A");
+	}
+	      
+	
+	//SCENARIO 12: Check type of login for a client with invalid username and invalid password
+	@When("checking the type of login for the clients data")
+	public void checking_the_type_of_login_for_the_clients_data() {
+	    application.loginValidation(name,"78688");
+	}
+
+	@Then("the login of the client is invalid")
+	public void the_login_of_the_client_is_invalid() {
+		 assertEquals(application.loginValidation(name,"78688"), "N/A");
+	}
+	
+	
+	//SCENARIO 13: Check for a clients list of past and present journeys in the database
+	@When("searching for all journeys that are listed under the same company as the client")
+	public void searching_for_all_journeys_that_are_listed_under_the_same_company_as_the_client() {
+	    application.findClientJourneys(application.getJourneyContainerDat().getActiveJourneys());	    
+	}
+	
+	@Then("a set of journeys associated to the client are returned")
+	public void a_set_of_journey_associated_to_the_client_are_returned() {
+		assertEquals(application.findClientJourneys(application.getJourneyContainerDat().getActiveJourneys()).size(),1);
+	}
+	
+	
+	//SCENARIO 14: Check for a clients empty list of past and present journeys in the database
+	@Then("an empty set of journeys associated to the client is returned")
+	public void an_empty_set_of_journeys_associated_to_the_client_is_returned() {
+		assertEquals(application.findClientJourneys(application.getJourneyContainerDat().getActiveJourneys()).size(),0);
+	}
 	
 	
 	
@@ -231,7 +308,7 @@ public class stepDef {
 
 	@Then("a unique journey id is created")
 	public void a_unique_journey_id_is_created() {
-		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getId(), "CPHRIO19");
+		assertEquals(application.getJourneyContainerDat().getActiveJourneys().get(0).getId(), "CPHRIO28");
 	}
 	
 	@Then("the origin and destination for the journey is correct")
@@ -300,7 +377,7 @@ public class stepDef {
 	
 	@When("searching through the journeys in the database using the keyword")
 	public void searching_through_the_journeys_in_the_database_using_the_keyword() {
-	    journeyMatches = application.findUsingLoop(search, application.getJourneyContainerDat().getActiveJourneys());
+	    journeyMatches = application.findJourneys(search, application.getJourneyContainerDat().getActiveJourneys());
 	}
 
 	@Then("an empty list of journeys in the database matching the keyword is returned")
@@ -309,7 +386,7 @@ public class stepDef {
 	}
 	
 	
-	//SCENARIO 5: Search for a journey in a database using a specific origin
+	//SCENARIO 5: Search for a journey multiple times in a database using different specific origins
 	@Then("a list of one journey matching the specific origin {string} is returned")
 	public void a_list_of_one_journey_matching_the_specific_origin_is_returned(String origin) {
 		assertEquals(journeyMatches.get(0).getOrigin(), origin.toUpperCase());
@@ -396,7 +473,7 @@ public class stepDef {
 	}
 	
 	
-	//SCENARIO 11: Search for a container in a database using a specific content	
+//    SCENARIO 11: Search for a container multiple times in a database using different specific contents
 	@Given("a keyword {string} describing a container")
 	public void a_keyword_describing_a_container(String keyword) {
 		this.keyword = keyword;	
@@ -568,9 +645,9 @@ public class stepDef {
     
     @Then("the internal-status history of container {string} is returned")
     public void the_internal_status_history_of_container_is_returned(String search){
-    	assertEquals(containerStatusHistory.getTempList().size(), 2);
-    	assertEquals(containerStatusHistory.getPressureList().size(), 2);
-    	assertEquals(containerStatusHistory.getHumList().size(), 2);
+    	assertEquals(containerStatusHistory.getTempList().size(), 1);
+    	assertEquals(containerStatusHistory.getPressureList().size(), 1);
+    	assertEquals(containerStatusHistory.getHumList().size(), 1); 
     }
  
     
@@ -591,7 +668,9 @@ public class stepDef {
     
     @Then("the internal-status history of the reused container {string} is returned")
     public void the_internal_status_history_of_the_reused_container_is_returned(String search) {
-    	assertEquals(containerInternalStatusHistoryList.size(),2);
+    	assertEquals(containerStatusHistory.getTempList().size(), 2);
+    	assertEquals(containerStatusHistory.getPressureList().size(), 2);
+    	assertEquals(containerStatusHistory.getHumList().size(), 2); 
     }
     
     
@@ -603,47 +682,49 @@ public class stepDef {
     
     @Then("the empty internal-status history of the unused container {string} is returned")
     public void the_empty_internal_status_history_of_the_unused_container_is_returned(String search) {
-        assertEquals(containerInternalStatusHistoryList.size(),0);
+        assertEquals(containerStatusHistory.getTempList().size(),0);
+        assertEquals(containerStatusHistory.getHumList().size(),0);
+        assertEquals(containerStatusHistory.getPressureList().size(),0);
     }
     
     
-	//SCENARIO 7: Filtering for all active containers
+	//SCENARIO 7: Filter for all active containers
 	@When("filtering for all the active containers")
 	public void filtering_for_all_the_active_containers() {
-		filteredcontainer = application.getJourneyContainerDat().getfilteredContainers(application.getJourneyContainerDat().getActiveJourneys());
+		filteredContainers = application.getJourneyContainerDat().getFilteredContainers(application.getJourneyContainerDat().getActiveJourneys());
 	}
 	
 	@Then("a list of all the active containers is returned")
 	public void a_list_of_all_the_active_containers_is_returned() {
-		assertEquals(filteredcontainer.size(),2);
-		assertEquals(filteredcontainer.get(0).getContainerId(), application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getContainerId());
+		assertEquals(filteredContainers.size(),2);
+		assertEquals(filteredContainers.get(0).getContainerId(), application.getJourneyContainerDat().getActiveJourneys().get(0).getContainers().get(0).getContainerId());
 	}
 	
 	
-	//SCENARIO 8: Filtered for all containers in the containerwarehouse
+	//SCENARIO 8: Filter for all containers in the container warehouse
 	@When("filtering for all the containers in the containerwarehouse")
 	public void filtering_for_all_containers_in_the_containerwarehouse() {
-		filteredcontainer = application.getJourneyContainerDat().getfilteredContainers(application.getJourneyContainerDat().getActiveJourneys());
+		filteredContainers = application.getJourneyContainerDat().getFilteredContainers(application.getJourneyContainerDat().getActiveJourneys());
 	}
 	
 	@Then("a list of all containers in the containerwarehouse is returned")
 	public void a_list_of_all_containers_in_the_containerwarehouse_is_returned() {
-		assertEquals(filteredcontainer.size(),1);
-		assertEquals(filteredcontainer.get(0).getContainerId(), "C4");
+		assertEquals(filteredContainers.size(),1);
+		assertEquals(filteredContainers.get(0).getContainerId(), "C4");
 	}
 	
 	
-	//SCENARIO 9: Retrieving all containers
+	//SCENARIO 9: Retrieve all containers
 	@When("all containers have been retrieved")
 	public void all_containers_have_been_retrieved(){
-		allcontainers = application.getJourneyContainerDat().getAllContainers(false, application.getJourneyContainerDat().getActiveJourneys());
+		allContainers = application.getJourneyContainerDat().getAllContainers(false, application.getJourneyContainerDat().getActiveJourneys());
 	}
 	
 	@Then("a list of all containers are returned")
 	public void a_list_of_all_containers_are_returned(){
-		assertEquals(allcontainers.size(),2);
-		assertEquals(allcontainers.get(0).getId(), "CPHBEJ6");
-		assertEquals(allcontainers.get(1).getId(), "BDPTOR5");
+		assertEquals(allContainers.size(),2);
+		assertEquals(allContainers.get(0).getId(), "CPHBEJ6");
+		assertEquals(allContainers.get(1).getId(), "BDPTOR5");
 	}   
 	
 	
@@ -952,7 +1033,7 @@ public class stepDef {
  
     @When("reading the generated client file")
     public void reading_the_generated_client_file() {
-    	cb.readClientFile();
+    	application.getClientDat().readClientFile();
     }
 
     @Then("the client file matches the copied list of clients")
@@ -1003,12 +1084,12 @@ public class stepDef {
 	
 	@When("storing the current list of active journeys")
 	public void storing_the_current_list_of_active_journeys() {
-		application.getJourneyContainerDat().readActiveJourneyFile();
+		application.getJourneyContainerDat().storeActiveJourneys();
 	}
     
 	@When("reading the generated activejourney file")
 	public void reading_the_generated_activejourneyFile() {
-		jb.readActiveJourneyFile();
+		application.getJourneyContainerDat().readActiveJourneyFile();
 	}
 
 	@Then("the activejourney file matches the copied list of active journeys")
@@ -1045,8 +1126,8 @@ public class stepDef {
 
 	@When("reading the generated pastjourney file and the containwarehouse file")
 	public void reading_the_generated_pastjourney_file_and_the_containwarehouse_file() {
-		jb.readEndedJourneyFile();
-		jb.readContainerWarehouseFile();
+		application.getJourneyContainerDat().readEndedJourneyFile();
+		application.getJourneyContainerDat().readContainerWarehouseFile();
 	}
 
 	@Then("the pastjourney file matches the copied list of past journeys")
@@ -1083,7 +1164,7 @@ public class stepDef {
 	
 	@When("storing the most recent client counter")
 	public void storing_the_most_recent_client_counter(){
-		application.getClientDat().storeClientCounters();
+		application.getClientDat().storeClientCounter();
 	}
 	
 	@When("reading the generated client counter file")
@@ -1107,7 +1188,7 @@ public class stepDef {
 	
 	@When("storing the most recent journey counter")
 	public void storing_the_most_recent_journey_counter(){
-		application.getJourneyContainerDat().storeJourneyCounters();
+		application.getJourneyContainerDat().storeJourneyCounter();
 	}
 	
 	@When("reading the generated journey counter file")
@@ -1130,7 +1211,7 @@ public class stepDef {
 	
 	@When("storing the most recent container counter")
 	public void storing_the_most_recent_container_counter(){
-		application.getJourneyContainerDat().storeContainerCounters();
+		application.getJourneyContainerDat().storeContainerCounter();
 	}
 	
 	@When("reading the generated container counter file")

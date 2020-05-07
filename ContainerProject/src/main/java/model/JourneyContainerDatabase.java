@@ -18,9 +18,9 @@ public class JourneyContainerDatabase implements Persistency {
 	public void store() {
 		storeActiveJourneys();
 		storeEndedJourneys();
-		storeJourneyCounters();
+		storeJourneyCounter();
 		storeContainerWarehouse();
-		storeContainerCounters();
+		storeContainerCounter();
 	}
 	public void read() {
 		readActiveJourneyFile();
@@ -30,7 +30,8 @@ public class JourneyContainerDatabase implements Persistency {
 		readContainerCounterFile();
 	}
 	
-	public void storeJourneyCounters() {
+	//Store the most recently generated journey counter
+	public void storeJourneyCounter() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./JourneyCounter.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
@@ -41,7 +42,7 @@ public class JourneyContainerDatabase implements Persistency {
 			ex.printStackTrace();
 		}
 	} 
-	
+	//Read the most recently generated joruney counter
 	public void readJourneyCounterFile() {
 		FileInputStream fis;
 		try {
@@ -50,13 +51,12 @@ public class JourneyContainerDatabase implements Persistency {
 				throw new Error(e);
 				}
 		XMLDecoder decoder = new XMLDecoder(fis);
-//		Journey.setCounter(0);
 		Journey.setCounter((Integer)decoder.readObject()); 
 		decoder.close();
 	}
 	
-	
-	public void storeContainerCounters() {
+	//Store the most recently entered container counter
+	public void storeContainerCounter() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./ContainerCounter.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
@@ -68,6 +68,7 @@ public class JourneyContainerDatabase implements Persistency {
 		}
 	} 
 	
+	//Read the most recently generated container counter
 	public void readContainerCounterFile() {
 		FileInputStream fis;
 		try {
@@ -76,16 +77,14 @@ public class JourneyContainerDatabase implements Persistency {
 				throw new Error(e);
 				}
 		XMLDecoder decoder = new XMLDecoder(fis);
-//		Container.setcCounter(2);
 		Container.setcCounter((Integer)decoder.readObject()); 
 		decoder.close();
 	}
 	
 	
 	
-	//needs testing
-	public ArrayList<Container> getfilteredContainers( ArrayList<Journey> jList) {
-
+	//finds all containers present in either the past journey list or present journey list. 
+	public ArrayList<Container> getFilteredContainers( ArrayList<Journey> jList) {
 		ArrayList<Container> Containers = new ArrayList<Container>();
 		for (Journey j : jList) {
 			for (Container c : j.getContainers()) {
@@ -95,16 +94,18 @@ public class JourneyContainerDatabase implements Persistency {
 		return Containers;
 	}
 	
-	//needs testing
+	/* finds the same containers as getFilteredContainers.In case the boolean
+	 * isPastOrClient is false, the containers in the containerwarehouse to the result
+	 */
 	public ArrayList<Container> getAllContainers(boolean isPastOrClient, ArrayList<Journey> jList) {
-		
-		ArrayList<Container> Containers = getfilteredContainers(jList);
+		ArrayList<Container> Containers = getFilteredContainers(jList);
 		if (isPastOrClient == false) {
 			Containers.addAll(containerWarehouse);
 		}
 		return Containers;
 	}
 	
+	//Store all active journey object along with its attributes.
 	public void storeActiveJourneys() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./ActiveJourneys.xml"));
@@ -116,7 +117,8 @@ public class JourneyContainerDatabase implements Persistency {
 			ex.printStackTrace(); 
 		} 
 	}
-	 
+	
+	//Reads all active journeys in the database
 	public void readActiveJourneyFile() {
 		FileInputStream fis;
 		try {
@@ -130,6 +132,7 @@ public class JourneyContainerDatabase implements Persistency {
 
 		}
 	
+	//Store all ended journey object along with its attributes.
 	public void storeEndedJourneys() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./EndedJourneys.xml"));
@@ -141,7 +144,8 @@ public class JourneyContainerDatabase implements Persistency {
 			ex.printStackTrace();
 		}
 	}
-
+	
+	//Read all ended journeys in the database
 	public void readEndedJourneyFile() {
 		FileInputStream fis;
 		try {
@@ -155,6 +159,7 @@ public class JourneyContainerDatabase implements Persistency {
 
 	}
 	
+	//Read all containers present in the container warehouse along with its attributes
 	public void storeContainerWarehouse() {
 		try {
 			FileOutputStream fos = new FileOutputStream(new File("./ContainerWarehouse.xml"));
@@ -166,7 +171,8 @@ public class JourneyContainerDatabase implements Persistency {
 			ex.printStackTrace();
 		}
 	}
-
+	
+	//Read all containers in the container warehouse
 	public void readContainerWarehouseFile() {
 		FileInputStream fis;
 		try {

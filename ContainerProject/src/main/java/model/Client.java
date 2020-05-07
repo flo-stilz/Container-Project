@@ -11,6 +11,7 @@ public class Client {
 	private int id;
 	private static int count = 69420;
 	
+	//Instantiates the client object
 	public Client(String company, String address, String email, String name, String password) {
 		count = count +1;
 		this.company = company;
@@ -21,7 +22,7 @@ public class Client {
 		id=count;
 	}
 	
-	//for persistency layer
+	//Allows for creation of java bean for the Persistenncy Layer
 	public Client() {
 	}
 	
