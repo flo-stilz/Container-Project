@@ -42,7 +42,7 @@ public class JourneyContainerDatabase implements Persistency {
 			ex.printStackTrace();
 		}
 	} 
-	//Read the most recently generated joruney counter
+	//Read the most recently generated journey counter
 	public void readJourneyCounterFile() {
 		FileInputStream fis;
 		try {

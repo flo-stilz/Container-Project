@@ -92,7 +92,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		
 		// Filter among active Containers
 		
-		searchActiveContainers(application, topmain);
+		searchContainers(application, topmain, false);
 		
 		// Show all Containers at the current status
 		
@@ -100,7 +100,7 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		
 		// Filter among past Containers
 		
-		searchForPastContainers(application, topmain);
+		searchContainers(application, topmain, true);
 		
 		// Show all past Containers at their final status
 		
@@ -136,13 +136,23 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		});
 	}
 
-	// filters the active journeys regarding the input in the searchActiveContainer TextField
-	public void searchActiveContainers(final Application application, final TopMain topmain) {
-		JLabel activecontainer = new JLabel("Active Container");
-		containerSearch.add(activecontainer);
-		final JTextField searchActiveContainer = new JTextField();
-		searchActiveContainer.setPreferredSize(new Dimension(100, 25));
-		containerSearch.add(searchActiveContainer);
+	// filters the journeys regarding the input in the searchContainer TextField
+	public void searchContainers(final Application application, final TopMain topmain, final boolean b) {
+		
+		String type;
+		if (b) {
+			type = "Past";
+		}
+		else {
+			type = "Active";	
+		}
+		
+		JLabel container = new JLabel(type + " Container");
+		containerSearch.add(container);
+		
+		final JTextField searchContainer = new JTextField();
+		searchContainer.setPreferredSize(new Dimension(100, 25));
+		containerSearch.add(searchContainer);
 		
 		JButton search2 = new JButton("Search");
 		containerSearch.add(search2);
@@ -150,9 +160,17 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 
 			public void actionPerformed(ActionEvent e) {
 				showAllCommand = false;
-				isPast = false;
-				keyword = searchActiveContainer.getText();
-				ArrayList<Journey> result = filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getActiveJourneys());
+				isPast = b;
+				keyword = searchContainer.getText();
+				
+				ArrayList<Journey> jList;
+				if (b) {
+					jList = application.getJourneyContainerDat().getPastJourneys();
+				}
+				else {
+					jList = application.getJourneyContainerDat().getActiveJourneys();
+				}
+				ArrayList<Journey> result = filterJourneysForClients(application, topmain, jList);
 				
 				wContainers = application.findContainer(keyword, result);
 				checksSearchEntryC(application, topmain);
@@ -187,30 +205,6 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		else {
 			return unfiltered;
 		}
-	}
-	
-	// filters the past journeys regarding the input in the searchPastContainers TextField
-	public void searchForPastContainers(final Application application, final TopMain topmain) {
-		JLabel containeritempast = new JLabel("History of Containers");
-		containerSearch.add(containeritempast);
-		final JTextField searchPastContainers = new JTextField();
-		searchPastContainers.setPreferredSize(new Dimension(100, 25));
-		containerSearch.add(searchPastContainers);
-		
-		JButton searchPast = new JButton("Search");
-		containerSearch.add(searchPast);
-		searchPast.addActionListener(new ActionListener() {
-
-			public void actionPerformed(ActionEvent e) {
-				showAllCommand = false;
-				isPast = true;
-				keyword = searchPastContainers.getText();
-				ArrayList<Journey> result = filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getPastJourneys());
-				
-				wContainers = application.findContainer(keyword, result);
-				checksSearchEntryC(application, topmain);
-			}
-		});
 	}
 	
 	// gives extra features depending on the user

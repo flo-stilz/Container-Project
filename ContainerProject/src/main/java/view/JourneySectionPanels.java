@@ -34,7 +34,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	private boolean showAllCommand;
 	private Application application;
 	private TopMain topmain;
-	// input in the search textfield
+	// input in the search text field
 	private String keyword;
 	// indicates whether the past buttons has been pressed or the active ones
 	private boolean isPast;
@@ -68,7 +68,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 			
 		showAll(application, topmain, false);
 			
-		journeyPastSearch(application, topmain);
+		searchJourneys(application, topmain, true);
 			
 		showAll(application, topmain, true);	
 		
@@ -134,23 +134,40 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	}
 
 	// filters the past journeys matching the keyword
-	public void journeyPastSearch(final Application application, final TopMain topmain) {
-		JLabel journeyPast = new JLabel("Journey's History");
-		journeySearch.add(journeyPast);
-		final JTextField searchjourneyPastTxt = new JTextField();
-		searchjourneyPastTxt.setPreferredSize(new Dimension(100, 25));
-		journeySearch.add(searchjourneyPastTxt);
+	public void searchJourneys(final Application application, final TopMain topmain, final boolean b) {
 		
-		JButton journeyPastSearch = new JButton("Search");
-		journeySearch.add(journeyPastSearch);
+		String type;
+		if (b) {
+			type = "Past";
+		}
+		else {
+			type = "Active";
+		}
+		JLabel searchlbl = new JLabel(type + " Journeys");
+		journeySearch.add(searchlbl);
+		final JTextField searchjourneyTxt = new JTextField();
+		searchjourneyTxt.setPreferredSize(new Dimension(100, 25));
+		journeySearch.add(searchjourneyTxt);
+		
+		JButton searchButton = new JButton("Search");
+		journeySearch.add(searchButton);
 		// sets the wJourneys to the result of the filtering process
-		journeyPastSearch.addActionListener(new ActionListener() {
+		searchButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				isPast = true;
+				isPast = b;
 				showAllCommand = false;
-				ArrayList<Journey> result = new ArrayList<Journey>(filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getPastJourneys()));
-				keyword = searchjourneyPastTxt.getText();
+				
+				ArrayList<Journey> jList;
+				if (b) {
+					jList = application.getJourneyContainerDat().getPastJourneys();
+				}
+				else {
+					jList = application.getJourneyContainerDat().getActiveJourneys();
+				}
+				
+				ArrayList<Journey> result = new ArrayList<Journey>(filterJourneysForClients(application, topmain, jList));
+				keyword = searchjourneyTxt.getText();
 				wJourneys = application.findJourneys(keyword, result);
 				checksSearchEntryJ(application, topmain);
 			}
@@ -383,7 +400,7 @@ public class JourneySectionPanels implements PropertyChangeListener {
 		if (wJourneys.size()!= 0) {
 			if ((isPast && (evt.getPropertyName().contentEquals("history")))) {
 				
-				ArrayList<Journey> jList = new ArrayList<Journey>(filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getPastJourneys()));
+				ArrayList<Journey> jList = new ArrayList<Journey>(filterJourneysForClients(dat, topmain, dat.getJourneyContainerDat().getPastJourneys()));
 				showAllOrSearch(jList, dat);
 			}
 			else if (isPast == false && (evt.getPropertyName().contentEquals("journey"))) {
