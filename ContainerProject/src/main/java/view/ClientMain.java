@@ -37,7 +37,7 @@ public class ClientMain extends TopMain{
 
 	public ClientMain(final Application application, final JFrame login) {
 		super(application, login);
-		currentClient = application.getCurrentUser();
+
 	}
 	
 	/*
@@ -46,6 +46,7 @@ public class ClientMain extends TopMain{
 	 */
 	@Override
 	public void options(Application application, JFrame login) {
+		currentClient = application.getCurrentUser();
 		setOptions(new JPanel());
 		getOptions().setLayout(new BoxLayout(getOptions(), BoxLayout.Y_AXIS));
 		
