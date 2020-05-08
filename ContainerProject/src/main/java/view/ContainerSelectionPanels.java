@@ -375,16 +375,24 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 				// stop the ContainerSelectionPanels from listening to the application layer
 				application.removeObserver(csp);
 				
-				// checks which plot has been selected and then creates the chart panel for each plot
-				for (int i = 0; i<checkBoxes.size(); i++) {
-					JCheckBox checkb = checkBoxes.get(i);
-					Graph graph = graphs.get(i);
-					if (checkb.isSelected()) {
-						generatePlot(graph);
-					}
+				if (containerPlot.isEmpty()) {
+					
+					new ErrorFrame();
 				}
+				else {
+					
+					// checks which plot has been selected and then creates the chart panel for each plot
+					for (int i = 0; i<checkBoxes.size(); i++) {
+						JCheckBox checkb = checkBoxes.get(i);
+						Graph graph = graphs.get(i);
+						if (checkb.isSelected()) {
+							generatePlot(graph);
+						}
+					}
+					checksPlot(application, topmain);
 
-				topmain.getCl().show(topmain.getCards(), "plotPanel");
+					topmain.getCl().show(topmain.getCards(), "plotPanel");
+				}
 			}
 		});
 	}
@@ -404,15 +412,27 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 		topmain.getMain1().revalidate();
 	}
 	
+	// checks if anything matches the search and differentiates between search and showAll command
+		public void checksPlot(final Application application, final TopMain topmain) {
+			if (containerPlot.isEmpty()) {
+				new ErrorFrame();
+			}
+			else {
+			}
+		}
+	
 	// either picks the sum of all measurements of a certain container if past
 	// or just finds a specific container from the active journeys
 	public Container chooseContainerForPlot(Application application, String id) {
+		ArrayList<Journey> jList;
 		if (isPast) {
-			Container con = application.containerInternalStatusHistory(id, application.getJourneyContainerDat().getPastJourneys());
+			jList = filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getPastJourneys());
+			Container con = application.containerInternalStatusHistory(id, jList);
 			return con;
 		}
 		else {
-			ArrayList<Container> result = application.findContainer(id, application.getJourneyContainerDat().getActiveJourneys());;
+			jList = filterJourneysForClients(application, topmain, application.getJourneyContainerDat().getActiveJourneys());
+			ArrayList<Container> result = application.findContainer(id, jList);
 			Container c = result.get(0);
 			return c;
 		}
