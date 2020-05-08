@@ -139,11 +139,8 @@ public class MenuSectionPanels implements PropertyChangeListener{
 		load.addActionListener(new ActionListener() {
 			
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(application.getJourneyContainerDat().getActiveJourneys().size());
-				System.out.println(application.getJourneyContainerDat().getPastJourneys().size());
+				
 				application.read();
-				System.out.println(application.getJourneyContainerDat().getActiveJourneys().size());
-				System.out.println(application.getJourneyContainerDat().getPastJourneys().size());
 			}
 			
 		});

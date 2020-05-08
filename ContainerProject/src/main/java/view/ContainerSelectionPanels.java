@@ -30,18 +30,6 @@ import model.Application;
 import model.Journey;
 
 
-// Was added:
-// SearchContainerEntryC
-// SearchContainerEntryJ
-// pickPastOrActiveJourneys
-// checkContainerListForPast
-// chooseContainerOptions
-// chooseContainerForPlot
-// GetAllContainerMeasurements
-// showAllOrSearch
-// propertyChange
-
-
 public class ContainerSelectionPanels implements PropertyChangeListener{
 
 	

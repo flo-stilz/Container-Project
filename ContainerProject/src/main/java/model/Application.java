@@ -206,6 +206,7 @@ public class Application {
 		for(Journey j : history) {
 			for(Container c : j.getContainers()) {
 				if (c.getContainerId().contentEquals(search)) {
+					containerHis.setContainerId(c.getContainerId());
 					containerHis.getTempList().addAll(c.getTempList());
 					containerHis.getPressureList().addAll(c.getPressureList());
 					containerHis.getHumList().addAll(c.getHumList());
