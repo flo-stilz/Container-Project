@@ -21,15 +21,15 @@ Feature: Journey Simulator
     
 	Scenario: Create a client
     Given a seed 123 pointing to a particular instance in the simulator
-    When a client "client1" is created based on the simulated information
+    When a client is created based on the simulated information
     Then the client exists in the database 
     
  Scenario: Pick a client for creation of a journey
-    Given a client "client1" with seed 123
-    And a client "client2" with seed 98765
-    And a client "client3" with seed 123123
+    Given a client with seed 123
+    And a client with seed 98765
+    And a client with seed 123123
     When a client is choosen with seed 1234
-    Then that clientId will be 69423
+    Then that clientId will be 69446
 	    
 	Scenario: Pick content for creation of a journey
 	    Given a seed 123 pointing to a particular instance in the simulator
@@ -48,9 +48,9 @@ Feature: Journey Simulator
 	    
 	Scenario: Create a journey
 			Given a seed 123 pointing to a particular instance in the simulator
-	    And a client "client4" with seed 123
-	    And a client "client5" with seed 98765
-	    And a client "client6" with seed 123123
+	    And a client with seed 123
+	    And a client with seed 98765
+	    And a client with seed 123123
 	    And a client is choosen with seed 1234
 	    And a specific content is selected based on the value of the seed
 	    And a specific origin is selected based on the value of the seed
@@ -61,22 +61,22 @@ Feature: Journey Simulator
   Scenario: Initialize data for a Journey
   		Given a journey "j1" with origin "arr" destination "cph" content "phones" and company "maersk"
   		And a seed 123 pointing to a particular instance in the simulator
-  		When the internal-status measurements are generated for the containers in the journey "j1"
-  		And the data is added to the containers in the journey "j1"
-  		Then the data exists in the container for the journey "j1"
+  		When the internal-status measurements are generated for the containers in the journey 
+  		And the data is added to the containers in the journey
+  		Then the data exists in the container for the journey
   		And the data has the specific values
 	    
   Scenario: Generatate data based on previously entered data in a Container
   		Given a journey "j1" with origin "Gua" destination "Rot" content "soft drinks" and company "Arca Continental" 
   		And a seed 123 pointing to a particular instance in the simulator
-  		And the internal-status measurements are generated for the containers in the journey "j1"
-  		And the data is added to the containers in the journey "j1"
+  		And the internal-status measurements are generated for the containers in the journey
+  		And the data is added to the containers in the journey
   		When the internal-status measurements are generated based on the previously generated internal-status measurements 
   		Then the internal-status measurements are added to all the containers in the journey
 
 	Scenario: Simulate internal-status measurements thrice
-			Given a client "client5" with seed 1909
-			And a client "client4" with seed 20313
+			Given a client with seed 1909
+			And a client with seed 20313
 			And a seed 123 pointing to a particular instance in the simulator
 			And a simulated journey "j2" is created
 			When internal-status measurements are simulated and updated thrice with the following seeds 123 5039 3975
@@ -106,3 +106,4 @@ Feature: Journey Simulator
   		When simulation is running
   		Then the amount of clients in the system should be 4
   		Then the sum of the containers in all the active journeys and in the past journeys is 10
+  		

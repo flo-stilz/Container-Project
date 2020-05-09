@@ -1,7 +1,5 @@
 package model;
 
-
-
 public class Client {
 	private String company;
 	private String address;
@@ -25,7 +23,6 @@ public class Client {
 	//Allows for creation of java bean for the Persistenncy Layer
 	public Client() {
 	}
-	
 		
 	public void setCompany(String company) {
 		this.company = company;
@@ -59,42 +56,26 @@ public class Client {
 		Client.count = count;
 	}
 
-	public String toString() {
-		return getCompany();
-	}
 	public String getCompany() {
 		return company;
 	}
 	public String getAddress() {
 		return address;
 	}
-	public void updateAddress(String address) {
-		this.address = address;
-	}
+
 	public String getEmail() {
 		return email;
 	}
-	public void updateEmail(String email) {
-		this.email = email;
-	}
+
 	public String getPassword() {
 		return password;
 	}
-	public void updatePassword(String password) {
-		this.password = password;
-	}
+	
 	public String getName() {
 		return name;
 	}
-	public void updateName(String name) {
-		this.name = name;
-	}
-
-
-
 
 	public int getId() {
 		return id;
 	}
 }
-	

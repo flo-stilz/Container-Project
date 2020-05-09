@@ -139,7 +139,4 @@ public class Container {
 	public ArrayList<observer> getObs() {
 		return obs;
 	}
-
-
-
 }

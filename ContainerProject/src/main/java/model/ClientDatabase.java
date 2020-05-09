@@ -61,6 +61,7 @@ public class ClientDatabase implements Persistency {
 			ex.printStackTrace();
 		}
 	} 
+	
 	//Read all clients in the database
 	public void readClientFile() {
 		FileInputStream fis;
@@ -75,8 +76,6 @@ public class ClientDatabase implements Persistency {
 	}
 	
 	public ArrayList<Client> getClients() {
-		return clients;
-		
+		return clients;		
 	}
-
 }

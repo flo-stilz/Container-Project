@@ -264,8 +264,5 @@ public class Simulator {
 	}
 	public ArrayList<String> getAddress() {
 		return addresses;
-	}
-
-	
-	
+	}	
 }

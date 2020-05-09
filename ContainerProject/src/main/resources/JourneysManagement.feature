@@ -1,4 +1,4 @@
-Feature: Journey Management
+Feature: Journeys Management
   This feature will handle all container registrations for future journeys.
 
   Scenario: Create a journey
@@ -45,19 +45,19 @@ Feature: Journey Management
     When searching through the journeys in the database using the keyword
     Then a list of one journey matching the specific destination "Tou" is returned
     
-    Scenario: Find a journeys current location
+  Scenario: Find a journeys current location
     Given a journey "j1" with origin "Mum" destination "Nav" content "Cotton" and company "East India Cotton Manufacturing Co., Limited"
     When the journeys current location is found
     Then the current location of the journey "Mum" is returned   
     
-    Scenario: Update a journeys current location
+  Scenario: Update a journeys current location
     Given a journey "j1" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
     And a new location "Phe"
     When the journeys current location is updated
     Then the journeys new location is "Phe"
     And the journey "j1" is completed
     
-    Scenario: End a journey
+  Scenario: End a journey
     Given a journey "j1" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
     And a new location "Phe"
     When the journeys current location is updated
@@ -66,7 +66,7 @@ Feature: Journey Management
     And the journey is added to the list of ended journeys
     And the journeys assigned containers are stored in the container warehouse
     
-    Scenario: Assign container from container warehouse
+  Scenario: Assign container from container warehouse
     Given a journey "j1" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
     And a new location "Cat"
     And the journeys current location is updated 
@@ -75,30 +75,66 @@ Feature: Journey Management
     Then the journeys assigned container should be taken from the container warehouse
     And the same container is used for both journeys
     
-    Scenario: Search for a container in a database using a specific content
+  Scenario: Search for a container in a database using a specific content
     Given a journey "j1" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
     And a journey "j2" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
     And a keyword "Diamonds" describing a container
     When searching for the container using the keyword
     Then a list of containers matching the specific content is returned 
     
-    Scenario: Search for a container in a database using a specific company
+  Scenario: Search for a container in a database using a specific company
     Given a journey "j1" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
     And a journey "j2" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
     And a keyword "Riceland" describing a container
     When searching for the container using the keyword
     Then a list of containers matching the specific company is returned   
     
-    Scenario: Search for a container in a database using a specific location
+  Scenario: Search for a container in a database using a specific location
     Given a journey "j1" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
     And a journey "j2" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
     And a keyword "Gwa" describing a container
     When searching for the container using the keyword
     Then a list of containers matching the specfic location is returned     
     
-    Scenario: Search for a container in a database using a specific origin that no containers are listed under
+  Scenario: Search for a container in a database using a specific origin that no containers are listed under
     Given a journey "j1" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
     And a journey "j2" with origin "Gwa" destination "Phe" content "Diamonds" and company "Laxmi Diamond Pvt. Ltd"
     And a keyword "Lon" describing a container
     When searching for the container using the keyword
-    Then an empty list of containers matching the keyword is returned   
+    Then an empty list of containers matching the keyword is returned
+    
+  Scenario: Update the list of containers for a journey
+    Given a journey "j1" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
+    When updating the list of containers for the journey to the list of containers in the container warehouse
+    Then the list of containers is updated 
+    
+  Scenario: Update the list of active journeys
+    Given a journey "j1" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
+    When updating the list of active journeys to the list of past journeys
+    Then the list of active journeys is updated
+    
+  Scenario: Update the list of past journeys
+    Given a journey "j1" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
+    When updating the list of past journeys to the list of active journeys
+    Then the list of past journeys is updated
+    
+  Scenario: Update the list of containers in the container warhouse
+    Given a journey "j1" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
+    When updating the list of containers in the container warehouse to the list of containers in the active journeys
+    Then the list of containers in the container warehouse is updated
+    
+  Scenario: Attempt of ending a journey that has not reached its destination
+  	Given a journey "j1" with origin "Edb" destination "Cat" content "rice" and company "Riceland"
+  	When attempting to end the journey "j1"
+  	Then the journey remains present in the list of active journeys
+       
+  Scenario: Search for a journey in a database using a specific journey id
+    Given a journey "j1" with origin "Dub" destination "Cat" content "canned tuna" and company "Ocean More Foods Co., Limited"
+    When searching for a journey using a specific journey id
+    Then a list of journeys matching the specific journey id is returned 
+  
+  Scenario: Search for a journey in a database using a specific current location
+    Given a journey "j1" with origin "Dub" destination "Cat" content "canned tuna" and company "Ocean More Foods Co., Limited"
+    When searching for a journey using a specific current location
+    Then a list of journeys matching the current location is returned
+    

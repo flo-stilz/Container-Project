@@ -42,7 +42,7 @@ public class JourneyContainerDatabase implements Persistency {
 			ex.printStackTrace();
 		}
 	} 
-	//Read the most recently generated journey counter
+	//Read the most recently generated joruney counter
 	public void readJourneyCounterFile() {
 		FileInputStream fis;
 		try {
@@ -81,17 +81,15 @@ public class JourneyContainerDatabase implements Persistency {
 		decoder.close();
 	}
 	
-	
-	
 	//finds all containers present in either the past journey list or present journey list. 
-	public ArrayList<Container> getFilteredContainers( ArrayList<Journey> jList) {
+	public ArrayList<Container> getFilteredContainers(ArrayList<Journey> jList) {
 		ArrayList<Container> Containers = new ArrayList<Container>();
 		for (Journey j : jList) {
 			for (Container c : j.getContainers()) {
 				Containers.add(c);
 			}
 		}
-		return Containers;
+		return Containers; 
 	}
 	
 	/* finds the same containers as getFilteredContainers.In case the boolean
@@ -129,7 +127,6 @@ public class JourneyContainerDatabase implements Persistency {
 		XMLDecoder decoder = new XMLDecoder(fis);
 		activeJourneys = (ArrayList<Journey>)decoder.readObject();
 		decoder.close();
-
 		}
 	
 	//Store all ended journey object along with its attributes.
@@ -156,7 +153,6 @@ public class JourneyContainerDatabase implements Persistency {
 		XMLDecoder decoder = new XMLDecoder(fis);
 		pastJourneys = (ArrayList<Journey>)decoder.readObject();
 		decoder.close();
-
 	}
 	
 	//Read all containers present in the container warehouse along with its attributes
@@ -183,7 +179,6 @@ public class JourneyContainerDatabase implements Persistency {
 		XMLDecoder decoder = new XMLDecoder(fis);
 		containerWarehouse = (ArrayList<Container>)decoder.readObject();
 		decoder.close();
-
 	}
 	
 	public ArrayList<Journey> getActiveJourneys() {

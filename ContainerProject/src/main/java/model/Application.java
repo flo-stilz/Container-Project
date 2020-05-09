@@ -1,17 +1,9 @@
 package model;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
-import java.beans.XMLDecoder;
-import java.beans.XMLEncoder;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.util.List;
 
 public class Application {
 	
@@ -48,29 +40,47 @@ public class Application {
 	public void addObserver(PropertyChangeListener l) {
 		support.addPropertyChangeListener(l);
 	}
+
 	public void removeObserver(PropertyChangeListener l) {
         support.removePropertyChangeListener(l);
     }
 	
 	public void simulation(int days) {
 		Simulator simulation = new Simulator();
-		simulation.simulation(this, days);
+		simulation.simulation(this, days); 
+	}
+	
+	//searches for all clients that contain a similair string for either company or email
+	public ArrayList<Client> findSimilairClients (String company, String email){
+		ArrayList<Client> results = new ArrayList<Client>();
+		for (Client c : clientDat.getClients()) {
+			if ((c.getCompany().equalsIgnoreCase(company)) 
+					||c.getEmail().equalsIgnoreCase(email)) {
+				results.add(c);
+			}
+		}
+		return results;
 	}
 	
 	//This method is responsible for creating a new client object
-	public Client createClient( String company, String address, String email, String name, String password) {
-		Client c = new Client(company, address, email, name, password);
-		clientDat.getClients().add(c);
-		support.firePropertyChange("clients",null,null);
-		return c;
+	public Client createClient(String company, String address, String email, String name, String password) {
+		if (findSimilairClients(company,email).size() == 0) {
+			Client c = new Client(company, address, email, name, password);
+			clientDat.getClients().add(c);
+			support.firePropertyChange("clients",null,null);
+			return c;
+		}
+		else {
+			return findSimilairClients(company, email).get(0);
+		}
 	}
 
 	//searches for a journey that matches a keyword
 	public ArrayList<Journey> findJourneys (String search, ArrayList<Journey> journeyList){
 			ArrayList<Journey> matches = new ArrayList<Journey>();
 			for (Journey j : journeyList) {
-				if ((j.getOrigin().equalsIgnoreCase(search))||
-						(j.getDestination().equalsIgnoreCase(search))
+				if ((j.getOrigin().equalsIgnoreCase(search))
+						|| (j.getDestination().equalsIgnoreCase(search))
 						|| (j.getId().equalsIgnoreCase(search))
 						|| (j.getCurrentLocation().equalsIgnoreCase(search))) {
 					matches.add(j);
@@ -83,7 +93,10 @@ public class Application {
 	public ArrayList<Client> searchClient (String keyword){
 		ArrayList<Client> results = new ArrayList<Client>();
 		for (Client cl: clientDat.getClients()) {
-			if ((cl.getAddress().equalsIgnoreCase(keyword)||cl.getCompany().contentEquals(keyword)||cl.getEmail().equalsIgnoreCase(keyword)||cl.getName().equalsIgnoreCase(keyword))) {
+			if ((cl.getAddress().equalsIgnoreCase(keyword)
+					||cl.getCompany().contentEquals(keyword)
+					||cl.getEmail().equalsIgnoreCase(keyword)
+					||cl.getName().equalsIgnoreCase(keyword))) {
 				results.add(cl);
 			}
 		}
@@ -101,7 +114,6 @@ public class Application {
 				}
 			}
 		return results;
-		
 	}
 	
 	/* Responsible for assigning containers to new journeys in two different ways, 
@@ -245,16 +257,12 @@ public class Application {
 	public String loginValidation(String username, String password) {
 		if (admin.getUsername().contentEquals(username) && admin.getPassword().contentEquals(password)) {
 			return "admin";
-//			company.dispose();
 		}
 		else if ((searchClient(username).size())!= 0) {
-	
 			Client client = searchClient(username).get(0);
-			
 			if (client.getPassword().contentEquals(password)) {
 				currentUser = client;
 				return "client";
-//				LoginFrame.dispose();
 			}
 			else {
 				return "N/A";
@@ -264,6 +272,7 @@ public class Application {
 			return "N/A";
 		}
 	}
+	
 	// updates a journeys current location to a new location
 	public void updateCurrentLocation(Journey j, String newcurrentLocation) {
 		for (int i=0; i < j.getContainers().size(); i++){
@@ -290,7 +299,3 @@ public class Application {
 		c.setPassword(password);
 	}	
 }
-		
-
-	  
-
