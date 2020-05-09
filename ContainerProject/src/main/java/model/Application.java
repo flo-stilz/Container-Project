@@ -51,7 +51,7 @@ public class Application {
 	}
 	
 	//searches for all clients that contain a similair string for either company or email
-	public ArrayList<Client> findSimilairClients (String company, String email){
+	public ArrayList<Client> findSimilarClients (String company, String email){
 		ArrayList<Client> results = new ArrayList<Client>();
 		for (Client c : clientDat.getClients()) {
 			if ((c.getCompany().equalsIgnoreCase(company)) 
@@ -64,14 +64,14 @@ public class Application {
 	
 	//This method is responsible for creating a new client object
 	public Client createClient(String company, String address, String email, String name, String password) {
-		if (findSimilairClients(company,email).size() == 0) {
+		if (findSimilarClients(company,email).size() == 0) {
 			Client c = new Client(company, address, email, name, password);
 			clientDat.getClients().add(c);
 			support.firePropertyChange("clients",null,null);
 			return c;
 		}
 		else {
-			return findSimilairClients(company, email).get(0);
+			return findSimilarClients(company, email).get(0);
 		}
 	}
 
@@ -104,7 +104,7 @@ public class Application {
 	}
 
 	//searches for all active journeys that contain a given set of origin and destination
-	public ArrayList<Journey> findSimilairJourneys (String origin, String destination){
+	public ArrayList<Journey> findSimilarJourneys (String origin, String destination){
 		ArrayList<Journey> results = new ArrayList<Journey>();
 		for (Journey j : journeyContainerDat.getActiveJourneys()) {
 			if ((j.getOrigin().equalsIgnoreCase(origin))&&
@@ -137,7 +137,7 @@ public class Application {
 	//Handles the creation of new journeys. If a journey with the same destination and origin is ongoing,
 	//then another container is added to that journey.
 	public Journey createJourney( String origin, String destination, String content, String company) {
-		if (findSimilairJourneys( origin, destination).size() == 0) {
+		if (findSimilarJourneys( origin, destination).size() == 0) {
 			 Journey j = new Journey(origin, destination, content, company);
 			 journeyContainerDat.getActiveJourneys().add(j);
 			 Container container = assignContainer(content, company, j.getId());
@@ -147,12 +147,12 @@ public class Application {
 			 return j;
 		}
 		else {
-			Journey j = findSimilairJourneys( origin, destination).get(0);
+			Journey j = findSimilarJourneys( origin, destination).get(0);
 			Container container = assignContainer(content, company, j.getId());
 			j.getContainers().add(container);
 			updateCurrentLocation(j, origin);
 			support.firePropertyChange("journey",null,null);
-			return findSimilairJourneys( origin, destination).get(0);
+			return findSimilarJourneys( origin, destination).get(0);
 		}
 	}
 	
