@@ -470,29 +470,25 @@ public class ContainerSelectionPanels implements PropertyChangeListener{
 	// depending on which button has been pressed in the search containers it creates the fitting label
 	public void setTableLabel() {
 		JLabel label = new JLabel("");
-		if (isPast == false && showAllCommand) {
-			label = new JLabel("All active containers");
-			Font f = label.getFont();
-			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		if (isPast == false) {
+			label = showAllOrSearchLbl("active");
 		}
-		else if ( isPast && showAllCommand) {
-			label = new JLabel("All past containers");
-			Font f = label.getFont();
-			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		else {
+			label = showAllOrSearchLbl("past");
 		}
-		else if (isPast == false && showAllCommand == false) {
-			label = new JLabel("Active containers related to " + keyword);
-			Font f = label.getFont();
-			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
-		}
-		else if (isPast && showAllCommand == false) {
-			label = new JLabel("Past containers related to " + keyword);
-			Font f = label.getFont();
-			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
-		}
+		
+		Font f = label.getFont();
+		label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
 		viewContainers.add(label, BorderLayout.NORTH);
 	}
-
+	public JLabel showAllOrSearchLbl(String s) {
+		if (showAllCommand) {
+			return new JLabel("All " + s + " containers");
+		}
+		else {
+			return new JLabel(s + " containers related to " + keyword);
+		}
+	}
 	// inserts the to the column names corresponding information into the row
 	public void formRowForContainer(DefaultTableModel tableModel, Container c, Application application) {
 

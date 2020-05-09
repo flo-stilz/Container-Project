@@ -351,28 +351,27 @@ public class JourneySectionPanels implements PropertyChangeListener {
 	// also makes use of the keyword if the search button has been chosen
 	public void setTableLabel() {
 		JLabel label = new JLabel("");
-		if (isPast == false && showAllCommand) {
-			label = new JLabel("All active containers");
-			Font f = label.getFont();
-			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		if (isPast == false) {
+			label = showAllOrSearchLbl("active");
 		}
-		else if ( isPast && showAllCommand) {
-			label = new JLabel("All past containers");
-			Font f = label.getFont();
-			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
+		else {
+			label = showAllOrSearchLbl("past");
 		}
-		else if (isPast == false && showAllCommand == false) {
-			label = new JLabel("Active containers related to " + keyword);
-			Font f = label.getFont();
-			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
-		}
-		else if (isPast && showAllCommand == false) {
-			label = new JLabel("Past containers related to " + keyword);
-			Font f = label.getFont();
-			label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
-		}
+		
+		Font f = label.getFont();
+		label.setFont(f.deriveFont(f.getStyle() | Font.BOLD));
 		viewJourneys.add(label, BorderLayout.NORTH);
 	}
+	
+	public JLabel showAllOrSearchLbl(String s) {
+		if (showAllCommand) {
+			return new JLabel("All " + s + " journeys");
+		}
+		else {
+			return new JLabel(s + " journeys related to " + keyword);
+		}
+	}
+		
 	
 	// filters the containerids to the corresponding journey in order to display it on the table
 	public ArrayList<String> filterClientContainers(Application application, TopMain topmain, Journey j){

@@ -37,7 +37,6 @@ public class ClientMain extends TopMain{
 
 	public ClientMain(final Application application, final JFrame login) {
 		super(application, login);
-
 	}
 	
 	/*
