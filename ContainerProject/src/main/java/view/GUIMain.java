@@ -150,7 +150,7 @@ public class GUIMain {
 		/*
 		 * The login screen is created with at logo and the text fields to input the needed information to login.
 		 */
-		ImageIcon img = new ImageIcon("src/main/resources/logo.png");
+		ImageIcon img = new ImageIcon("images/logo.png");
 		Image image = img.getImage(); // transform it 
 		Image newimg = image.getScaledInstance(400, 200,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 		img = new ImageIcon(newimg);

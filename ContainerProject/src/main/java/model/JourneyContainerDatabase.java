@@ -33,7 +33,7 @@ public class JourneyContainerDatabase implements Persistency {
 	//Store the most recently generated journey counter
 	public void storeJourneyCounter() {
 		try {
-			FileOutputStream fos = new FileOutputStream(new File("./JourneyCounter.xml"));
+			FileOutputStream fos = new FileOutputStream(new File("data/JourneyCounter.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
 			encoder.writeObject(Journey.getCounter());
 			encoder.close();
@@ -46,7 +46,7 @@ public class JourneyContainerDatabase implements Persistency {
 	public void readJourneyCounterFile() {
 		FileInputStream fis;
 		try {
-			fis = new FileInputStream(new File("./JourneyCounter.xml"));
+			fis = new FileInputStream(new File("data/JourneyCounter.xml"));
 			} catch (FileNotFoundException e) {
 				throw new Error(e);
 				}
@@ -58,7 +58,7 @@ public class JourneyContainerDatabase implements Persistency {
 	//Store the most recently entered container counter
 	public void storeContainerCounter() {
 		try {
-			FileOutputStream fos = new FileOutputStream(new File("./ContainerCounter.xml"));
+			FileOutputStream fos = new FileOutputStream(new File("data/ContainerCounter.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
 			encoder.writeObject(Container.getcCounter());
 			encoder.close();
@@ -72,7 +72,7 @@ public class JourneyContainerDatabase implements Persistency {
 	public void readContainerCounterFile() {
 		FileInputStream fis;
 		try {
-			fis = new FileInputStream(new File("./ContainerCounter.xml"));
+			fis = new FileInputStream(new File("data/ContainerCounter.xml"));
 			} catch (FileNotFoundException e) {
 				throw new Error(e);
 				}
@@ -106,7 +106,7 @@ public class JourneyContainerDatabase implements Persistency {
 	//Store all active journey object along with its attributes.
 	public void storeActiveJourneys() {
 		try {
-			FileOutputStream fos = new FileOutputStream(new File("./ActiveJourneys.xml"));
+			FileOutputStream fos = new FileOutputStream(new File("data/ActiveJourneys.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
 			encoder.writeObject(activeJourneys);
 			encoder.close();
@@ -120,7 +120,7 @@ public class JourneyContainerDatabase implements Persistency {
 	public void readActiveJourneyFile() {
 		FileInputStream fis;
 		try {
-			fis = new FileInputStream(new File("./ActiveJourneys.xml"));
+			fis = new FileInputStream(new File("data/ActiveJourneys.xml"));
 			} catch (FileNotFoundException e) {
 				throw new Error(e);
 				}
@@ -132,7 +132,7 @@ public class JourneyContainerDatabase implements Persistency {
 	//Store all ended journey object along with its attributes.
 	public void storeEndedJourneys() {
 		try {
-			FileOutputStream fos = new FileOutputStream(new File("./EndedJourneys.xml"));
+			FileOutputStream fos = new FileOutputStream(new File("data/EndedJourneys.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
 			encoder.writeObject(pastJourneys);
 			encoder.close();
@@ -146,7 +146,7 @@ public class JourneyContainerDatabase implements Persistency {
 	public void readEndedJourneyFile() {
 		FileInputStream fis;
 		try {
-			fis = new FileInputStream(new File("./EndedJourneys.xml"));
+			fis = new FileInputStream(new File("data/EndedJourneys.xml"));
 		} catch (FileNotFoundException e) {
 			throw new Error(e);
 		}
@@ -158,7 +158,7 @@ public class JourneyContainerDatabase implements Persistency {
 	//Read all containers present in the container warehouse along with its attributes
 	public void storeContainerWarehouse() {
 		try {
-			FileOutputStream fos = new FileOutputStream(new File("./ContainerWarehouse.xml"));
+			FileOutputStream fos = new FileOutputStream(new File("data/ContainerWarehouse.xml"));
 			XMLEncoder encoder = new XMLEncoder(fos);
 			encoder.writeObject(containerWarehouse);
 			encoder.close();
@@ -172,7 +172,7 @@ public class JourneyContainerDatabase implements Persistency {
 	public void readContainerWarehouseFile() {
 		FileInputStream fis;
 		try {
-			fis = new FileInputStream(new File("./ContainerWarehouse.xml"));
+			fis = new FileInputStream(new File("data/ContainerWarehouse.xml"));
 		} catch (FileNotFoundException e) {
 			throw new Error(e);
 		}

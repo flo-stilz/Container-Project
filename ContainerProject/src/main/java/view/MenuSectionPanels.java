@@ -80,7 +80,7 @@ public class MenuSectionPanels implements PropertyChangeListener{
 			menupanel.add(clientDetails, BorderLayout.CENTER);
 		}
 		if ( topmain instanceof CompanyMain) {
-			ImageIcon img = new ImageIcon("src/main/resources/Companymenu.png");
+			ImageIcon img = new ImageIcon("images/Companymenu.png");
 			Image image = img.getImage(); // transform it 
 			Image newimg = image.getScaledInstance(800, 600,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 			img = new ImageIcon(newimg);  // transform it back
@@ -101,7 +101,7 @@ public class MenuSectionPanels implements PropertyChangeListener{
 		// Logout as company user
 		
 		final JButton profile = new JButton("Profile");
-		ImageIcon img = new ImageIcon("src/main/resources/profile.png");
+		ImageIcon img = new ImageIcon("images/profile.png");
 		Image image = img.getImage(); // transform it 
 		Image newimg = image.getScaledInstance(30, 30,  java.awt.Image.SCALE_SMOOTH); // scale it the smooth way  
 		img = new ImageIcon(newimg);  // transform it back

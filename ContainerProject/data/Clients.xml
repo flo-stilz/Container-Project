@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<java version="13.0.1" class="java.beans.XMLDecoder">
+ <object class="java.util.ArrayList">
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Kings Street 100</string>
+    </void>
+    <void property="company">
+     <string>TDCGroup</string>
+    </void>
+    <void property="email">
+     <string>Adam.Sorensen@TDCGroup.com</string>
+    </void>
+    <void property="id">
+     <int>69421</int>
+    </void>
+    <void property="name">
+     <string>Adam Sorensen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Harhoffs Alle 5, 4100 Ringsted</string>
+    </void>
+    <void property="company">
+     <string>AppleInc</string>
+    </void>
+    <void property="email">
+     <string>Alexander.Andersen@AppleInc.com</string>
+    </void>
+    <void property="id">
+     <int>69422</int>
+    </void>
+    <void property="name">
+     <string>Alexander Andersen</string>
+    </void>
+   </object>
+  </void>
+  <void method="add">
+   <object class="model.Client">
+    <void property="address">
+     <string>Frimestervej 32, 2400 Koebenhavn</string>
+    </void>
+    <void property="company">
+     <string>SamsungElectronics</string>
+    </void>
+    <void property="email">
+     <string>Phillip.Brevig@SamsungElectronics.com</string>
+    </void>
+    <void property="id">
+     <int>69423</int>
+    </void>
+    <void property="name">
+     <string>Phillip Brevig</string>
+    </void>
+   </object>
+  </void>
+ </object>
+</java>
